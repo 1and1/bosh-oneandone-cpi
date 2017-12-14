@@ -1,3 +1,3 @@
 package resource
 
-const logTag = "OCIResource"
+const logTag = "OAOResource"

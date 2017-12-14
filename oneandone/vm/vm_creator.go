@@ -19,6 +19,7 @@ type InstanceConfiguration struct {
 	DiskSize     int
 	Ram          float32
 	SSHKey       string
+	Network      Networks
 }
 
 type Creator interface {

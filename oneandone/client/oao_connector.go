@@ -23,13 +23,13 @@ type Connector interface {
 }
 
 type connectorImpl struct {
-	config config.OAOProperties
+	config config.Cloud
 	logger boshlog.Logger
 
 	client *cclient.API
 }
 
-func NewConnector(c config.OAOProperties, logger boshlog.Logger) Connector {
+func NewConnector(c config.Cloud, logger boshlog.Logger) Connector {
 
 	return &connectorImpl{config: c, logger: logger,
 		client: nil}
@@ -45,11 +45,11 @@ func (c *connectorImpl) Client() *cclient.API {
 }
 
 func (c *connectorImpl) AgentOptions() registry.AgentOptions {
-	return c.config.Agent
+	return c.config.Properties.Agent
 }
 
 func (c *connectorImpl) AgentRegistryEndpoint() string {
-	return c.config.Registry.EndpointWithCredentials()
+	return c.config.Properties.Registry.EndpointWithCredentials()
 }
 
 func (c *connectorImpl) createServiceClients(token string, basePath string) error {

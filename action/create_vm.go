@@ -8,9 +8,8 @@ import (
 	"time"
 
 	"github.com/bosh-oneandone-cpi/oneandone/client"
-	"github.com/bosh-oneandone-cpi/registry"
-	"github.com/oneandone/oneandone-cloudserver-sdk-go"
 	"github.com/bosh-oneandone-cpi/oneandone/vm"
+	"github.com/bosh-oneandone-cpi/registry"
 )
 
 // CreateVM action handles the create_vm request
@@ -28,8 +27,9 @@ func NewCreateVM(c client.Connector, l boshlog.Logger, r registry.Client, u bosh
 	return CreateVM{connector: c, logger: l, registry: r, uuidGen: u}
 }
 
-func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID,cloudProps VMCloudProperties, env Environment) (VMCID, error) {
+func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, networks Networks, cloudProps VMCloudProperties, env Environment) (VMCID, error) {
 
+	agentNetworks := networks.AsRegistryNetworks()
 	// Create the VM
 	name := cv.vmName()
 	creator := newVMCreator(cv.connector, cv.logger)
@@ -41,7 +41,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID,cloudProps VMClou
 		Ram:      cloudProps.Ram,
 		DiskSize: cloudProps.DiskSize,
 		Cores:    cloudProps.Cores,
-
+		Network:  networks.AsNetworkConfiguration(),
 	}
 
 	metadata := vm.InstanceMetadata{
@@ -61,7 +61,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID,cloudProps VMClou
 	}
 
 	//TODO: add agent networks
-	if err := cv.updateRegistry(agentID, instance.ID(), name, nil, env); err != nil {
+	if err := cv.updateRegistry(agentID, instance.ID(), name, agentNetworks, env); err != nil {
 		return "", err
 	}
 	return VMCID(instance.ID()), nil

@@ -1,6 +1,5 @@
 package action
 
-import "net"
 
 // Environment used to create an instance
 type Environment map[string]interface{}
@@ -11,6 +10,13 @@ type StemcellCloudProperties struct {
 	Name           string `json:"name,omitempty"`
 	ImageID        string `json:"image-id,omitempty"`
 	ImageSourceURL string `json:"image-source-url,omitempty"`
+}
+
+// NetworkCloudProperties holds the CPI specific network properties
+// defined in cloud config
+type NetworkCloudProperties struct {
+	VcnName    string `json:"vcn,omitempty"`
+	SubnetName string `json:"subnet_name,omitempty"`
 }
 
 // VMCloudProperties holds the CPI specific properties

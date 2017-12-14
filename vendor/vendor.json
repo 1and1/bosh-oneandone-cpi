@@ -3,6 +3,10 @@
 	"ignore": "test",
 	"package": [
 		{
+			"path": "gihub.com/cloudfoundry/bosh-utils/system/fakes",
+			"revision": ""
+		},
+		{
 			"checksumSHA1": "I2DDeog8ML55A+drYgods2s4Y5Q=",
 			"path": "github.com/bmatcuk/doublestar",
 			"revision": "dd6a6f0a8cdfaaa88b08cf26cf1bc7d69003ee13",
@@ -35,6 +39,12 @@
 		{
 			"checksumSHA1": "7BmA95N/2OiAu2cs8uIaBc9AOkw=",
 			"path": "github.com/cloudfoundry/bosh-utils/system",
+			"revision": "1a26ad52ff67437229527c43d17254e2a9dffcc6",
+			"revisionTime": "2017-12-11T23:38:08Z"
+		},
+		{
+			"checksumSHA1": "OHzK/qnaoqYrXlDLBTw8AF9C8M8=",
+			"path": "github.com/cloudfoundry/bosh-utils/system/fakes",
 			"revision": "1a26ad52ff67437229527c43d17254e2a9dffcc6",
 			"revisionTime": "2017-12-11T23:38:08Z"
 		},

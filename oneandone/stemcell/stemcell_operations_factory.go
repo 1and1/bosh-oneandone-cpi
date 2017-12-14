@@ -18,7 +18,7 @@ type Destroyer interface {
 type DestroyerFactory func(client.Connector, boshlog.Logger) Destroyer
 
 type Finder interface {
-	FindStemcell(imageOCID string) (stemcellId string, err error)
+	FindStemcell(imageOAOID string) (stemcellId string, err error)
 }
 type FinderFactory func(client.Connector, boshlog.Logger) Finder
 
