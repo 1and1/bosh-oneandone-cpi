@@ -41,7 +41,6 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, networks Network
 		Ram:      cloudProps.Ram,
 		DiskSize: cloudProps.DiskSize,
 		Cores:    cloudProps.Cores,
-		Network:  networks.AsNetworkConfiguration(),
 	}
 
 	metadata := vm.InstanceMetadata{
@@ -60,7 +59,6 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, networks Network
 		return "", bosherr.WrapError(err, "Error launching new instance")
 	}
 
-	//TODO: add agent networks
 	if err := cv.updateRegistry(agentID, instance.ID(), name, agentNetworks, env); err != nil {
 		return "", err
 	}

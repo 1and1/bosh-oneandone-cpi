@@ -1,16 +1,15 @@
 package resource
 
 import (
-	//"time"
-
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
-	//boshretry "github.com/cloudfoundry/bosh-utils/retrystrategy"
+	boshretry "github.com/cloudfoundry/bosh-utils/retrystrategy"
 
 	"github.com/bosh-oneandone-cpi/oneandone/client"
+	"time"
 )
 
 type Instance struct {
-	vmId     string
+	vmId string
 
 	// May not always be known
 	publicIPs  []string
@@ -44,20 +43,26 @@ func (in *Instance) queryIPs(c client.Connector, l boshlog.Logger) error {
 		return err
 	}
 
-	//var public []string
+	res, err := c.Client().ListServerIps(in.ID())
+	if err != nil {
+		l.Debug(logTag, "Error finding IPs %s", err)
+		return err
+	}
+	var public []string
+	for _, ip := range res {
+		public = append(public, ip.Ip)
+	}
+	//todo: find private ips
 	//var private []string
 	//public, private, err = in.location.instanceIPs(c, in.ocid)
-	//if err != nil {
-	//	l.Debug(logTag, "Error finding IPs %s", err)
-	//	return err
-	//}
 
-	//in.publicIPs = make([]string, len(public))
+
+	in.publicIPs = make([]string, len(public))
 	//in.privateIPs = make([]string, len(private))
-	//copy(in.publicIPs, public)
+	copy(in.publicIPs, public)
 	//copy(in.privateIPs, private)
 
-	//l.Debug(logTag, "Queried IPs, Private %v, Public %v", in.privateIPs, in.publicIPs)
+	l.Debug(logTag, "Queried IPs, Private %v, Public %v", in.privateIPs, in.publicIPs)
 	return nil
 }
 
@@ -113,30 +118,30 @@ func (in *Instance) PrivateIP(c client.Connector, l boshlog.Logger) (string, err
 }
 
 func (in *Instance) setupSSHTunnelToAgent(c client.Connector, l boshlog.Logger) (err error) {
-	//tunnel := c.SSHTunnelConfig()
-	//if tunnel.IsConfigured() {
-	//
-	//	duration, _ := time.ParseDuration(tunnel.Duration)
-	//	remotePort, _ := c.AgentOptions().MBusPort()
-	//	remoteIP, err := in.remoteIP(c, l, tunnel.UsePublicIP)
-	//	if err != nil {
-	//		return err
-	//	}
-	//
-	//	// Ensure SSHD is up
-	//	retryable := NewSSHDCheckerRetryable(tunnel.User, remoteIP, l)
-	//	strategy := boshretry.NewAttemptRetryStrategy(10, 20*time.Second, retryable, l)
-	//	err = strategy.Try()
-	//
-	//	// Then start the port forwarder
-	//	if err == nil {
-	//		retryable = NewSSHPortForwarderRetryable(tunnel.LocalPort, remotePort, remoteIP, tunnel.User,
-	//			duration, l)
-	//		strategy = boshretry.NewAttemptRetryStrategy(2, 2*time.Second, retryable, l)
-	//		err = strategy.Try()
-	//	}
-	//	return err
-	//}
+	tunnel := c.SSHTunnelConfig()
+	if tunnel.IsConfigured() {
+
+		duration, _ := time.ParseDuration(tunnel.Duration)
+		remotePort, _ := c.AgentOptions().MBusPort()
+		remoteIP, err := in.remoteIP(c, l, tunnel.UsePublicIP)
+		if err != nil {
+			return err
+		}
+
+		// Ensure SSHD is up
+		retryable := NewSSHDCheckerRetryable(tunnel.User, remoteIP, l)
+		strategy := boshretry.NewAttemptRetryStrategy(10, 20*time.Second, retryable, l)
+		err = strategy.Try()
+
+		// Then start the port forwarder
+		if err == nil {
+			retryable = NewSSHPortForwarderRetryable(tunnel.LocalPort, remotePort, remoteIP, tunnel.User,
+				duration, l)
+			strategy = boshretry.NewAttemptRetryStrategy(2, 2*time.Second, retryable, l)
+			err = strategy.Try()
+		}
+		return err
+	}
 	return nil
 }
 

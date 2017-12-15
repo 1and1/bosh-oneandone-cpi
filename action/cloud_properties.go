@@ -12,12 +12,12 @@ type StemcellCloudProperties struct {
 	ImageSourceURL string `json:"image-source-url,omitempty"`
 }
 
-// NetworkCloudProperties holds the CPI specific network properties
-// defined in cloud config
-type NetworkCloudProperties struct {
-	VcnName    string `json:"vcn,omitempty"`
-	SubnetName string `json:"subnet_name,omitempty"`
-}
+//// NetworkCloudProperties holds the CPI specific network properties
+//// defined in cloud config
+//type NetworkCloudProperties struct {
+//	VcnName    string `json:"vcn,omitempty"`
+//	SubnetName string `json:"subnet_name,omitempty"`
+//}
 
 // VMCloudProperties holds the CPI specific properties
 // defined in cloud-config for creating a instance
@@ -30,16 +30,3 @@ type VMCloudProperties struct {
 	SSHKey     string  `json:"rsa_key,omitempty"`
 }
 
-func (o VMCloudProperties) Validate() error {
-	//err := o.Agent.Validate()
-	//if err != nil {
-	//	return bosherr.WrapError(err, "Validating Agent configuration")
-	//}
-	//
-	//err = o.Softlayer.Validate()
-	//if err != nil {
-	//	return bosherr.WrapError(err, "Validating SoftLayer configuration")
-	//}
-
-	return nil
-}

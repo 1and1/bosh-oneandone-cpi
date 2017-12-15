@@ -1,9 +1,8 @@
 package action
 
 import (
-	bosherr "github.com/cloudfoundry/bosh-utils/errors"
+	//bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	"github.com/bosh-oneandone-cpi/registry"
-	"github.com/bosh-oneandone-cpi/oneandone/vm"
 )
 
 // Networks configured in the environment
@@ -18,7 +17,7 @@ type Network struct {
 	DNS             []string               `json:"dns,omitempty"`
 	DHCP            bool                   `json:"use_dhcp,omitempty"`
 	Default         []string               `json:"default,omitempty"`
-	CloudProperties NetworkCloudProperties `json:"cloud_properties,omitempty"`
+	//CloudProperties NetworkCloudProperties `json:"cloud_properties,omitempty"`
 }
 
 // AsRegistryNetworks converts the networks map to network settings
@@ -32,19 +31,19 @@ func (ns Networks) AsRegistryNetworks() registry.NetworksSettings {
 	return networksSettings
 }
 
-// AsNetworkConfiguration converts the networks map to vm.Networks
-// suitable for use with the vm.Creator
-func (ns Networks) AsNetworkConfiguration() vm.Networks {
-
-	networks := []vm.NetworkConfiguration{}
-	for _, n := range ns {
-		networks = append(networks, vm.NetworkConfiguration{
-			VcnName:    n.CloudProperties.VcnName,
-			SubnetName: n.CloudProperties.SubnetName,
-			PrivateIP:  n.IP})
-	}
-	return networks
-}
+//// AsNetworkConfiguration converts the networks map to vm.Networks
+//// suitable for use with the vm.Creator
+//func (ns Networks) AsNetworkConfiguration() vm.Networks {
+//
+//	networks := []vm.NetworkConfiguration{}
+//	for _, n := range ns {
+//		networks = append(networks, vm.NetworkConfiguration{
+//			VcnName:    n.CloudProperties.VcnName,
+//			SubnetName: n.CloudProperties.SubnetName,
+//			PrivateIP:  n.IP})
+//	}
+//	return networks
+//}
 
 // AsRegistryNetwork converts a single network to network setting structure
 // expected by the agent registry
@@ -125,12 +124,12 @@ func (ns Networks) First() *Network {
 	return nil
 }
 
-func (n *Network) validate() error {
-	if n.CloudProperties.SubnetName == "" {
-		return bosherr.Error("Missing subnet name from network definition ")
-	}
-	if n.CloudProperties.VcnName == "" {
-		return bosherr.Error("Missing vcn name from network definition ")
-	}
-	return nil
-}
+//func (n *Network) validate() error {
+//	if n.CloudProperties.SubnetName == "" {
+//		return bosherr.Error("Missing subnet name from network definition ")
+//	}
+//	if n.CloudProperties.VcnName == "" {
+//		return bosherr.Error("Missing vcn name from network definition ")
+//	}
+//	return nil
+//}

@@ -20,6 +20,7 @@ type Connector interface {
 	AuthorizedKeys() []string
 	AgentOptions() registry.AgentOptions
 	AgentRegistryEndpoint() string
+	SSHTunnelConfig() config.SSHTunnel
 }
 
 type connectorImpl struct {
@@ -52,6 +53,10 @@ func (c *connectorImpl) AgentRegistryEndpoint() string {
 	return c.config.Properties.Registry.EndpointWithCredentials()
 }
 
+func (c *connectorImpl) SSHTunnelConfig() config.SSHTunnel {
+	return c.config.Properties.OAO.SSHTunnel
+}
+
 func (c *connectorImpl) createServiceClients(token string, basePath string) error {
 
 	api := cclient.New(token, basePath)
@@ -67,22 +72,22 @@ func (c *connectorImpl) createServiceClients(token string, basePath string) erro
 }
 
 func (c *connectorImpl) AuthorizedKeys() []string {
-	//keys := []string{}
-	//userKey, err := c.config.Properties.OCI.UserSSHPublicKeyContent()
-	//if err != nil {
-	//	c.logger.Debug(logTag, "Ignored error while getting user key %v", err)
-	//} else {
-	//	keys = append(keys, userKey)
-	//}
-	//
-	//cpiKey, err := c.config.Properties.OCI.CpiSSHPublicKeyContent()
-	//if err != nil {
-	//	c.logger.Debug(logTag, "Ignored error while getting cpi key %v", err)
-	//} else {
-	//	keys = append(keys, cpiKey)
-	//
-	//}
-	//return keys
+	keys := []string{}
+	userKey, err := c.config.Properties.OAO.UserSSHPublicKeyContent()
+	if err != nil {
+		c.logger.Debug(logTag, "Ignored error while getting user key %v", err)
+	} else {
+		keys = append(keys, userKey)
+	}
+
+	cpiKey, err := c.config.Properties.OAO.CpiSSHPublicKeyContent()
+	if err != nil {
+		c.logger.Debug(logTag, "Ignored error while getting cpi key %v", err)
+	} else {
+		keys = append(keys, cpiKey)
+
+	}
+	return keys
 	return []string{}
 }
 

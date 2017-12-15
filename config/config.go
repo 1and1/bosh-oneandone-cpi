@@ -9,8 +9,6 @@ import (
 	"github.com/bosh-oneandone-cpi/registry"
 )
 
-const configLogTag string = "oneandoneCpiConfig"
-
 type errorMsg int
 
 const (

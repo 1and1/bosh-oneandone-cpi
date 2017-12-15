@@ -19,7 +19,7 @@ type InstanceConfiguration struct {
 	DiskSize     int
 	Ram          float32
 	SSHKey       string
-	Network      Networks
+	//Network      Networks
 }
 
 type Creator interface {
@@ -70,11 +70,5 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration, md InstanceMetadat
 	}
 	instance := resource.NewInstance(res.Id)
 
-	//if icfg.Network.hasSecondaries() {
-	//	err = cv.attachSecondaryVnics(instance, icfg.Network.secondaries())
-	//	if err != nil {
-	//		return nil, newLaunchInstanceError(err)
-	//	}
-	//}
 	return instance, nil
 }
