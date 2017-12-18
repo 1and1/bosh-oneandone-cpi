@@ -88,10 +88,10 @@ var _ = Describe("CreateVM", func() {
 					DNS:     []string{"fake-network-dns"},
 					DHCP:    true,
 					Default: []string{"fake-network-default"},
-					CloudProperties: NetworkCloudProperties{
-						VcnName:    "fake-vcn",
-						SubnetName: "fake-subnet1",
-					},
+					//CloudProperties: NetworkCloudProperties{
+					//	VcnName:    "fake-vcn",
+					//	SubnetName: "fake-subnet1",
+					//},
 				},
 			}
 		})

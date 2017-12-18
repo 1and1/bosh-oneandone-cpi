@@ -51,7 +51,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, networks Network
 	instance, err := creator.CreateInstance(icfg, metadata)
 
 	// Start a local forward ssh tunnel?
-	if err == nil {
+	if err == nil && networks.AllDynamic() {
 		err = instance.EnsureReachable(cv.connector, cv.logger)
 	}
 

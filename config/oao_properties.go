@@ -10,21 +10,6 @@ import (
 // OAOProperties contains the properties for configuring
 // BOSH CPI for 1&1 Cloud Infrastructure
 type OAOProperties struct {
-	// Tenancy under which the resources are provisioned
-	Tenancy string `json:"tenancy"`
-
-	// User ID
-	User string `json:"user"`
-
-	// Compartment OCID
-	CompartmentID string `json:"compartment"`
-
-	// Region name
-	Region string `json:"region, omitempty"`
-
-	// Fingerprint of the User API key
-	Fingerprint string `json:"fingerprint"`
-
 	// APIKeyFile is the path to the private API key
 	APIKeyFile string `json:"apikeyfile"`
 
@@ -61,11 +46,7 @@ type AuthorizedKeys struct {
 func (b OAOProperties) Validate() error {
 
 	if err := isAnyEmpty(map[string]string{
-		"tenancy":     b.Tenancy,
-		"user":        b.User,
-		"fingerprint": b.Fingerprint,
 		"apikeyfile":  b.APIKeyFile,
-		"compartment": b.CompartmentID,
 		"cpiuser":     b.CpiUser,
 		"cpikeyfile":  b.CpiKeyFile,
 	}); err != nil {
@@ -103,11 +84,6 @@ func newSanitizedConfig(configFullPath string, b OAOProperties) OAOProperties {
 	dir := filepath.Dir(configFullPath)
 
 	return OAOProperties{
-		Tenancy:           b.Tenancy,
-		User:              b.User,
-		CompartmentID:     b.CompartmentID,
-		Region:            b.Region,
-		Fingerprint:       b.Fingerprint,
 		APIKeyFile:        filepath.Join(dir, filepath.Base(b.APIKeyFile)),
 		CpiKeyFile:        filepath.Join(dir, filepath.Base(b.CpiKeyFile)),
 		CpiUser:           b.CpiUser,

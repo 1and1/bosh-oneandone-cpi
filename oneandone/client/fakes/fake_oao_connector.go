@@ -3,6 +3,7 @@ package fakes
 import (
 	"github.com/bosh-oneandone-cpi/registry"
 	cclient "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	"github.com/bosh-oneandone-cpi/config"
 )
 
 type FakeConnector struct {
@@ -26,4 +27,12 @@ func (fc *FakeConnector) AgentOptions() registry.AgentOptions {
 
 func (fc *FakeConnector) AgentRegistryEndpoint() string {
 	return "fake-agent-registry-endpoint"
+}
+
+func (fc *FakeConnector) SSHTunnelConfig() config.SSHTunnel {
+	return config.SSHTunnel{}
+}
+
+func (fc *FakeConnector) SSHConfig() config.SSHConfig {
+	return config.SSHConfig{}
 }
