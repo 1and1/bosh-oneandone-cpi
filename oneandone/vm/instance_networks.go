@@ -4,7 +4,7 @@ package vm
 //	"fmt"
 //)
 //
-//type Networks []NetworkConfiguration
+type Networks []NetworkConfiguration
 //
 //func (n Networks) primary() NetworkConfiguration {
 //	// Assume first network to be the primary

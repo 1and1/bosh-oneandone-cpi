@@ -20,7 +20,7 @@ const (
 
 var errMsgs = []string{
 	"Unsupported cloud plugin type %s",
-	"Invalid oci configuration",
+	"Invalid configuration",
 	"Invalid agent options configuration",
 	"Invalid registry client configuration",
 }
@@ -45,7 +45,7 @@ type Cloud struct {
 
 // CPIProperties element in Cloud.Config
 type CPIProperties struct {
-	OAO      OAOProperties
+	OAO      OAOProperties `json:"oao"`
 	Agent    registry.AgentOptions
 	Registry registry.ClientOptions
 }
@@ -88,6 +88,24 @@ func NewConfigFromPath(configFile string, fs boshsys.FileSystem) (Config, error)
 	if err = config.Validate(); err != nil {
 		return config, bosherr.WrapError(err, "Validating config")
 	}
+	return config, nil
+}
+
+func NewConfigFromString(configString string) (Config, error) {
+	var config Config
+	var err error
+	if configString == "" {
+		return config, bosherr.Errorf("Must provide a config")
+	}
+
+	if err = json.Unmarshal([]byte(configString), &config); err != nil {
+		return config, bosherr.WrapError(err, "Unmarshalling config contents")
+	}
+
+	if err = config.Validate(); err != nil {
+		return config, bosherr.WrapError(err, "Validating config")
+	}
+
 	return config, nil
 }
 

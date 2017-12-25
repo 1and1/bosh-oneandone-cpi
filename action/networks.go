@@ -2,6 +2,7 @@ package action
 
 import (
 	//bosherr "github.com/cloudfoundry/bosh-utils/errors"
+	"github.com/bosh-oneandone-cpi/oneandone/vm"
 	"github.com/bosh-oneandone-cpi/registry"
 )
 
@@ -17,7 +18,7 @@ type Network struct {
 	DNS             []string               `json:"dns,omitempty"`
 	DHCP            bool                   `json:"use_dhcp,omitempty"`
 	Default         []string               `json:"default,omitempty"`
-	//CloudProperties NetworkCloudProperties `json:"cloud_properties,omitempty"`
+	CloudProperties NetworkCloudProperties `json:"cloud_properties,omitempty"`
 }
 
 // AsRegistryNetworks converts the networks map to network settings
@@ -31,19 +32,23 @@ func (ns Networks) AsRegistryNetworks() registry.NetworksSettings {
 	return networksSettings
 }
 
-//// AsNetworkConfiguration converts the networks map to vm.Networks
-//// suitable for use with the vm.Creator
-//func (ns Networks) AsNetworkConfiguration() vm.Networks {
-//
-//	networks := []vm.NetworkConfiguration{}
-//	for _, n := range ns {
-//		networks = append(networks, vm.NetworkConfiguration{
-//			VcnName:    n.CloudProperties.VcnName,
-//			SubnetName: n.CloudProperties.SubnetName,
-//			PrivateIP:  n.IP})
-//	}
-//	return networks
-//}
+// AsNetworkConfiguration converts the networks map to vm.Networks
+// suitable for use with the vm.Creator
+func (ns Networks) AsNetworkConfiguration() vm.Networks {
+
+	var openPorts []vm.Rule
+
+	networks := []vm.NetworkConfiguration{}
+	for _, n := range ns {
+		for _, port := range n.CloudProperties.OpenPorts {
+			openPorts = append(openPorts, vm.Rule{PortFrom: port.PortFrom, PortTo: port.PortTo, Source: port.Source})
+		}
+		networks = append(networks, vm.NetworkConfiguration{
+			OpenPorts:openPorts,
+		})
+	}
+	return networks
+}
 
 // AsRegistryNetwork converts a single network to network setting structure
 // expected by the agent registry

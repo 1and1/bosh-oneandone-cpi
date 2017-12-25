@@ -57,9 +57,10 @@ func (c *connectorImpl) SSHTunnelConfig() config.SSHTunnel {
 	return c.config.Properties.OAO.SSHTunnel
 }
 
-func (c *connectorImpl) createServiceClients(token string, basePath string) error {
+func (c *connectorImpl) createServiceClients(token string, basePath string) (error) {
 
 	api := cclient.New(token, basePath)
+	c.client = api
 
 	_, err := c.client.ListDatacenters()
 	if err != nil {
@@ -67,7 +68,6 @@ func (c *connectorImpl) createServiceClients(token string, basePath string) erro
 		return err
 	}
 
-	c.client = api
 	return nil
 }
 

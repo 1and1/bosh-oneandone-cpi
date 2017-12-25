@@ -22,15 +22,30 @@ func NewTerminator(c client.Connector, l boshlog.Logger) Terminator {
 func (t *terminator) TerminateInstance(instanceID string) error {
 
 	t.logger.Info(logTag, "Deleting VM %s...", instanceID)
-
+	var firewallIdsToremove []string
 	//TODO: cleanup any remainig resources like firewalls and load balancers
-	//// Find and detach any attached Vnics
-	//ids, err := t.vnicAttachmentIDs(instanceID)
-	//if err != nil {
-	//	t.logger.Info(logTag, "Ignoring error finding attached Vnics %s", oci.CoreModelErrorMsg(err))
-	//}
-	//t.detachAllVnics(ids)
+	// find any attached firewall policies
+	//list server ips
+	serverIps, err := t.connector.Client().ListServerIps(instanceID)
+	if err != nil {
+		t.logger.Error(logTag, "Ignoring Could not list instance IP's %s")
+	}
 
+	for _, ip := range serverIps {
+		firewallIdsToremove = append(firewallIdsToremove, ip.Firewall.Id)
+	}
+
+	for _, id := range firewallIdsToremove {
+		firewallpolicy, _ := t.connector.Client().GetFirewallPolicy(id)
+
+		//remove the firewall policy if no other servers attached
+		if len(firewallpolicy.ServerIps) <= 1 {
+			_, err := t.connector.Client().DeleteFirewallPolicy(id)
+			if err != nil {
+				t.logger.Error(logTag, "Failed to remove firewallpolicy id=%s with error %s", id, err)
+			}
+		}
+	}
 	// Delete instance
 	vm, err := t.connector.Client().DeleteServer(instanceID, false)
 	if err != nil {

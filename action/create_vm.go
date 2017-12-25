@@ -27,7 +27,7 @@ func NewCreateVM(c client.Connector, l boshlog.Logger, r registry.Client, u bosh
 	return CreateVM{connector: c, logger: l, registry: r, uuidGen: u}
 }
 
-func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, networks Networks, cloudProps VMCloudProperties, env Environment) (VMCID, error) {
+func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMCloudProperties, networks Networks, env Environment) (VMCID, error) {
 
 	agentNetworks := networks.AsRegistryNetworks()
 	// Create the VM
@@ -41,6 +41,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, networks Network
 		Ram:      cloudProps.Ram,
 		DiskSize: cloudProps.DiskSize,
 		Cores:    cloudProps.Cores,
+		Network:  networks.AsNetworkConfiguration(),
 	}
 
 	metadata := vm.InstanceMetadata{

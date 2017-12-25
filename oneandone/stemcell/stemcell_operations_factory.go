@@ -1,14 +1,14 @@
 package stemcell
 
 import (
-	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	"github.com/bosh-oneandone-cpi/oneandone/client"
+	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 )
 
 const stemCellLogTag = "OAOStemcell"
 
 type Creator interface {
-	CreateStemcell(imageSourceURL string, customImageName string) (stemcellId string, err error)
+	CreateStemcell(imageSourceURL string, customImageName string, osType string, architecture int, imageId string) (stemcellId string, err error)
 }
 type CreatorFactory func(client.Connector, boshlog.Logger) Creator
 

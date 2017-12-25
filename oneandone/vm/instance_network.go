@@ -5,16 +5,15 @@ package vm
 //	"github.com/bosh-oneandone-cpi/oneandone/client"
 //)
 //
-//type NetworkConfiguration struct {
-//	VcnName    string
-//	SubnetName string
-//	PrivateIP  string
-//
-//	// Queried/Cached id of Vcn
-//	vcnId string
-//	// Queried/Cached id of Subnet
-//	subnetId string
-//}
+type NetworkConfiguration struct {
+	OpenPorts []Rule
+}
+type Rule struct {
+	PortFrom *int
+	PortTo   *int
+	Source   string
+}
+
 //
 //func (n *NetworkConfiguration) subnetID(connector client.Connector) (string, error) {
 //

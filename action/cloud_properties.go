@@ -1,6 +1,5 @@
 package action
 
-
 // Environment used to create an instance
 type Environment map[string]interface{}
 
@@ -10,14 +9,21 @@ type StemcellCloudProperties struct {
 	Name           string `json:"name,omitempty"`
 	ImageID        string `json:"image-id,omitempty"`
 	ImageSourceURL string `json:"image-source-url,omitempty"`
+	OSType         string `json:"os-type,omitempty"`
+	Architecture   int    `json:"architecture,omitempty"`
 }
 
-//// NetworkCloudProperties holds the CPI specific network properties
-//// defined in cloud config
-//type NetworkCloudProperties struct {
-//	VcnName    string `json:"vcn,omitempty"`
-//	SubnetName string `json:"subnet_name,omitempty"`
-//}
+// NetworkCloudProperties holds the CPI specific network properties
+// defined in cloud config
+type NetworkCloudProperties struct {
+	OpenPorts    []Rule `json:"open-ports,omitempty"`
+}
+
+type Rule struct {
+	PortFrom *int `json:"port-from,omitempty"`
+	PortTo   *int `json:"port-to,omitempty"`
+	Source   string `json:"source,omitempty"`
+}
 
 // VMCloudProperties holds the CPI specific properties
 // defined in cloud-config for creating a instance
@@ -28,5 +34,5 @@ type VMCloudProperties struct {
 	DiskSize   int     `json:"diskSize,omitempty"`
 	Ram        float32 `json:"ram,omitempty"`
 	SSHKey     string  `json:"rsa_key,omitempty"`
+	Network
 }
-
