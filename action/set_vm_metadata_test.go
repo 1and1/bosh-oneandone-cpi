@@ -6,9 +6,9 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	clientfakes "github.com/bosh-oneandone-cpi/oneandone/client/fakes"
 	vmfakes "github.com/bosh-oneandone-cpi/oneandone/vm/fakes"
+	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/vm"

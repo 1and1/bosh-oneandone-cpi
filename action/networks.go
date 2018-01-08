@@ -44,7 +44,7 @@ func (ns Networks) AsNetworkConfiguration() vm.Networks {
 			openPorts = append(openPorts, vm.Rule{PortFrom: port.PortFrom, PortTo: port.PortTo, Source: port.Source})
 		}
 		networks = append(networks, vm.NetworkConfiguration{
-			OpenPorts:openPorts,
+			OpenPorts: openPorts,
 		})
 	}
 	return networks

@@ -56,7 +56,6 @@ func (in *Instance) queryIPs(c client.Connector, l boshlog.Logger) error {
 	//var private []string
 	//public, private, err = in.location.instanceIPs(c, in.ocid)
 
-
 	in.publicIPs = make([]string, len(public))
 	//in.privateIPs = make([]string, len(private))
 	copy(in.publicIPs, public)

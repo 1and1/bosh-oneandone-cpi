@@ -37,37 +37,32 @@ var (
 	ips chan string
 	//apikeyPath = fakeAPIKeyPath()
 	apikeyPath = "C:/gopath/src/github.com/bosh-oneandone-cpi/integration/test/assets/fake_api_key.pem"
+	//token      = os.Getenv("ONEANDONE_TOKEN")
+	token = "c4a21f145229f0597d60b0e531cfc69f"
 
 	cfgContent = fmt.Sprintf(`{
-	  "cloud": {
-		"plugin": "oneandone",
-          "properties": {
-		  "oao": {
-			"apikeyfile": "%v",
-			"cpikeyfile": "sss",
-			"cpiuser": "sss",
-			"authorized_keys":{
-				"cpi":"xxx",
-				"user":"xxx"
-
+		  "cloud": {
+			"plugin": "oneandone",
+			  "properties": {
+			  "oao": {
+				"token": "%v"
+			  },
+			  "agent": {
+				"mbus": "http://127.0.0.1",
+				"blobstore": {
+				  "provider": "local"
+				}
+			  },
+			  "registry": {
+				"protocol": "http",
+				"host": "fake-host",
+				"port": 5555,
+				"username": "fake-username",
+				"password": "fake-username"
+			  }
 			}
-		  },
-		  "agent": {
-			"mbus": "http://127.0.0.1",
-			"blobstore": {
-			  "provider": "local"
-			}
-		  },
-		  "registry": {
-			"protocol": "http",
-			"host": "fake-host",
-			"port": 5555,
-			"username": "fake-username",
-			"password": "fake-username"
 		  }
-		}
-      }
-	}`, apikeyPath)
+		}`, token)
 )
 
 func execCPI(request string) (boshdisp.Response, error) {

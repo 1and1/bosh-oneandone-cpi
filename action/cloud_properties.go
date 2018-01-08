@@ -16,12 +16,12 @@ type StemcellCloudProperties struct {
 // NetworkCloudProperties holds the CPI specific network properties
 // defined in cloud config
 type NetworkCloudProperties struct {
-	OpenPorts    []Rule `json:"open-ports,omitempty"`
+	OpenPorts []Rule `json:"open-ports,omitempty"`
 }
 
 type Rule struct {
-	PortFrom *int `json:"port-from,omitempty"`
-	PortTo   *int `json:"port-to,omitempty"`
+	PortFrom *int   `json:"port-from,omitempty"`
+	PortTo   *int   `json:"port-to,omitempty"`
 	Source   string `json:"source,omitempty"`
 }
 
@@ -34,5 +34,4 @@ type VMCloudProperties struct {
 	DiskSize   int     `json:"diskSize,omitempty"`
 	Ram        float32 `json:"ram,omitempty"`
 	SSHKey     string  `json:"rsa_key,omitempty"`
-	Network
 }

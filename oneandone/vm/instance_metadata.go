@@ -2,8 +2,8 @@ package vm
 
 import (
 	"encoding/json"
-	"strings"
 	"github.com/bosh-oneandone-cpi/registry"
+	"strings"
 )
 
 // WARNING:

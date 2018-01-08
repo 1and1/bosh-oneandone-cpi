@@ -1,4 +1,5 @@
 package resource
+
 //
 //import (
 //	boshlog "github.com/cloudfoundry/bosh-utils/logger"

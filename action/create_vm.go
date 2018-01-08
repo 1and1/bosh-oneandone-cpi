@@ -42,10 +42,11 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 		DiskSize: cloudProps.DiskSize,
 		Cores:    cloudProps.Cores,
 		Network:  networks.AsNetworkConfiguration(),
+		SSHKey:   cloudProps.SSHKey,
 	}
 
 	metadata := vm.InstanceMetadata{
-		vm.NewSSHKeys(cv.connector.AuthorizedKeys()),
+		vm.NewSSHKeys([]string{cloudProps.SSHKey}),
 		vm.NewUserData(name, cv.connector.AgentRegistryEndpoint(),
 			nil, nil),
 	}

@@ -6,7 +6,6 @@ import (
 
 	"github.com/bosh-oneandone-cpi/config"
 	"github.com/bosh-oneandone-cpi/registry"
-	"os"
 )
 
 const (
@@ -17,7 +16,7 @@ const (
 type Connector interface {
 	Connect() error
 	Client() *cclient.API
-	AuthorizedKeys() []string
+	Token() string
 	AgentOptions() registry.AgentOptions
 	AgentRegistryEndpoint() string
 	SSHTunnelConfig() config.SSHTunnel
@@ -37,12 +36,17 @@ func NewConnector(c config.Cloud, logger boshlog.Logger) Connector {
 }
 
 func (c *connectorImpl) Connect() error {
-	return c.createServiceClients(os.Getenv("ONEANDONE_API_KEY"), apiBasePath)
+	return c.createServiceClients(c.config.Properties.OAO.APIToken, apiBasePath)
 }
 
 func (c *connectorImpl) Client() *cclient.API {
 
 	return c.client
+}
+
+func (c *connectorImpl) Token() string {
+
+	return c.config.Properties.OAO.APIToken
 }
 
 func (c *connectorImpl) AgentOptions() registry.AgentOptions {
@@ -71,25 +75,25 @@ func (c *connectorImpl) createServiceClients(token string, basePath string) (err
 	return nil
 }
 
-func (c *connectorImpl) AuthorizedKeys() []string {
-	keys := []string{}
-	userKey, err := c.config.Properties.OAO.UserSSHPublicKeyContent()
-	if err != nil {
-		c.logger.Debug(logTag, "Ignored error while getting user key %v", err)
-	} else {
-		keys = append(keys, userKey)
-	}
-
-	cpiKey, err := c.config.Properties.OAO.CpiSSHPublicKeyContent()
-	if err != nil {
-		c.logger.Debug(logTag, "Ignored error while getting cpi key %v", err)
-	} else {
-		keys = append(keys, cpiKey)
-
-	}
-	return keys
-	return []string{}
-}
+//func (c *connectorImpl) AuthorizedKeys() []string {
+//	keys := []string{}
+//	userKey, err := c.config.Properties.OAO.UserSSHPublicKeyContent()
+//	if err != nil {
+//		c.logger.Debug(logTag, "Ignored error while getting user key %v", err)
+//	} else {
+//		keys = append(keys, userKey)
+//	}
+//
+//	cpiKey, err := c.config.Properties.OAO.CpiSSHPublicKeyContent()
+//	if err != nil {
+//		c.logger.Debug(logTag, "Ignored error while getting cpi key %v", err)
+//	} else {
+//		keys = append(keys, cpiKey)
+//
+//	}
+//	return keys
+//	return []string{}
+//}
 
 func (c *connectorImpl) createCoreServiceClient() {
 

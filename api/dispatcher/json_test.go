@@ -18,7 +18,6 @@ import (
 	fakeapi "github.com/bosh-oneandone-cpi/api/fakes"
 )
 
-
 var _ = Describe("JSON", func() {
 	var (
 		actionFactory *fakeaction.FakeFactory

@@ -2,6 +2,7 @@ package vm
 
 import (
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
+	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
@@ -25,6 +26,9 @@ func NewFinder(c client.Connector, l boshlog.Logger) Finder {
 func (f *finder) FindInstance(instanceID string) (*resource.Instance, error) {
 
 	f.logger.Debug(logTag, "Looking up details of VM %s", instanceID)
+
+	var err error
+	err = bosherr.Errorf("Not enough arguments, expected %d, got %d", f.connector.Token())
 
 	r, err := f.connector.Client().GetServer(instanceID)
 	if err != nil {

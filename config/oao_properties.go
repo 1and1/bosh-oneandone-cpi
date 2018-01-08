@@ -3,31 +3,29 @@ package config
 import (
 	"fmt"
 	"os"
-	"path/filepath"
-	"strings"
 )
 
 // OAOProperties contains the properties for configuring
 // BOSH CPI for 1&1 Cloud Infrastructure
 type OAOProperties struct {
-	// APIKeyFile is the path to the private API key
-	APIKeyFile string `json:"apikeyfile"`
+	// APIToken is the token used to connect to 1&1
+	APIToken string `json:"token"`
 
-	// CPIKeyfile is the path to the private key used by the CPI
-	// used for SSH connections
-	CpiKeyFile string `json:"cpikeyfile"`
-
-	// CpiUser is name of the user to use for CPI SSH connections
-	CpiUser string `json:"cpiuser"`
-
-	// UsePublicIPForSSH controls whether to use public or private IP
-	// of the target insatnce for establishing SSH connections
-	UsePublicIPForSSH bool `json:"usePublicIpForSsh,omitempty"`
-
-	// AuthorizedKeys contains the public ssh-keys to provision
-	// on new vms
-	AuthorizedKeys AuthorizedKeys `json:"authorized_keys"`
-
+	//// CPIKeyfile is the path to the private key used by the CPI
+	//// used for SSH connections
+	//CpiKeyFile string `json:"cpikeyfile"`
+	//
+	//// CpiUser is name of the user to use for CPI SSH connections
+	//CpiUser string `json:"cpiuser"`
+	//
+	//// UsePublicIPForSSH controls whether to use public or private IP
+	//// of the target insatnce for establishing SSH connections
+	//UsePublicIPForSSH bool `json:"usePublicIpForSsh,omitempty"`
+	//
+	//// AuthorizedKeys contains the public ssh-keys to provision
+	//// on new vms
+	//AuthorizedKeys AuthorizedKeys `json:"authorized_keys"`
+	//
 	// SSHTunnel is the configuration for creating a forward SSH tunnel
 	SSHTunnel SSHTunnel `json:"sshTunnel,omitempty"`
 }
@@ -46,13 +44,13 @@ type AuthorizedKeys struct {
 func (b OAOProperties) Validate() error {
 
 	if err := isAnyEmpty(map[string]string{
-		"apikeyfile":  b.APIKeyFile,
-		"cpiuser":     b.CpiUser,
-		"cpikeyfile":  b.CpiKeyFile,
+		"token": b.APIToken,
+		//"cpiuser":     b.CpiUser,
+		//"cpikeyfile":  b.CpiKeyFile,
 	}); err != nil {
 		return err
 	}
-	return validateFilePaths([]string{b.APIKeyFile})
+	return nil
 }
 
 func isAnyEmpty(attributes map[string]string) error {
@@ -81,15 +79,15 @@ func validateFilePath(path string) error {
 }
 
 func newSanitizedConfig(configFullPath string, b OAOProperties) OAOProperties {
-	dir := filepath.Dir(configFullPath)
+	//dir := filepath.Dir(configFullPath)
 
 	return OAOProperties{
-		APIKeyFile:        filepath.Join(dir, filepath.Base(b.APIKeyFile)),
-		CpiKeyFile:        filepath.Join(dir, filepath.Base(b.CpiKeyFile)),
-		CpiUser:           b.CpiUser,
-		UsePublicIPForSSH: b.UsePublicIPForSSH,
-		AuthorizedKeys:    b.AuthorizedKeys,
-		SSHTunnel:         b.SSHTunnel,
+		APIToken: b.APIToken,
+		//CpiKeyFile:        filepath.Join(dir, filepath.Base(b.CpiKeyFile)),
+		//CpiUser:           b.CpiUser,
+		//UsePublicIPForSSH: b.UsePublicIPForSSH,
+		//AuthorizedKeys:    b.AuthorizedKeys,
+		SSHTunnel: b.SSHTunnel,
 	}
 }
 
@@ -103,20 +101,20 @@ func newSanitizedConfig(configFullPath string, b OAOProperties) OAOProperties {
 //}
 
 // UserSSHPublicKeyContent returns the configured ssh-rsa user public key
-func (b OAOProperties) UserSSHPublicKeyContent() (string, error) {
-	return sanitizeSSHKey(b.AuthorizedKeys.User)
-}
+//func (b OAOProperties) UserSSHPublicKeyContent() (string, error) {
+//	return sanitizeSSHKey(b.AuthorizedKeys.User)
+//}
 
 // CpiSSHPublicKeyContent returns the configured cpi user's ssh-rsa public key
-func (b OAOProperties) CpiSSHPublicKeyContent() (string, error) {
-	return sanitizeSSHKey(b.AuthorizedKeys.Cpi)
-}
+//func (b OAOProperties) CpiSSHPublicKeyContent() (string, error) {
+//	return sanitizeSSHKey(b.AuthorizedKeys.Cpi)
+//}
 
 // CpiSSHConfig returns the CPI ssh configuration
-func (b OAOProperties) CpiSSHConfig() SSHConfig {
-	return SSHConfig{b.CpiUser, b.CpiKeyFile, b.UsePublicIPForSSH}
-}
+//func (b OAOProperties) CpiSSHConfig() SSHConfig {
+//	return SSHConfig{b.CpiUser, b.CpiKeyFile, b.UsePublicIPForSSH}
+//}
 
-func sanitizeSSHKey(key string) (string, error) {
-	return strings.TrimSuffix(strings.TrimSpace(key), "\n"), nil
-}
+//func sanitizeSSHKey(key string) (string, error) {
+//	return strings.TrimSuffix(strings.TrimSpace(key), "\n"), nil
+//}

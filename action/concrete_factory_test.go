@@ -1,14 +1,14 @@
 package action
 
 import (
-	boshlog "github.com/cloudfoundry/bosh-utils/logger"
-	fakeuuid "github.com/cloudfoundry/bosh-utils/uuid/fakes"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"github.com/bosh-oneandone-cpi/config"
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	clientfakes "github.com/bosh-oneandone-cpi/oneandone/client/fakes"
 	"github.com/bosh-oneandone-cpi/registry"
+	boshlog "github.com/cloudfoundry/bosh-utils/logger"
+	fakeuuid "github.com/cloudfoundry/bosh-utils/uuid/fakes"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("ConcreteFactory", func() {

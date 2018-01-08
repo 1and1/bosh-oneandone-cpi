@@ -1,8 +1,8 @@
 package action
 
 import (
-	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	"github.com/bosh-oneandone-cpi/oneandone/client"
+	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 )
 
 // DeleteStemcell action handles the delete_stemcell method invocation

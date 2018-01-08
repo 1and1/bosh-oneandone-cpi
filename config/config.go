@@ -45,7 +45,7 @@ type Cloud struct {
 
 // CPIProperties element in Cloud.Config
 type CPIProperties struct {
-	OAO      OAOProperties `json:"oao"`
+	OAO      OAOProperties
 	Agent    registry.AgentOptions
 	Registry registry.ClientOptions
 }

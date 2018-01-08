@@ -9,11 +9,11 @@ import (
 )
 
 const (
-jsonLogTag = "json"
+	jsonLogTag = "json"
 
-jsonCloudErrorType          = "Bosh::Clouds::CloudError"
-jsonCpiErrorType            = "Bosh::Clouds::CpiError"
-jsonNotImplementedErrorType = "Bosh::Clouds::NotImplemented"
+	jsonCloudErrorType          = "Bosh::Clouds::CloudError"
+	jsonCpiErrorType            = "Bosh::Clouds::CpiError"
+	jsonNotImplementedErrorType = "Bosh::Clouds::NotImplemented"
 )
 
 type Request struct {

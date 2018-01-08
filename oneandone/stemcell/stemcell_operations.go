@@ -82,7 +82,7 @@ func (so stemcellOperations) CreateStemcell(sourceURI string, customImageName st
 	//}
 	//
 	//return image.Id, nil
-	return "9F6D32F961E2170CF72453D1836BF877", nil
+	return "753E3C1F859874AA74EB63B3302601F5", nil
 }
 
 func (so stemcellOperations) FindStemcell(imageID string) (stemcellID string, err error) {

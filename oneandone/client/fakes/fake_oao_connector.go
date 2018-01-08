@@ -1,9 +1,9 @@
 package fakes
 
 import (
+	"github.com/bosh-oneandone-cpi/config"
 	"github.com/bosh-oneandone-cpi/registry"
 	cclient "github.com/oneandone/oneandone-cloudserver-sdk-go"
-	"github.com/bosh-oneandone-cpi/config"
 )
 
 type FakeConnector struct {

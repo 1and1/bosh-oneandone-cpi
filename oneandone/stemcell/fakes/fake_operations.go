@@ -22,7 +22,7 @@ type FakeDestroyer struct {
 	DestroyStemcellError  error
 }
 
-func (f *FakeCreator) CreateStemcell(imageSourceURL string, imageName string) (stemcellId string, err error) {
+func (f *FakeCreator) CreateStemcell(imageSourceURL string, imageName string, ostype string, architecture int, imageId string) (stemcellId string, err error) {
 	f.CreateStemcellCalled = true
 	f.CreateStemcellCalledWithURL = imageSourceURL
 	f.CreateStemcellCalledWithImageName = imageName
@@ -37,5 +37,6 @@ func (f *FakeDestroyer) DeleteStemcell(stemcellId string) (err error) {
 func (f *FakeFinder) FindStemcell(imageOCID string) (stemcellId string, err error) {
 	f.FindStemcellCalled = true
 	f.FindStemcellCalledWithID = imageOCID
+	f.FindStemcellResult = imageOCID
 	return f.FindStemcellResult, f.FindStemcellError
 }

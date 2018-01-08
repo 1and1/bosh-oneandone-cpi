@@ -48,4 +48,3 @@ type FakeAction struct{}
 func (a *FakeAction) Run(payload []byte) (interface{}, error) {
 	return nil, nil
 }
-

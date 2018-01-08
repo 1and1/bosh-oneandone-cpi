@@ -5,6 +5,7 @@ package vm
 //)
 //
 type Networks []NetworkConfiguration
+
 //
 //func (n Networks) primary() NetworkConfiguration {
 //	// Assume first network to be the primary

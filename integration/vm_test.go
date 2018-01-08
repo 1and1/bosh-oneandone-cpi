@@ -16,10 +16,10 @@ var _ = Describe("VM", func() {
 				"agent",
 				"%v",
 				{
-				  "Name": "boshtest",
-				  "Cores": 1,
-				  "DiskSize": 20,
-				  "Ram": 4
+				  "name": "boshtest",
+				  "cores": 1,
+				  "diskSize": 20,
+				  "ram": 4
 				},
 				{
 				  "default": {
@@ -120,8 +120,8 @@ var _ = Describe("VM", func() {
 				},
 				{
 				  "bosh": {
-					  "group_name": "micro-google-dummy-dummy",
-					  "groups": ["micro-google", "dummy", "dummy", "micro-google-dummy", "dummy-dummy"]
+					  "group_name": "1and1 test",
+					  "groups": ["micro-1and1", "dummy", "dummy", "micro-1and1-dummy", "dummy-dummy"]
 				  }
 				}
 			  ]
