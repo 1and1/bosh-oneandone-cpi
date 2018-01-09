@@ -36,3 +36,8 @@ func (fc *FakeConnector) SSHTunnelConfig() config.SSHTunnel {
 func (fc *FakeConnector) SSHConfig() config.SSHConfig {
 	return config.SSHConfig{}
 }
+
+func (c *FakeConnector) Token() string {
+
+	return "fake-token"
+}

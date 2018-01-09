@@ -37,7 +37,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 	icfg := vm.InstanceConfiguration{
 		Name:     name,
 		ImageId:  string(stemcellCID),
-		Location: cloudProps.Datacenter,
+		DatacenterId: cloudProps.Datacenter,
 		Ram:      cloudProps.Ram,
 		DiskSize: cloudProps.DiskSize,
 		Cores:    cloudProps.Cores,

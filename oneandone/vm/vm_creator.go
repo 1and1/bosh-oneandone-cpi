@@ -14,7 +14,7 @@ type InstanceConfiguration struct {
 	ImageId      string
 	Name         string
 	ServerIp     string
-	Location     string
+	DatacenterId string
 	SecondaryIps []string
 	Cores        int
 	DiskSize     int
@@ -86,7 +86,7 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration, md InstanceMetadat
 			},
 		},
 		FirewallPolicyId: firewallId,
-		DatacenterId:     icfg.Location,
+		DatacenterId:     icfg.DatacenterId,
 		ApplianceId:      icfg.ImageId,
 	}
 	_, res, err := cv.connector.Client().CreateServer(&req)

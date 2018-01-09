@@ -1,5 +1,10 @@
 package action
 
+// DiskCloudProperties holds the CPI specific disk properties
+type DiskCloudProperties struct {
+	Datacenter string  `json:"datacenter,omitempty"`
+}
+
 // Environment used to create an instance
 type Environment map[string]interface{}
 

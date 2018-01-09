@@ -88,29 +88,29 @@ var _ = Describe("ConcreteFactory", func() {
 		Expect(action).To(Equal(NewHasVM(connector, logger)))
 	})
 
-	//It("returns create disk action", func() {
-	//	action, err := factory.Create("create_disk")
-	//	Expect(err).ToNot(HaveOccurred())
-	//	Expect(action).To(Equal(NewCreateDisk(connector, logger)))
-	//})
-	//
-	//It("returns delete disk action", func() {
-	//	action, err := factory.Create("delete_disk")
-	//	Expect(err).ToNot(HaveOccurred())
-	//	Expect(action).To(Equal(NewDeleteDisk(connector, logger)))
-	//})
-	//
-	//It("returns attach disk action", func() {
-	//	action, err := factory.Create("attach_disk")
-	//	Expect(err).ToNot(HaveOccurred())
-	//	Expect(action).To(Equal(NewAttachDisk(connector, logger, registryClient)))
-	//})
-	//
-	//It("returns detach disk action", func() {
-	//	action, err := factory.Create("detach_disk")
-	//	Expect(err).ToNot(HaveOccurred())
-	//	Expect(action).To(Equal(NewDetachDisk(connector, logger, registryClient)))
-	//})
+	It("returns create disk action", func() {
+		action, err := factory.Create("create_disk")
+		Expect(err).ToNot(HaveOccurred())
+		Expect(action).To(Equal(NewCreateDisk(connector, logger)))
+	})
+
+	It("returns delete disk action", func() {
+		action, err := factory.Create("delete_disk")
+		Expect(err).ToNot(HaveOccurred())
+		Expect(action).To(Equal(NewDeleteDisk(connector, logger)))
+	})
+
+	It("returns attach disk action", func() {
+		action, err := factory.Create("attach_disk")
+		Expect(err).ToNot(HaveOccurred())
+		Expect(action).To(Equal(NewAttachDisk(connector, logger, registryClient)))
+	})
+
+	It("returns detach disk action", func() {
+		action, err := factory.Create("detach_disk")
+		Expect(err).ToNot(HaveOccurred())
+		Expect(action).To(Equal(NewDetachDisk(connector, logger, registryClient)))
+	})
 	//It("returns has disk action", func() {
 	//	action, err := factory.Create("has_disk")
 	//	Expect(err).ToNot(HaveOccurred())

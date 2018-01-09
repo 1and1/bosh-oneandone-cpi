@@ -41,10 +41,10 @@ func NewConcreteFactory(
 			"set_vm_metadata": NewSetVMMetadata(connector, logger),
 
 			// Disk Management
-			//"create_disk": NewCreateDisk(connector, logger),
-			//"delete_disk": NewDeleteDisk(connector, logger),
-			//"attach_disk": NewAttachDisk(connector, logger, registryClient),
-			//"detach_disk": NewDetachDisk(connector, logger, registryClient),
+			"create_disk": NewCreateDisk(connector, logger),
+			"delete_disk": NewDeleteDisk(connector, logger),
+			"attach_disk": NewAttachDisk(connector, logger, registryClient),
+			"detach_disk": NewDetachDisk(connector, logger, registryClient),
 			//"has_disk":    NewHasDisk(connector, logger),
 			//"get_disks":   NewGetDisks(connector, logger),
 		},
