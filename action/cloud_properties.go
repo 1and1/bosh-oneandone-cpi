@@ -2,7 +2,7 @@ package action
 
 // DiskCloudProperties holds the CPI specific disk properties
 type DiskCloudProperties struct {
-	Datacenter string  `json:"datacenter,omitempty"`
+	Datacenter string `json:"datacenter,omitempty"`
 }
 
 // Environment used to create an instance
@@ -33,10 +33,11 @@ type Rule struct {
 // VMCloudProperties holds the CPI specific properties
 // defined in cloud-config for creating a instance
 type VMCloudProperties struct {
-	Name       string  `json:"name,omitempty"`
-	Datacenter string  `json:"datacenter,omitempty"`
-	Cores      int     `json:"cores,omitempty"`
-	DiskSize   int     `json:"diskSize,omitempty"`
-	Ram        float32 `json:"ram,omitempty"`
-	SSHKey     string  `json:"rsa_key,omitempty"`
+	Name           string  `json:"name,omitempty"`
+	Datacenter     string  `json:"datacenter,omitempty"`
+	InstanceFlavor string  `json:"flavor,omitempty"`
+	Cores          int     `json:"cores,omitempty"`
+	DiskSize       int     `json:"diskSize,omitempty"`
+	Ram            float32 `json:"ram,omitempty"`
+	SSHKey         string  `json:"rsa_key,omitempty"`
 }

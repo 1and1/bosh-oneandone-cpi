@@ -6,21 +6,23 @@ import (
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	"github.com/oneandone/oneandone-cloudserver-sdk-go"
+	"strings"
 )
 
 const logTag = "VMOperations"
 
 type InstanceConfiguration struct {
-	ImageId      string
-	Name         string
-	ServerIp     string
-	DatacenterId string
-	SecondaryIps []string
-	Cores        int
-	DiskSize     int
-	Ram          float32
-	SSHKey       string
-	Network      Networks
+	ImageId        string
+	Name           string
+	ServerIp       string
+	DatacenterId   string
+	SecondaryIps   []string
+	Cores          int
+	DiskSize       int
+	Ram            float32
+	SSHKey         string
+	Network        Networks
+	InstanceFlavor string
 }
 
 type Creator interface {
@@ -50,6 +52,25 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration, md InstanceMetadat
 	var firewallId string
 	var firewallData *oneandone.FirewallPolicy
 	var err error
+	var flavorId string
+
+	if icfg.InstanceFlavor != "" {
+		instances, err := cv.connector.Client().ListFixedInstanceSizes()
+		if err != nil {
+			return nil, fmt.Errorf("Error fetching hardware flavor. Reason: %s", err)
+		}
+		for _, instance := range instances {
+			if strings.ToUpper(instance.Name) == strings.ToUpper(icfg.InstanceFlavor) {
+				flavorId = instance.Id
+				break
+			}
+
+		}
+		if flavorId == "" {
+			return nil, fmt.Errorf("Could find a matching instance flavor: %s , either provide a custom hardware configurations or a valid flavir (S,M,L,XL,XXL,3XL,4XL,5XL)", icfg.InstanceFlavor)
+		}
+
+	}
 
 	if icfg.Network != nil && len(icfg.Network) > 0 {
 		firewallPolicy.Name = fmt.Sprintf("Bosh fw %v", icfg.Name)
@@ -75,6 +96,7 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration, md InstanceMetadat
 		SSHKey:  icfg.SSHKey,
 		PowerOn: true,
 		Hardware: oneandone.Hardware{
+			FixedInsSizeId:    flavorId,
 			Ram:               icfg.Ram,
 			Vcores:            icfg.Cores,
 			CoresPerProcessor: 1,

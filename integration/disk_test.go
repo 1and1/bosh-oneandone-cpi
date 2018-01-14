@@ -34,9 +34,7 @@ var _ = Describe("Disk", func() {
 				"%v",
 				{
 				  "Name": "boshtest",
-				  "Cores": 1,
-				  "DiskSize": 20,
-				  "Ram": 4
+				  "flavor":"kita"
 				},
 				{
 				  "default": {

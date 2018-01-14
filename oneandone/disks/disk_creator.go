@@ -3,7 +3,6 @@ package disks
 import (
 	"fmt"
 	"github.com/bosh-oneandone-cpi/oneandone/client"
-	"github.com/bosh-oracle-cpi/oci"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	sdk "github.com/oneandone/oneandone-cloudserver-sdk-go"
 )
@@ -29,7 +28,7 @@ func (dc *diskCreator) CreateStorage(name string, sizeinGB int, dcId string) (*s
 	_, res, err := dc.connector.Client().CreateBlockStorage(&req)
 
 	if err != nil {
-		return nil, fmt.Errorf("Error creating block storage. Reason: %s", oci.CoreModelErrorMsg(err))
+		return nil, fmt.Errorf("Error creating block storage. Reason: %s", err)
 	}
 
 	//wait for block storage to be ready

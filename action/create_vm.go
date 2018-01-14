@@ -35,14 +35,15 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 	creator := newVMCreator(cv.connector, cv.logger)
 
 	icfg := vm.InstanceConfiguration{
-		Name:     name,
-		ImageId:  string(stemcellCID),
-		DatacenterId: cloudProps.Datacenter,
-		Ram:      cloudProps.Ram,
-		DiskSize: cloudProps.DiskSize,
-		Cores:    cloudProps.Cores,
-		Network:  networks.AsNetworkConfiguration(),
-		SSHKey:   cloudProps.SSHKey,
+		Name:           name,
+		ImageId:        string(stemcellCID),
+		DatacenterId:   cloudProps.Datacenter,
+		Ram:            cloudProps.Ram,
+		DiskSize:       cloudProps.DiskSize,
+		Cores:          cloudProps.Cores,
+		Network:        networks.AsNetworkConfiguration(),
+		SSHKey:         cloudProps.SSHKey,
+		InstanceFlavor: cloudProps.InstanceFlavor,
 	}
 
 	metadata := vm.InstanceMetadata{
