@@ -33,7 +33,7 @@ func (dc *diskCreator) CreateStorage(name string, sizeinGB int, dcId string) (*s
 	}
 
 	//wait for block storage to be ready
-	dc.connector.Client().WaitForState(res, "ACTIVE", 10, 90)
+	dc.connector.Client().WaitForState(res, "POWERED_ON", 10, 90)
 
 	dc.logger.Debug(diskOperationsLogTag, "Created block storage %v", res)
 	return res, nil

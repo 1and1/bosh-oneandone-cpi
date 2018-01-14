@@ -25,7 +25,7 @@ func (f *diskFinder) FindStorage(storageId string) (*sdk.BlockStorage, error) {
 	}
 
 	//wait for block storage to be ready
-	f.connector.Client().WaitForState(strg, "ACTIVE", 10, 90)
+	f.connector.Client().WaitForState(strg, "POWERED_ON", 10, 90)
 	return strg, nil
 }
 

@@ -35,7 +35,7 @@ func (ad *diskAttacherDetacher) AttachInstanceToStorage(v *sdk.BlockStorage, in 
 	disks, err := ad.connector.Client().ListBlockStorages(1, 50, "", in.ID(), "")
 
 	//wait for block storage to be ready
-	ad.connector.Client().WaitForState(res, "ACTIVE", 10, 90)
+	ad.connector.Client().WaitForState(res, "POWERED_ON", 10, 90)
 
 	// Look up for the device index
 	for index, attacheddisk := range disks {
@@ -55,7 +55,7 @@ func (ad *diskAttacherDetacher) DetachInstanceFromStorage(v *sdk.BlockStorage, i
 	}
 
 	//wait for block storage to be ready
-	ad.connector.Client().WaitForState(res, "ACTIVE", 10, 90)
+	ad.connector.Client().WaitForState(res, "POWERED_ON", 10, 90)
 
 	return nil
 }

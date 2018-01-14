@@ -14,7 +14,7 @@ var _ = Describe("Disk", func() {
 		var diskCID string
 		request := fmt.Sprintf(`{
 			  "method": "create_disk",
-			  "arguments": [20,{}]
+			  "arguments": [20,{"datacenter":"908DC2072407C94C8054610AD5A53B8C"}]
 			}`)
 		diskCID = assertSucceedsWithResult(request).(string)
 
@@ -33,10 +33,10 @@ var _ = Describe("Disk", func() {
 				"agent",
 				"%v",
 				{
-				  "name": "boshtest",
-				  "cores": 1,
-				  "diskSize": 20,
-				  "ram": 4
+				  "Name": "boshtest",
+				  "Cores": 1,
+				  "DiskSize": 20,
+				  "Ram": 4
 				},
 				{
 				  "default": {
@@ -75,6 +75,12 @@ var _ = Describe("Disk", func() {
 						]
 					}
 				  }
+				},
+				{
+				  "bosh": {
+					  "group_name": "1and1 test",
+					  "groups": ["micro-1and1", "dummy", "dummy", "micro-1and1-dummy", "dummy-dummy"]
+				  }
 				}
 			  ]
 			}`, existingStemcell)
@@ -102,21 +108,6 @@ var _ = Describe("Disk", func() {
 			}`, vmCID, diskCID)
 		assertSucceeds(request)
 
-		request = fmt.Sprintf(`{
-			  "method": "delete_disk",
-			  "arguments": ["%v"]
-			}`, diskCID)
-		assertSucceeds(request)
-
-		By("confirming a disk does not exist")
-		request = fmt.Sprintf(`{
-			  "method": "has_disk",
-			  "arguments": ["%v"]
-			}`, diskCID)
-		found := assertSucceedsWithResult(request).(bool)
-		Expect(found).To(BeFalse())
-
-		By("deleting the disk")
 		request = fmt.Sprintf(`{
 			  "method": "delete_disk",
 			  "arguments": ["%v"]

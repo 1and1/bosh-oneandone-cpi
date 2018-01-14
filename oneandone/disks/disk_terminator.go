@@ -23,12 +23,13 @@ func (dt *diskTerminator) DeleteStorage(storageId string) error {
 		return err
 	}
 	//wait for block storage to be ready
-	dt.connector.Client().WaitForState(strg, "ACTIVE", 10, 90)
+	dt.connector.Client().WaitForState(strg, "POWERED_ON", 10, 90)
 	_, errs := dt.connector.Client().DeleteBlockStorage(storageId)
 	if errs != nil {
 		dt.logger.Error(diskOperationsLogTag, "Error deleting storage %v", errs)
 		return errs
 	}
+	dt.connector.Client().WaitUntilDeleted(strg)
 	dt.logger.Debug(diskOperationsLogTag, "Deleted storage %s", storageId)
 	return nil
 }

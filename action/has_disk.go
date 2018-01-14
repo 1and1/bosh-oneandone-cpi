@@ -1,9 +1,9 @@
 package action
 
 import (
+	"github.com/bosh-oneandone-cpi/oneandone/client"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
-	"github.com/bosh-oneandone-cpi/oneandone/client"
 )
 
 // HasDisk action handles the has_disk request
@@ -21,8 +21,12 @@ func NewHasDisk(c client.Connector, l boshlog.Logger) HasDisk {
 func (hd HasDisk) Run(diskCID DiskCID) (bool, error) {
 
 	strg, err := newDiskFinder(hd.connector, hd.logger).FindStorage(string(diskCID))
+
 	if err != nil {
 		return false, bosherr.WrapError(err, "Error finding disk")
+	}
+	if strg.State == "REMOVING" {
+		return false, nil
 	}
 	return strg.Id == string(diskCID), nil
 }

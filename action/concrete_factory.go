@@ -45,8 +45,8 @@ func NewConcreteFactory(
 			"delete_disk": NewDeleteDisk(connector, logger),
 			"attach_disk": NewAttachDisk(connector, logger, registryClient),
 			"detach_disk": NewDetachDisk(connector, logger, registryClient),
-			//"has_disk":    NewHasDisk(connector, logger),
-			//"get_disks":   NewGetDisks(connector, logger),
+			"has_disk":    NewHasDisk(connector, logger),
+			"get_disks":   NewGetDisks(connector, logger),
 		},
 	}
 }

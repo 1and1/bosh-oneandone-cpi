@@ -111,15 +111,14 @@ var _ = Describe("ConcreteFactory", func() {
 		Expect(err).ToNot(HaveOccurred())
 		Expect(action).To(Equal(NewDetachDisk(connector, logger, registryClient)))
 	})
-	//It("returns has disk action", func() {
-	//	action, err := factory.Create("has_disk")
-	//	Expect(err).ToNot(HaveOccurred())
-	//	Expect(action).To(Equal(NewHasDisk(connector, logger)))
-	//})
-	//
-	//It("returns get disks action", func() {
-	//	action, err := factory.Create("get_disks")
-	//	Expect(err).ToNot(HaveOccurred())
-	//	Expect(action).To(Equal(NewGetDisks(connector, logger)))
-	//})
+	It("returns has disk action", func() {
+		action, err := factory.Create("has_disk")
+		Expect(err).ToNot(HaveOccurred())
+		Expect(action).To(Equal(NewHasDisk(connector, logger)))
+	})
+	It("returns get disks action", func() {
+		action, err := factory.Create("get_disks")
+		Expect(err).ToNot(HaveOccurred())
+		Expect(action).To(Equal(NewGetDisks(connector, logger)))
+	})
 })
