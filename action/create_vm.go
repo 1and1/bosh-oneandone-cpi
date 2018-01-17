@@ -44,6 +44,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 		Network:        networks.AsNetworkConfiguration(),
 		SSHKey:         cloudProps.SSHKey,
 		InstanceFlavor: cloudProps.InstanceFlavor,
+		ServerIp:       cloudProps.PublicIP,
 	}
 
 	metadata := vm.InstanceMetadata{

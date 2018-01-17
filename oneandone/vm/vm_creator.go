@@ -53,6 +53,24 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration, md InstanceMetadat
 	var firewallData *oneandone.FirewallPolicy
 	var err error
 	var flavorId string
+	var ipId string
+
+	if icfg.ServerIp != "" {
+		ips, err := cv.connector.Client().ListPublicIps()
+		if err != nil {
+			return nil, fmt.Errorf("Error fetching public IPs. Reason: %s", err)
+		}
+		for _, ip := range ips {
+			if ip.IpAddress == icfg.ServerIp && ip.AssignedTo == nil {
+				ipId = ip.Id
+				break
+			}
+
+		}
+		if ipId == "" {
+			return nil, fmt.Errorf("Could find a matching public ip address", icfg.ServerIp)
+		}
+	}
 
 	if icfg.InstanceFlavor != "" {
 		instances, err := cv.connector.Client().ListFixedInstanceSizes()
@@ -110,6 +128,7 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration, md InstanceMetadat
 		FirewallPolicyId: firewallId,
 		DatacenterId:     icfg.DatacenterId,
 		ApplianceId:      icfg.ImageId,
+		IpId:             ipId,
 	}
 	_, res, err := cv.connector.Client().CreateServer(&req)
 	if err != nil {

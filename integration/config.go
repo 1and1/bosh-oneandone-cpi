@@ -39,6 +39,17 @@ var (
 	apikeyPath = "C:/gopath/src/github.com/bosh-oneandone-cpi/integration/test/assets/fake_api_key.pem"
 	//token      = os.Getenv("ONEANDONE_TOKEN")
 	token = "c4a21f145229f0597d60b0e531cfc69f"
+	internalIp      = envOrDefault("CPI_INTERNAL_IP", "172.16.0.31")
+	internalCidr    = envOrDefault("CPI_INTERNAL_CIDR", "172.16.0.0/24")
+	internalNetmask = envOrDefault("CPI_INTERNAL_NETMASK", "255.240.0.0")
+	internalGw      = envOrDefault("CPI_INTERNAL_GW", "172.16.0.1")
+
+	//
+	// registry
+	registryUser     = envOrDefault("CPI_REGISTRY_USER", "admin")
+	registryPassword = envOrDefault("CPI_REGISTRY_PASSWORD", "admin-password")
+	registryHost     = envOrDefault("CPI_REGISTRY_ADDRESS", "172.0.0.1")
+	registryPort     = envOrDefault("CPI_REGISTRY_PORT", "25777")
 
 	cfgContent = fmt.Sprintf(`{
 		  "cloud": {
@@ -55,14 +66,14 @@ var (
 			  },
 			  "registry": {
 				"protocol": "http",
-				"host": "fake-host",
-				"port": 5555,
-				"username": "fake-username",
-				"password": "fake-username"
+				"host": "%v",
+				"port": %v,
+				"username": "%v",
+				"password": "%v"
 			  }
 			}
 		  }
-		}`, token)
+		}`, token, registryHost, registryPort, registryUser, registryPassword)
 )
 
 func execCPI(request string) (boshdisp.Response, error) {

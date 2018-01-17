@@ -40,4 +40,5 @@ type VMCloudProperties struct {
 	DiskSize       int     `json:"diskSize,omitempty"`
 	Ram            float32 `json:"ram,omitempty"`
 	SSHKey         string  `json:"rsa_key,omitempty"`
+	PublicIP       string  `json:"public_ip,omitempty"`
 }

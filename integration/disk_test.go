@@ -34,7 +34,8 @@ var _ = Describe("Disk", func() {
 				"%v",
 				{
 				  "Name": "boshtest",
-				  "flavor":"kita"
+				  "flavor":"s",
+			      "public_ip":"70.35.200.157"
 				},
 				{
 				  "default": {
