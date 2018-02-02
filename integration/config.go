@@ -39,16 +39,16 @@ var (
 	apikeyPath = "C:/gopath/src/github.com/bosh-oneandone-cpi/integration/test/assets/fake_api_key.pem"
 	//token      = os.Getenv("ONEANDONE_TOKEN")
 	token = "c4a21f145229f0597d60b0e531cfc69f"
-	internalIp      = envOrDefault("CPI_INTERNAL_IP", "172.16.0.31")
-	internalCidr    = envOrDefault("CPI_INTERNAL_CIDR", "172.16.0.0/24")
-	internalNetmask = envOrDefault("CPI_INTERNAL_NETMASK", "255.240.0.0")
-	internalGw      = envOrDefault("CPI_INTERNAL_GW", "172.16.0.1")
+	internalIp      = envOrDefault("CPI_INTERNAL_IP", "10.4.92.139")
+	internalCidr    = envOrDefault("CPI_INTERNAL_CIDR", "10.4.92.139/24")
+	internalNetmask = envOrDefault("CPI_INTERNAL_NETMASK", "255.255.255.0")
+	internalGw      = envOrDefault("CPI_INTERNAL_GW", "10.4.92.139")
 
 	//
 	// registry
 	registryUser     = envOrDefault("CPI_REGISTRY_USER", "admin")
 	registryPassword = envOrDefault("CPI_REGISTRY_PASSWORD", "admin-password")
-	registryHost     = envOrDefault("CPI_REGISTRY_ADDRESS", "172.0.0.1")
+	registryHost     = envOrDefault("CPI_REGISTRY_ADDRESS", "10.4.92.139")
 	registryPort     = envOrDefault("CPI_REGISTRY_PORT", "25777")
 
 	cfgContent = fmt.Sprintf(`{

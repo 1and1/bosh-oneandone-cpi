@@ -2,11 +2,12 @@ package vm
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	"github.com/oneandone/oneandone-cloudserver-sdk-go"
-	"strings"
 )
 
 const logTag = "VMOperations"
@@ -99,13 +100,15 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration, md InstanceMetadat
 			}
 		}
 		firewallPolicy.Rules = rules
-		firewallId, firewallData, err = cv.connector.Client().CreateFirewallPolicy(&firewallPolicy)
-		if err != nil {
+		if len(rules) > 0 {
+			firewallId, firewallData, err = cv.connector.Client().CreateFirewallPolicy(&firewallPolicy)
 			if err != nil {
-				return nil, err
+				if err != nil {
+					return nil, fmt.Errorf("Error creating a firewall policy with the open ports provided in the config file %s", err)
+				}
 			}
+			cv.connector.Client().WaitForState(firewallData, "ACTIVE", 10, 90)
 		}
-		cv.connector.Client().WaitForState(firewallData, "ACTIVE", 10, 90)
 	}
 
 	//creating the server on 1&1

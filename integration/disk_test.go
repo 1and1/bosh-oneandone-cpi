@@ -35,7 +35,7 @@ var _ = Describe("Disk", func() {
 				{
 				  "Name": "boshtest",
 				  "flavor":"s",
-			      "public_ip":"70.35.200.157"
+    "rsa_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDA3zMuWZBH4INpQ/XegqfJ498eQHyffuqG1Y/NSzUNAY2Ys6xggQijATbAIF6GuCSfxfKzlmR2J6HmhxzYqhhmNZk7vIyfQ6TWYyoNnDNCcysFy+GOf65WY9KrUo3JH8SJtytn5Hs6ZT7GT22pc2P3ThiHu3e+y3N3nhjglgLXnKpzQbS2xzeA8AUUfC7TfIIpE1JP+856BXH8b3a9rbt6xQQEQFdTqOAZgi93+wp9jHiiq8NsTWSi1W4t0+r0Y9XM0t1DGjpKUTm7Q+JxItnx6IpBtl6j8ThKo9J5NIlmAEKhDQYdecsDnjU3WhuENRAb/jfP2+Ci7i7bANVxa/Tj ali@ali-G751JT"
 				},
 				{
 				  "default": {

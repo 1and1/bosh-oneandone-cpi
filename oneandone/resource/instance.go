@@ -38,11 +38,6 @@ func (in *Instance) EnsureReachable(c client.Connector, l boshlog.Logger) error 
 }
 
 func (in *Instance) queryIPs(c client.Connector, l boshlog.Logger) error {
-	err := in.WaitUntilStarted(c, l)
-	if err != nil {
-		return err
-	}
-
 	res, err := c.Client().ListServerIps(in.ID())
 	if err != nil {
 		l.Debug(logTag, "Error finding IPs %s", err)
@@ -62,41 +57,6 @@ func (in *Instance) queryIPs(c client.Connector, l boshlog.Logger) error {
 	//copy(in.privateIPs, private)
 
 	l.Debug(logTag, "Queried IPs, Private %v, Public %v", in.privateIPs, in.publicIPs)
-	return nil
-}
-
-func (in *Instance) WaitUntilStarted(c client.Connector, l boshlog.Logger) (err error) {
-
-	//getInstanceState := func() (bool, error) {
-	//
-	//	p := compute.NewGetInstanceParams().WithInstanceID(in.ocid)
-	//	r, err := c.CoreSevice().Compute.GetInstance(p)
-	//	if err != nil {
-	//		return false, err
-	//	}
-	//	instance := r.Payload
-	//	switch *instance.LifecycleState {
-	//	case "PROVISIONING", "CREATING_IMAGE":
-	//		return true, errors.New("Not provisioned yet")
-	//	case "STOPPING", "STOPPED", "TERMINATING", "TERMINATED":
-	//		return false, errors.New("Terminated")
-	//	case "RUNNING":
-	//		return true, nil
-	//	case "STARTING":
-	//		return true, errors.New("Starting")
-	//	}
-	//	return true, errors.New("Unknown instance state")
-	//}
-	//
-	//retryable := boshretry.NewRetryable(getInstanceState)
-	//retryStrategy := boshretry.NewUnlimitedRetryStrategy(10*time.Second, retryable, l)
-	//
-	//l.Debug(logTag, "Waiting for instance to reach RUNNING state...")
-	//if err := retryStrategy.Try(); err != nil {
-	//	l.Debug(logTag, "Error waiting for instance to start %v", err)
-	//	return err
-	//}
-	//l.Debug(logTag, "Done")
 	return nil
 }
 
@@ -122,13 +82,17 @@ func (in *Instance) setupSSHTunnelToAgent(c client.Connector, l boshlog.Logger) 
 
 		duration, _ := time.ParseDuration(tunnel.Duration)
 		remotePort, _ := c.AgentOptions().MBusPort()
-		remoteIP, err := in.remoteIP(c, l, tunnel.UsePublicIP)
+		//todo: mind this below
+		//remoteIP, err := in.remoteIP(c, l, tunnel.UsePublicIP)
+		remoteIP, err := in.remoteIP(c, l, true)
 		if err != nil {
 			return err
 		}
 
 		// Ensure SSHD is up
-		retryable := NewSSHDCheckerRetryable(tunnel.User, remoteIP, l)
+		//todo: mind this below
+		retryable := NewSSHDCheckerRetryable("root", remoteIP, l)
+		//retryable := NewSSHDCheckerRetryable(tunnel.User, remoteIP, l)
 		strategy := boshretry.NewAttemptRetryStrategy(10, 20*time.Second, retryable, l)
 		err = strategy.Try()
 

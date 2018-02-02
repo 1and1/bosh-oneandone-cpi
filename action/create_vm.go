@@ -2,10 +2,11 @@ package action
 
 import (
 	"fmt"
+	"time"
+
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	boshuuid "github.com/cloudfoundry/bosh-utils/uuid"
-	"time"
 
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/vm"
@@ -31,7 +32,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 
 	agentNetworks := networks.AsRegistryNetworks()
 	// Create the VM
-	name := cv.vmName()
+	name := cv.vmName(cloudProps.Name)
 	creator := newVMCreator(cv.connector, cv.logger)
 
 	icfg := vm.InstanceConfiguration{
@@ -50,7 +51,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 	metadata := vm.InstanceMetadata{
 		vm.NewSSHKeys([]string{cloudProps.SSHKey}),
 		vm.NewUserData(name, cv.connector.AgentRegistryEndpoint(),
-			nil, nil),
+			nil, agentNetworks),
 	}
 	instance, err := creator.CreateInstance(icfg, metadata)
 
@@ -69,13 +70,13 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 	return VMCID(instance.ID()), nil
 }
 
-func (cv CreateVM) vmName() string {
+func (cv CreateVM) vmName(prefix string) string {
 
 	suffix, err := cv.uuidGen.Generate()
 	if err != nil {
 		suffix = time.Now().Format(time.Stamp)
 	}
-	return fmt.Sprintf("bosh-%s", suffix)
+	return fmt.Sprintf("%s-%s", prefix, suffix)
 }
 
 func (cv CreateVM) updateRegistry(agentID string, instanceID string, vmName string,

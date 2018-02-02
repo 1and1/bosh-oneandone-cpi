@@ -34,7 +34,7 @@ var validOCIPropertiesWithSSHTunnel = OAOProperties{
 	//AuthorizedKeys: AuthorizedKeys{
 	//	Cpi: "ssh-rsa fake key",
 	//},
-	//SSHTunnel: forwardSSHTunnel,
+	SSHTunnel: forwardSSHTunnel,
 }
 
 var validAgentOptions = registry.AgentOptions{
