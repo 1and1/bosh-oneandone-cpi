@@ -8,7 +8,7 @@ import (
 const stemCellLogTag = "OAOStemcell"
 
 type Creator interface {
-	CreateStemcell(imageSourceURL string, customImageName string, osType string, architecture int, imageId string) (stemcellId string, err error)
+	CreateStemcell(imageId string) (stemcellId string, err error)
 }
 type CreatorFactory func(client.Connector, boshlog.Logger) Creator
 

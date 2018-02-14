@@ -9,12 +9,11 @@ type FakeFinder struct {
 }
 
 type FakeCreator struct {
-	CreateStemcellCalled              bool
-	CreateStemcellCalledWithURL       string
-	CreateStemcellCalledWithImageName string
+	FindStemcellCalled       bool
+	FindStemcellCalledWithID string
 
-	CreateStemcellResult string
-	CreateStemcellError  error
+	FindStemcellResult string
+	FindStemcellError  error
 }
 
 type FakeDestroyer struct {
@@ -22,11 +21,11 @@ type FakeDestroyer struct {
 	DestroyStemcellError  error
 }
 
-func (f *FakeCreator) CreateStemcell(imageSourceURL string, imageName string, ostype string, architecture int, imageId string) (stemcellId string, err error) {
-	f.CreateStemcellCalled = true
-	f.CreateStemcellCalledWithURL = imageSourceURL
-	f.CreateStemcellCalledWithImageName = imageName
-	return f.CreateStemcellResult, f.CreateStemcellError
+func (f *FakeCreator) CreateStemcell(imageId string) (stemcellId string, err error) {
+	f.FindStemcellCalled = true
+	f.FindStemcellCalledWithID = imageId
+	f.FindStemcellResult = imageId
+	return f.FindStemcellResult, f.FindStemcellError
 }
 
 func (f *FakeDestroyer) DeleteStemcell(stemcellId string) (err error) {

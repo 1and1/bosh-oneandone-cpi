@@ -5,8 +5,6 @@ import (
 	"github.com/bosh-oneandone-cpi/oneandone/stemcell"
 	"github.com/bosh-oneandone-cpi/oneandone/vm"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
-	//"github.com/bosh-oneandone-cpi/oneandone/disks"
-	//"github.com/bosh-oneandone-cpi/oneandone/resource"
 	"github.com/bosh-oneandone-cpi/oneandone/disks"
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 )

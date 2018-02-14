@@ -21,18 +21,17 @@ func TestIntegration(t *testing.T) {
 var _ = SynchronizedBeforeSuite(func() []byte {
 	// Clean any straggler VMs
 	cleanVMs()
+	var imageId = "BC7CC2DF4258653C41FFCBD18C4D7E9B"
 
 	request := fmt.Sprintf(`{
 			  "method": "create_stemcell",
-			  "arguments": ["%s", {
-				  "name": "bosh-oneandone-ubuntu-trusty",
-				  "image-source-url": "%s",
-                  "os-type":"Ubuntu16.04",
-                  "image-id":"753E3C1F859874AA74EB63B3302601F5",
-				  "infrastructure": "oneandone",
-                  "architecture":64
+         "arguments": [{
+           "name": "bosh-oneandone-kvm-ubuntu-trusty",
+           "version": "3215",
+           "infrastructure": "1&1",
+           "image-id": "%s"
 				}]
-			}`, stemcellFile, stemcellVersion)
+			}`, imageId)
 	stemcell := assertSucceedsWithResult(request).(string)
 
 	ips = make(chan string, len(ipAddrs))

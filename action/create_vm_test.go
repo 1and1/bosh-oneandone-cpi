@@ -76,7 +76,7 @@ var _ = Describe("CreateVM", func() {
 				Cores:      1,
 				Ram:        4,
 				DiskSize:   30,
-				Name:       "test",
+				Name:       "bosh",
 				Datacenter: "fake-dc",
 			}
 			networks = Networks{
@@ -88,17 +88,13 @@ var _ = Describe("CreateVM", func() {
 					DNS:     []string{"fake-network-dns"},
 					DHCP:    true,
 					Default: []string{"fake-network-default"},
-					//CloudProperties: NetworkCloudProperties{
-					//	VcnName:    "fake-vcn",
-					//	SubnetName: "fake-subnet1",
-					//},
 				},
 			}
 		})
 		Context("when no errors in vm creation", func() {
 			BeforeEach(func() {
 				creator = &vmfakes.FakeVMCreator{
-					CreateInstanceResult: resource.NewInstance("fake-ocid"),
+					CreateInstanceResult: resource.NewInstance("test-fake-uuid"),
 					CreateInstanceError:  nil,
 				}
 			})
@@ -106,7 +102,7 @@ var _ = Describe("CreateVM", func() {
 				vmCID, err = createVM.Run("fake-agent-id", "fake-stemcell-id", cloudProps, networks, env)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(creator.CreateInstanceCalled).To(BeTrue())
-				Expect(vmCID).To(Equal(VMCID("fake-ocid")))
+				Expect(vmCID).To(Equal(VMCID("test-fake-uuid")))
 			})
 			It("uses uuid as part of vm name", func() {
 				vmCID, err = createVM.Run("fake-agent-id", "fake-stemcell-id", cloudProps, networks, env)
@@ -145,7 +141,7 @@ var _ = Describe("CreateVM", func() {
 				Expect(err).NotTo(HaveOccurred())
 				Expect(registryClient.UpdateCalled).To(BeTrue())
 				Expect(registryClient.UpdateSettings).To(Equal(expectedAgentSettings))
-				Expect(vmCID).To(Equal(VMCID("fake-ocid")))
+				Expect(vmCID).To(Equal(VMCID("test-fake-uuid")))
 			})
 		})
 		Context("when vm creation fails", func() {

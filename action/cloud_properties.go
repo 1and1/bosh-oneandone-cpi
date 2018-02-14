@@ -12,7 +12,8 @@ type Environment map[string]interface{}
 // defined in stemcell's manifest
 type StemcellCloudProperties struct {
 	Name           string `json:"name,omitempty"`
-	ImageID        string `json:"image-id,omitempty"`
+	Version        string `json:"version,omitempty"`
+	ImageID        string `json:"image-id"`
 	ImageSourceURL string `json:"image-source-url,omitempty"`
 	OSType         string `json:"os-type,omitempty"`
 	Architecture   int    `json:"architecture,omitempty"`
