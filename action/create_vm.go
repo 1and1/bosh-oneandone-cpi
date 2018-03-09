@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	bosherr "github.com/cloudfoundry/bosh-utils/errors"
+	//bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	boshuuid "github.com/cloudfoundry/bosh-utils/uuid"
 
@@ -28,7 +28,7 @@ func NewCreateVM(c client.Connector, l boshlog.Logger, r registry.Client, u bosh
 	return CreateVM{connector: c, logger: l, registry: r, uuidGen: u}
 }
 
-func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMCloudProperties, networks Networks, env Environment) (VMCID, error) {
+func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMCloudProperties, networks Networks, disks []DiskCID, env Environment) (VMCID, error) {
 
 	agentNetworks := networks.AsRegistryNetworks()
 	// Create the VM
@@ -60,11 +60,12 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 		err = instance.EnsureReachable(cv.connector, cv.logger)
 	}
 
+	publicIp, err := instance.PublicIP(cv.connector, cv.logger)
 	if err != nil {
 		return "", bosherr.WrapError(err, "Error launching new instance")
 	}
 
-	if err := cv.updateRegistry(agentID, instance.ID(), name, agentNetworks, env); err != nil {
+	if err := cv.updateRegistry(agentID, publicIp, name, agentNetworks, env); err != nil {
 		return "", err
 	}
 	return VMCID(instance.ID()), nil
@@ -79,9 +80,10 @@ func (cv CreateVM) vmName(prefix string) string {
 	return fmt.Sprintf("%s-%s", prefix, suffix)
 }
 
-func (cv CreateVM) updateRegistry(agentID string, instanceID string, vmName string,
+func (cv CreateVM) updateRegistry(agentID string, ipAddress string, vmName string,
 	agentNetworks registry.NetworksSettings, env Environment) error {
 
+	cv.logger.Info(logTag, "trying to update the registry")
 	// Handle registry update failure. Delete VM or retry?
 	var err error
 	defer func() {
@@ -93,11 +95,10 @@ func (cv CreateVM) updateRegistry(agentID string, instanceID string, vmName stri
 	agentSettings := registry.NewAgentSettings(agentID, vmName, agentNetworks,
 		registry.EnvSettings(env), agentOptions)
 
-	// Update Registry with AgentSettings
-	// for the agent (agent will find them as a HTTP source)
-	if err = cv.registry.Update(instanceID, agentSettings); err != nil {
-		return bosherr.WrapError(err, "Create VM. Error updating registry")
-	}
+	//upload file with AgentSettings using FS and SCP
+	cv.registry.UploadFile("root", ipAddress, agentSettings)
+
+	cv.logger.Info(logTag, "Updated registry")
 	return nil
 
 }

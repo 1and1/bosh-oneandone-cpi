@@ -22,6 +22,7 @@ type StemcellCloudProperties struct {
 // NetworkCloudProperties holds the CPI specific network properties
 // defined in cloud config
 type NetworkCloudProperties struct {
+	Subnet    string `json:"subnet,omitempty"`
 	OpenPorts []Rule `json:"open-ports,omitempty"`
 }
 

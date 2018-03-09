@@ -36,8 +36,8 @@ func (r JSONCaller) Call(action bgcaction.Action, args []interface{}) (value int
 
 	methodArgs, err := r.extractMethodArgs(runMethodType, args)
 	if err != nil {
-		//err = bosherr.WrapError(err, "Extracting method arguments from payload")
-		//return
+		err = bosherr.WrapError(err, "Extracting method arguments from payload")
+		return
 	}
 
 	values := runMethodValue.Call(methodArgs)
@@ -94,8 +94,8 @@ func (r JSONCaller) extractMethodArgs(runMethodType reflect.Type, args []interfa
 		//something:=argValuePtr.Interface()
 		if err = json.Unmarshal(rawArgBytes, argValuePtr.Interface()); err != nil {
 			//err = bosherr.WrapErrorf(err, "the interface %s, and the data probably empty array %s", something, rawArgBytes)
-			//err = bosherr.WrapError(err, "Unmarshalling action argument")
-			//return
+			err = bosherr.WrapError(err, "Unmarshalling action argument")
+			return
 		}
 
 		methodArgs = append(methodArgs, reflect.Indirect(argValuePtr))

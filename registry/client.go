@@ -5,4 +5,5 @@ type Client interface {
 	Delete(instanceID string) error
 	Fetch(instanceID string) (AgentSettings, error)
 	Update(instanceID string, agentSettings AgentSettings) error
+	UploadFile(username string, ipAddress string, agentSettings AgentSettings) error
 }

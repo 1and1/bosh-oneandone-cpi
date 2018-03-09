@@ -1,13 +1,14 @@
 package integration
 
 import (
-	"fmt"
+	//"fmt"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"testing"
 
 	//"github.com/bosh-oneandone-cpi/oneandone/client"
+	"fmt"
 	"github.com/oneandone/oneandone-cloudserver-sdk-go"
 )
 
@@ -21,11 +22,12 @@ func TestIntegration(t *testing.T) {
 var _ = SynchronizedBeforeSuite(func() []byte {
 	// Clean any straggler VMs
 	cleanVMs()
-	var imageId = "BC7CC2DF4258653C41FFCBD18C4D7E9B"
+	var imageId = "CF9C6569ECB0B0EF81BA5A3446538226"
 
 	request := fmt.Sprintf(`{
 			  "method": "create_stemcell",
-         "arguments": [{
+         "arguments": ["",
+			{
            "name": "bosh-oneandone-kvm-ubuntu-trusty",
            "version": "3215",
            "infrastructure": "1&1",

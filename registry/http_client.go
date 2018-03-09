@@ -10,8 +10,13 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/bramvdbogaerde/go-scp"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
+	"golang.org/x/crypto/ssh"
+	"os"
+	//"os/user"
+	"io"
 )
 
 const httpClientLogTag = "RegistryHTTPClient"
@@ -181,4 +186,89 @@ func (c HTTPClient) httpClient() (http.Client, error) {
 	}
 
 	return httpClient, nil
+}
+
+// Update updates the agent settings for a given instance ID. If there are not already agent settings for the instance, it will create ones.
+func (c HTTPClient) UploadFile(username string, ipAddress string, agentSettings AgentSettings) error {
+	settingsJSON, err := json.Marshal(agentSettings)
+	if err != nil {
+		return bosherr.WrapErrorf(err, "Marshalling agent settings, contents: '%#v", agentSettings)
+	}
+	//creating the settings file locally
+	writeFile(settingsJSON)
+
+	//uploading file to server
+	//key, err := getKeyFile()
+	if err != nil {
+		return bosherr.WrapErrorf(err, "no public key found")
+
+	}
+
+	config := &ssh.ClientConfig{
+		User:            username,
+		Auth:            []ssh.AuthMethod{PublicKeyFile(username, ".ssh/id_rsa")},
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+	}
+
+	sshAddress := fmt.Sprint(ipAddress, ":22")
+	// Create a new SCP client
+	client := scp.NewClient(sshAddress, config)
+
+	for i := 0; i < 5; i++ {
+		time.Sleep(20 * time.Second)
+		// Connect to the remote server
+		err = client.Connect()
+		if err == nil {
+			break
+		}
+	}
+	if err != nil {
+		return bosherr.WrapErrorf(err, "Couldn't establish a connection to the remote server'")
+	}
+
+	// Open a file
+	f, _ := os.Open("1and1-agent-env.json")
+
+	// Close session after the file has been copied
+	defer client.Session.Close()
+
+	// Close the file after it has been copied
+	defer f.Close()
+
+	// Finaly, copy the file over
+	// Usage: CopyFile(fileReader, remotePath, permission)
+
+	client.CopyFile(f, "/var/vcap/bosh/user_data.json", "0655")
+	return nil
+}
+
+func writeFile(fileContent []byte) {
+	err := ioutil.WriteFile("1and1-agent-env.json", fileContent, 0644)
+
+	check(err)
+	//
+	//dat, err := ioutil.ReadFile("1and1-agent-env.json")
+	//check(err)
+	//fmt.Print(string(dat))
+}
+
+func PublicKeyFile(username string, file string) ssh.AuthMethod {
+	//usr, _ := user.Current()x
+	file = "/" + username + "/.ssh/id_rsa" //+ username + "/" + file
+	buffer, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil
+	}
+
+	key, err := ssh.ParsePrivateKey(buffer)
+	if err != nil {
+		return nil
+	}
+	return ssh.PublicKeys(key)
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
