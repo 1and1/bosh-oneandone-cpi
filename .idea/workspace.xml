@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/action/create_vm.go" description="defer func() {" line="87" />
+    <bookmark url="file://$PROJECT_DIR$/action/create_vm.go" description="defer func() {" line="93" />
     <bookmark url="file://$PROJECT_DIR$/integration/integration_suite_test.go" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="084cda53-5a4c-4a52-85c3-ffe86e809b78" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/util/ssh_client.go" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/action/cloud_properties.go" afterPath="$PROJECT_DIR$/action/cloud_properties.go" />
+      <change beforePath="$PROJECT_DIR$/action/attach_disk.go" afterPath="$PROJECT_DIR$/action/attach_disk.go" />
       <change beforePath="$PROJECT_DIR$/action/create_vm.go" afterPath="$PROJECT_DIR$/action/create_vm.go" />
-      <change beforePath="$PROJECT_DIR$/api/dispatcher/json_caller.go" afterPath="$PROJECT_DIR$/api/dispatcher/json_caller.go" />
-      <change beforePath="$PROJECT_DIR$/api/transport/cli.go" afterPath="$PROJECT_DIR$/api/transport/cli.go" />
+      <change beforePath="$PROJECT_DIR$/action/detach_disk.go" afterPath="$PROJECT_DIR$/action/detach_disk.go" />
+      <change beforePath="$PROJECT_DIR$/integration/1and1-agent-env.json" afterPath="$PROJECT_DIR$/integration/1and1-agent-env.json" />
       <change beforePath="$PROJECT_DIR$/integration/integration_suite_test.go" afterPath="$PROJECT_DIR$/integration/integration_suite_test.go" />
       <change beforePath="$PROJECT_DIR$/integration/stemcell_test.go" afterPath="$PROJECT_DIR$/integration/stemcell_test.go" />
       <change beforePath="$PROJECT_DIR$/integration/vm_test.go" afterPath="$PROJECT_DIR$/integration/vm_test.go" />
+      <change beforePath="$PROJECT_DIR$/oneandone/disks/disk_attacher_detacher.go" afterPath="$PROJECT_DIR$/oneandone/disks/disk_attacher_detacher.go" />
+      <change beforePath="$PROJECT_DIR$/oneandone/disks/disk_creator.go" afterPath="$PROJECT_DIR$/oneandone/disks/disk_creator.go" />
       <change beforePath="$PROJECT_DIR$/oneandone/resource/instance.go" afterPath="$PROJECT_DIR$/oneandone/resource/instance.go" />
-      <change beforePath="$PROJECT_DIR$/oneandone/vm/instance_network.go" afterPath="$PROJECT_DIR$/oneandone/vm/instance_network.go" />
+      <change beforePath="$PROJECT_DIR$/oneandone/vm/instance_metadata.go" afterPath="$PROJECT_DIR$/registry/instance_metadata.go" />
       <change beforePath="$PROJECT_DIR$/oneandone/vm/vm_creator.go" afterPath="$PROJECT_DIR$/oneandone/vm/vm_creator.go" />
+      <change beforePath="$PROJECT_DIR$/registry/agent_settings.go" afterPath="$PROJECT_DIR$/registry/agent_settings.go" />
       <change beforePath="$PROJECT_DIR$/registry/client.go" afterPath="$PROJECT_DIR$/registry/client.go" />
       <change beforePath="$PROJECT_DIR$/registry/http_client.go" afterPath="$PROJECT_DIR$/registry/http_client.go" />
-      <change beforePath="$PROJECT_DIR$/vendor/vendor.json" afterPath="$PROJECT_DIR$/vendor/vendor.json" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,81 +34,109 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="http_client.go" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/registry/http_client.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="104">
-              <caret line="213" column="4" lean-forward="false" selection-start-line="213" selection-start-column="4" selection-end-line="226" selection-end-column="5" />
-              <folding>
-                <element signature="e#18#318#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ioutil.go" pinned="false" current-in-tab="false">
-        <entry file="file:///usr/lib/go-1.9/src/io/ioutil/ioutil.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="75" column="5" lean-forward="false" selection-start-line="75" selection-start-column="5" selection-end-line="75" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cli.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api/transport/cli.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="702">
-              <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-              <folding>
-                <element signature="e#19#212#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="io.go" pinned="false" current-in-tab="false">
-        <entry file="file:///usr/lib/go-1.9/src/io/io.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="89" column="5" lean-forward="false" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="json.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api/dispatcher/json.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-427">
-              <caret line="61" column="22" lean-forward="false" selection-start-line="61" selection-start-column="14" selection-end-line="61" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="create_vm.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/action/create_vm.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+            <state relative-caret-position="320">
+              <caret line="87" column="5" lean-forward="false" selection-start-line="87" selection-start-column="5" selection-end-line="87" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="disk_creator.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/oneandone/disks/disk_creator.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="46">
+              <caret line="25" column="35" lean-forward="false" selection-start-line="25" selection-start-column="35" selection-end-line="25" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="vm_creator.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/oneandone/vm/vm_creator.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="442">
+              <caret line="148" column="6" lean-forward="false" selection-start-line="148" selection-start-column="6" selection-end-line="148" selection-end-column="67" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="vm_test.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/integration/vm_test.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1116">
+              <caret line="119" column="26" lean-forward="false" selection-start-line="119" selection-start-column="26" selection-end-line="119" selection-end-column="26" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="client.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/registry/client.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="6" column="42" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="http_client.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/registry/http_client.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="465">
+              <caret line="321" column="0" lean-forward="false" selection-start-line="321" selection-start-column="0" selection-end-line="321" selection-end-column="0" />
               <folding>
-                <element signature="e#16#341#0" expanded="true" />
+                <element signature="e#18#341#0" expanded="true" />
+                <element signature="n#!!block;n#PublicKeyFile#0" expanded="false" />
+                <element signature="n#!!block;n#Download#0" expanded="false" />
+                <element signature="n#!!block;n#SSHDownload#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main/main.go">
+      <file leaf-file-name="client_auth.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/client_auth.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="48" column="24" lean-forward="false" selection-start-line="48" selection-start-column="24" selection-end-line="48" selection-end-column="24" />
+            <state relative-caret-position="239">
+              <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="attach_disk.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/action/attach_disk.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="617">
+              <caret line="68" column="36" lean-forward="false" selection-start-line="68" selection-start-column="36" selection-end-line="68" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="disk_attacher_detacher.go" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/oneandone/disks/disk_attacher_detacher.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="234">
+              <caret line="37" column="13" lean-forward="false" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
               <folding>
-                <element signature="e#14#484#0" expanded="true" />
-                <element signature="n#!!block;n#basicDeps#0" expanded="false" />
+                <element signature="e#15#244#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="create_disk.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/action/create_disk.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="46">
+              <caret line="23" column="17" lean-forward="false" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -121,22 +152,8 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Starting SSH tunnel</find>
-      <find>Waiting until instance is ready:</find>
-      <find>Waiting for the agent on VM</find>
-      <find>Performing request to agent endpoint</find>
-      <find>6868</find>
-      <find>forwardSSHTunnel</find>
-      <find>AttachPersistentDisk</find>
-      <find>UpdateSettings</find>
-      <find>registryClient</find>
-      <find>cloud_properties</find>
-      <find>ntp</find>
-      <find>AgentOptions</find>
-      <find>connect</find>
       <find>google</find>
       <find>existingStemcell</find>
-      <find>SoftlayerFileService</find>
       <find>softlayer</find>
       <find>10BDF554BDA3B734A31126C40B9A83D5</find>
       <find>Deserialized response</find>
@@ -151,6 +168,20 @@
       <find>update</find>
       <find>io</find>
       <find>readAll</find>
+      <find>mbus</find>
+      <find>CF9C6569ECB0B0EF81BA5A3446538226</find>
+      <find>127.0.0.1</find>
+      <find>endpoint</find>
+      <find>SoftlayerFileService</find>
+      <find>vm</find>
+      <find>UpdateAgentEnv</find>
+      <find>Client</find>
+      <find>logger</find>
+      <find>writeFile</find>
+      <find>fetch</find>
+      <find>download</find>
+      <find>md</find>
+      <find>Getting real device path</find>
     </findStrings>
     <replaceStrings>
       <replace>bosh-oneandone-cpi/oneandone</replace>
@@ -180,57 +211,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/action/has_disk.go" />
-        <option value="$PROJECT_DIR$/action/detach_disk.go" />
-        <option value="$PROJECT_DIR$/oneandone/disks/disk_creator.go" />
-        <option value="$PROJECT_DIR$/action/attach_disk.go" />
-        <option value="$PROJECT_DIR$/action/attach_disk_test.go" />
-        <option value="$PROJECT_DIR$/config/oao_properties.go" />
-        <option value="$PROJECT_DIR$/oneandone/client/oao_connector.go" />
-        <option value="$PROJECT_DIR$/oneandone/client/fakes/fake_oao_connector.go" />
-        <option value="$PROJECT_DIR$/registry/agent_settings.go" />
-        <option value="$PROJECT_DIR$/integration/config.go" />
-        <option value="$PROJECT_DIR$/config/ssh_tunnel.go" />
-        <option value="$PROJECT_DIR$/config/config_test.go" />
-        <option value="$PROJECT_DIR$/oneandone/stemcell/stemcell_operations_factory.go" />
-        <option value="$PROJECT_DIR$/oneandone/stemcell/stemcell_operations.go" />
-        <option value="$PROJECT_DIR$/oneandone/stemcell/fakes/fake_operations.go" />
-        <option value="$PROJECT_DIR$/action/create_stemcell_test.go" />
-        <option value="$PROJECT_DIR$/action/create_vm_test.go" />
-        <option value="$PROJECT_DIR$/integration/disk_test.go" />
-        <option value="$PROJECT_DIR$/action/create_stemcell.go" />
-        <option value="$PROJECT_DIR$/oneandone/vm/instance_network.go" />
-        <option value="$PROJECT_DIR$/oneandone/resource/oneandoneFileServices.go" />
-        <option value="$PROJECT_DIR$/registry/FileManager.go" />
-        <option value="$PROJECT_DIR$/registry/sshFileManager.go" />
-        <option value="$PROJECT_DIR$/oneandone/resource/warden_file_service_test.go" />
-        <option value="$PROJECT_DIR$/oneandone/resource/warden_file_service.go" />
-        <option value="$PROJECT_DIR$/registry/file_manager.go" />
-        <option value="$PROJECT_DIR$/registry/client.go" />
-        <option value="$PROJECT_DIR$/integration/assertions.go" />
-        <option value="$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/keys.go" />
-        <option value="$PROJECT_DIR$/oneandone/vm/fs_agent_env_service.go" />
-        <option value="$PROJECT_DIR$/integration/1and1-agent-env.json" />
-        <option value="$PROJECT_DIR$/util/fakes/fake_ssh_client.go" />
-        <option value="$PROJECT_DIR$/util/utility_test.go" />
-        <option value="$PROJECT_DIR$/util/sleeper_test.go" />
-        <option value="$PROJECT_DIR$/oneandone/common/agent_env_service_interface.go" />
         <option value="$PROJECT_DIR$/oneandone/common/agent_env_service_factory_interface.go" />
-        <option value="$PROJECT_DIR$/oneandone/resource/instance.go" />
         <option value="$PROJECT_DIR$/oneandone/common/oneandone_file_service.go" />
         <option value="$PROJECT_DIR$/oneandone/common/fs_agent_env_service.go" />
-        <option value="$PROJECT_DIR$/integration/stemcell_test.go" />
         <option value="$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/client_auth.go" />
-        <option value="$PROJECT_DIR$/integration/integration_suite_test.go" />
-        <option value="$PROJECT_DIR$/oneandone/vm/vm_creator.go" />
         <option value="$PROJECT_DIR$/api/dispatcher/json.go" />
         <option value="$PROJECT_DIR$/api/dispatcher/json_caller.go" />
-        <option value="$PROJECT_DIR$/integration/vm_test.go" />
         <option value="$PROJECT_DIR$/action/cloud_properties.go" />
         <option value="$PROJECT_DIR$/main/main.go" />
-        <option value="$PROJECT_DIR$/action/create_vm.go" />
         <option value="$PROJECT_DIR$/api/transport/cli.go" />
+        <option value="$PROJECT_DIR$/integration/integration_suite_test.go" />
+        <option value="$PROJECT_DIR$/integration/stemcell_test.go" />
+        <option value="$PROJECT_DIR$/integration/vm_test.go" />
+        <option value="$PROJECT_DIR$/action/oao_api_hooks.go" />
+        <option value="$PROJECT_DIR$/action/delete_disk.go" />
+        <option value="$PROJECT_DIR$/action/get_disks.go" />
+        <option value="$PROJECT_DIR$/action/create_disk.go" />
+        <option value="$PROJECT_DIR$/action/has_disk.go" />
+        <option value="$PROJECT_DIR$/action/concrete_factory.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/softlayer_file_service.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/fs_agent_env_service_test.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/softlayer_file_service_test.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/agent_env_for_vm_test.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/agent_env_from_json_test.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/agent_env_service_interface.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/agent_env_test.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/agent_options.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/agent_options_test.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/network.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/network_test.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/agent_env.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/agent_env_service_factory_interface.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/fs_agent_env_service.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/oneandone_file_service.go" />
+        <option value="$PROJECT_DIR$/util/ssh_client.go" />
+        <option value="$PROJECT_DIR$/oneandone/vm/instance_networks.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/client.go" />
+        <option value="$PROJECT_DIR$/oneandone/client/agent_settings.go" />
+        <option value="$PROJECT_DIR$/oneandone/resource/instance.go" />
+        <option value="$PROJECT_DIR$/action/attach_disk.go" />
+        <option value="$PROJECT_DIR$/action/networks.go" />
+        <option value="$PROJECT_DIR$/oneandone/vm/instance_metadata.go" />
+        <option value="$PROJECT_DIR$/action/detach_disk.go" />
+        <option value="$PROJECT_DIR$/config/config.go" />
+        <option value="$PROJECT_DIR$/registry/agent_settings.go" />
+        <option value="$PROJECT_DIR$/registry/instance_metadata.go" />
+        <option value="$PROJECT_DIR$/registry/client.go" />
         <option value="$PROJECT_DIR$/registry/http_client.go" />
+        <option value="$PROJECT_DIR$/oneandone/vm/vm_creator.go" />
+        <option value="$PROJECT_DIR$/action/create_vm.go" />
+        <option value="$PROJECT_DIR$/oneandone/disks/disk_creator.go" />
+        <option value="$PROJECT_DIR$/oneandone/disks/disk_attacher_detacher.go" />
       </list>
     </option>
   </component>
@@ -262,6 +293,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -277,13 +309,7 @@
             <path>
               <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
               <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="api" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="api" type="462c0819:PsiDirectoryNode" />
-              <item name="dispatcher" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
@@ -310,33 +336,7 @@
               <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
               <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
               <item name="oneandone" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="fakes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="oneandone" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="oneandone" type="462c0819:PsiDirectoryNode" />
-              <item name="resource" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="oneandone" type="462c0819:PsiDirectoryNode" />
-              <item name="stemcell" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="oneandone" type="462c0819:PsiDirectoryNode" />
-              <item name="stemcell" type="462c0819:PsiDirectoryNode" />
-              <item name="fakes" type="462c0819:PsiDirectoryNode" />
+              <item name="disks" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
@@ -352,70 +352,17 @@
             <path>
               <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
               <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="golang.org" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="golang.org" type="462c0819:PsiDirectoryNode" />
-              <item name="x" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="golang.org" type="462c0819:PsiDirectoryNode" />
-              <item name="x" type="462c0819:PsiDirectoryNode" />
-              <item name="crypto" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bosh-oneandone-cpi" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="golang.org" type="462c0819:PsiDirectoryNode" />
-              <item name="x" type="462c0819:PsiDirectoryNode" />
-              <item name="crypto" type="462c0819:PsiDirectoryNode" />
-              <item name="ssh" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Go SDK 1.9.4" type="20ee2d1f:SyntheticLibraryElementNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Go SDK 1.9.4" type="20ee2d1f:SyntheticLibraryElementNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bosh-oneandone-cpi" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Go SDK 1.9.4" type="20ee2d1f:SyntheticLibraryElementNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="os" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../bosh-oneandone-cpi-release" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../bosh-google-cpi-release" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="go.vendoring.notification.had.been.shown" value="true" />
     <property name="configurable.Global.GOPATH.is.expanded" value="true" />
@@ -425,14 +372,15 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/oneandone/client" />
+      <recent name="$PROJECT_DIR$/oneandone" />
+      <recent name="$PROJECT_DIR$/util" />
       <recent name="$PROJECT_DIR$/oneandone/common" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/oneandone/resource" />
-      <recent name="$PROJECT_DIR$/oneandone/vm" />
-      <recent name="$PROJECT_DIR$/action" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/registry" />
+      <recent name="$PROJECT_DIR$/oneandone/client" />
       <recent name="C:\gopath\src\github.com\bosh-oneandone-cpi" />
       <recent name="C:\gopath\src\bosh-oneandone-cpi\oneandone\common" />
     </key>
@@ -514,34 +462,34 @@
     <option name="remove_strategy" value="false" />
   </component>
   <component name="TestHistory">
-    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.08 at 23h 47m 52s.xml">
+    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.20 at 11h 52m 25s.xml">
       <configuration name="go test github.com/bosh-oneandone-cpi/integration" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.08 at 23h 50m 25s.xml">
+    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.20 at 12h 45m 44s.xml">
       <configuration name="go test github.com/bosh-oneandone-cpi/integration" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.08 at 23h 50m 41s.xml">
+    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.20 at 12h 47m 36s.xml">
       <configuration name="go test github.com/bosh-oneandone-cpi/integration" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.08 at 23h 53m 24s.xml">
+    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.20 at 12h 51m 59s.xml">
       <configuration name="go test github.com/bosh-oneandone-cpi/integration" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.09 at 00h 45m 57s.xml">
+    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.20 at 12h 52m 26s.xml">
       <configuration name="go test github.com/bosh-oneandone-cpi/integration" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.09 at 00h 46m 14s.xml">
+    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.20 at 12h 53m 51s.xml">
       <configuration name="go test github.com/bosh-oneandone-cpi/integration" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.09 at 00h 47m 10s.xml">
+    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.20 at 12h 56m 27s.xml">
       <configuration name="go test github.com/bosh-oneandone-cpi/integration" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.09 at 01h 10m 11s.xml">
+    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.20 at 13h 35m 29s.xml">
       <configuration name="go test github.com/bosh-oneandone-cpi/integration" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.09 at 01h 21m 15s.xml">
+    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.20 at 13h 38m 06s.xml">
       <configuration name="go test github.com/bosh-oneandone-cpi/integration" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.09 at 01h 22m 02s.xml">
+    <history-entry file="go_test_github_com_bosh-oneandone-cpi_integration - 2018.03.20 at 15h 35m 08s.xml">
       <configuration name="go test github.com/bosh-oneandone-cpi/integration" configurationId="GoTestRunConfiguration" />
     </history-entry>
   </component>
@@ -553,13 +501,12 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924336" sideWeight="0.50187063" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924336" sideWeight="0.49573562" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.704499" sideWeight="0.4970604" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924336" sideWeight="0.49812934" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.704499" sideWeight="0.4970604" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50511247" sideWeight="0.48933902" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3997955" sideWeight="0.49599144" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3997955" sideWeight="0.49599144" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="SFDX" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -568,6 +515,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Execute Anonymous" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924336" sideWeight="0.49573562" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Log Manager" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Salesforce" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -623,16 +571,6 @@
           <option name="timeStamp" value="172" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/registry/http_client.go</url>
-          <line>240</line>
-          <option name="timeStamp" value="201" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/registry/http_client.go</url>
-          <line>241</line>
-          <option name="timeStamp" value="204" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/vendor/github.com/bramvdbogaerde/go-scp/client.go</url>
           <line>60</line>
           <option name="timeStamp" value="207" />
@@ -643,55 +581,49 @@
           <option name="timeStamp" value="208" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/client_auth.go</url>
-          <line>24</line>
-          <option name="timeStamp" value="209" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/client_auth.go</url>
-          <line>63</line>
-          <option name="timeStamp" value="211" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/client_auth.go</url>
-          <line>43</line>
-          <option name="timeStamp" value="212" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/oneandone/vm/vm_creator.go</url>
-          <line>50</line>
-          <properties />
+          <line>49</line>
           <option name="timeStamp" value="216" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/oneandone/vm/vm_creator.go</url>
-          <line>149</line>
-          <properties />
-          <option name="timeStamp" value="223" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/oneandone/vm/vm_creator.go</url>
-          <line>152</line>
-          <properties />
-          <option name="timeStamp" value="224" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/action/create_vm.go</url>
-          <line>70</line>
-          <properties />
+          <line>66</line>
           <option name="timeStamp" value="230" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/action/create_vm.go</url>
-          <line>32</line>
+          <url>file://$PROJECT_DIR$/oneandone/vm/vm_creator.go</url>
+          <line>146</line>
+          <option name="timeStamp" value="248" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/registry/http_client.go</url>
+          <line>305</line>
           <properties />
-          <option name="timeStamp" value="243" />
+          <option name="timeStamp" value="249" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/action/create_vm.go</url>
+          <line>79</line>
+          <properties />
+          <option name="timeStamp" value="250" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/action/create_vm.go</url>
+          <line>83</line>
+          <properties />
+          <option name="timeStamp" value="251" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/registry/http_client.go</url>
+          <line>319</line>
+          <properties />
+          <option name="timeStamp" value="256" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="244" />
+      <option name="time" value="257" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -801,110 +733,203 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/config/ssh_tunnel.go">
+    <entry file="file://$PROJECT_DIR$/action/get_disks.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        <state relative-caret-position="594">
+          <caret line="33" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/oneandone/vm/fs_agent_env_service.go" />
-    <entry file="file://$PROJECT_DIR$/registry/file_manager.go" />
-    <entry file="file://$PROJECT_DIR$/oneandone/vm/instance_network.go">
+    <entry file="file://$PROJECT_DIR$/action/cids.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
-          <caret line="3" column="4" lean-forward="false" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="20" />
+          <caret line="3" column="5" lean-forward="false" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/util/fakes/fake_ssh_client.go" />
-    <entry file="file://$PROJECT_DIR$/util/utility_test.go" />
-    <entry file="file://$PROJECT_DIR$/util/sleeper.go" />
-    <entry file="file://$PROJECT_DIR$/util/sleeper_test.go" />
-    <entry file="file://$PROJECT_DIR$/util/utility.go" />
-    <entry file="file://$PROJECT_DIR$/util/util_suite_test.go" />
-    <entry file="file://$PROJECT_DIR$/oneandone/common/agent_env.go" />
-    <entry file="file://$PROJECT_DIR$/registry/agent_settings.go">
+    <entry file="file://$PROJECT_DIR$/action/has_disk.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1350">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="576">
+          <caret line="32" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/oneandone/common/agent_env_service_interface.go" />
-    <entry file="file://$PROJECT_DIR$/oneandone/common/agent_env_service_factory_interface.go" />
-    <entry file="file://$PROJECT_DIR$/oneandone/common/oneandone_file_service.go" />
-    <entry file="file://$PROJECT_DIR$/oneandone/common/fs_agent_env_service.go" />
-    <entry file="file://$PROJECT_DIR$/util/ssh_client.go" />
-    <entry file="file://$PROJECT_DIR$/registry/agent_options.go">
+    <entry file="file://$PROJECT_DIR$/oneandone/client/oneandone_file_service_test.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/agent_env_for_vm_test.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/agent_env_from_json_test.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/agent_options_test.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/network_test.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/agent_env_service_interface.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/agent_env_test.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/agent_options.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/agent_env_service_factory_interface.go" />
+    <entry file="file://$PROJECT_DIR$/action/cloud_properties.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="648">
+          <caret line="36" column="5" lean-forward="false" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oneandone/client/agent_env.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/agent_settings.go" />
+    <entry file="file://$PROJECT_DIR$/action/oao_api_hooks.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-967">
+          <caret line="24" column="104" lean-forward="true" selection-start-line="21" selection-start-column="4" selection-end-line="24" selection-end-column="104" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/action/concrete_factory.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="23" column="18" lean-forward="false" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/registry/client_options.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="9" column="5" lean-forward="false" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oneandone/client/client.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/fs_agent_env_service_test.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/network.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/oneandone_file_service.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/client/fs_agent_env_service.go" />
+    <entry file="file://$PROJECT_DIR$/oneandone/vm/instance_network.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="10" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oneandone/vm/instance_networks.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/action/networks.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="44" lean-forward="false" selection-start-line="5" selection-start-column="44" selection-end-line="5" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oneandone/resource/instance.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/action/detach_disk.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="65" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oneandone/client/oao_connector.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="19" column="31" lean-forward="false" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/util/ssh_client.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2502">
+          <caret line="147" column="17" lean-forward="false" selection-start-line="147" selection-start-column="5" selection-end-line="147" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/config.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-504">
+          <caret line="8" column="44" lean-forward="false" selection-start-line="8" selection-start-column="44" selection-end-line="8" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/integration/1and1-agent-env.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="0" column="19" lean-forward="false" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/integration/stemcell_test.go">
+    <entry file="file://$PROJECT_DIR$/registry/agent_options.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="19" column="35" lean-forward="false" selection-start-line="19" selection-start-column="35" selection-end-line="19" selection-end-column="35" />
+        <state relative-caret-position="180">
+          <caret line="10" column="5" lean-forward="false" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/registry/agent_settings.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1872">
+          <caret line="104" column="5" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="178" selection-end-column="0" />
+          <folding>
+            <element signature="e#18#40#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/registry/instance_metadata.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1152">
+          <caret line="67" column="5" lean-forward="false" selection-start-line="67" selection-start-column="5" selection-end-line="67" selection-end-column="5" />
+          <folding>
+            <element signature="e#18#56#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oneandone/disks/disk_operations_factory.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="18" column="4" lean-forward="false" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/go-1.9/src/io/io.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="360" column="5" lean-forward="false" selection-start-line="360" selection-start-column="5" selection-end-line="360" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/github.com/bramvdbogaerde/go-scp/client.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="12" column="5" lean-forward="false" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/github.com/bramvdbogaerde/go-scp/scp.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="9" column="14" lean-forward="true" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+          <folding>
+            <element signature="e#58#95#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/session.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="313" column="0" lean-forward="false" selection-start-line="313" selection-start-column="0" selection-end-line="313" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/handshake.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9198">
-          <caret line="519" column="0" lean-forward="false" selection-start-line="519" selection-start-column="0" selection-end-line="519" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/messages.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7596">
-          <caret line="432" column="0" lean-forward="false" selection-start-line="432" selection-start-column="0" selection-end-line="432" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/registry/client.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="4" lean-forward="false" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/keys.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="774" column="5" lean-forward="false" selection-start-line="774" selection-start-column="5" selection-end-line="774" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/integration/integration_suite_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-          <folding>
-            <element signature="e#21#221#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/client_auth.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="49" column="0" lean-forward="false" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+        <state relative-caret-position="177">
+          <caret line="277" column="18" lean-forward="false" selection-start-line="277" selection-start-column="18" selection-end-line="277" selection-end-column="18" />
           <folding />
         </state>
       </provider>
@@ -917,207 +942,89 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/github.com/bramvdbogaerde/go-scp/client.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/github.com/onsi/ginkgo/internal/leafnodes/runner.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="107" column="0" lean-forward="false" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/go-1.9/src/runtime/panic.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="491" column="0" lean-forward="false" selection-start-line="491" selection-start-column="0" selection-end-line="491" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oneandone/resource/instance.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <folding>
-            <element signature="e#18#202#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/go-1.9/src/runtime/asm_amd64.s">
+    <entry file="file://$PROJECT_DIR$/vendor/golang.org/x/crypto/ssh/client_auth.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="239">
-          <caret line="511" column="0" lean-forward="false" selection-start-line="511" selection-start-column="0" selection-end-line="511" selection-end-column="0" />
+          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/lib/go-1.9/src/reflect/value.go">
+    <entry file="file://$PROJECT_DIR$/registry/client.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="301" column="0" lean-forward="false" selection-start-line="301" selection-start-column="0" selection-end-line="301" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/integration/config.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-864">
-          <caret line="24" column="20" lean-forward="false" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/action/cloud_properties.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="5" lean-forward="false" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+        <state relative-caret-position="108">
+          <caret line="6" column="42" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/integration/vm_test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-404">
-          <caret line="73" column="27" lean-forward="false" selection-start-line="73" selection-start-column="27" selection-end-line="73" selection-end-column="27" />
+        <state relative-caret-position="1116">
+          <caret line="119" column="26" lean-forward="false" selection-start-line="119" selection-start-column="26" selection-end-line="119" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/action/networks.go">
+    <entry file="file://$PROJECT_DIR$/registry/http_client.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="9" column="5" lean-forward="false" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
+        <state relative-caret-position="465">
+          <caret line="321" column="0" lean-forward="false" selection-start-line="321" selection-start-column="0" selection-end-line="321" selection-end-column="0" />
+          <folding>
+            <element signature="e#18#341#0" expanded="true" />
+            <element signature="n#!!block;n#PublicKeyFile#0" expanded="false" />
+            <element signature="n#!!block;n#Download#0" expanded="false" />
+            <element signature="n#!!block;n#SSHDownload#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/action/create_vm.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="87" column="5" lean-forward="false" selection-start-line="87" selection-start-column="5" selection-end-line="87" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/action/attach_disk.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="617">
+          <caret line="68" column="36" lean-forward="false" selection-start-line="68" selection-start-column="36" selection-end-line="68" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/oneandone/vm/vm_creator.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1147">
-          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding>
-            <element signature="e#12#264#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/dispatcher/json_caller.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="16" lean-forward="false" selection-start-line="0" selection-start-column="16" selection-end-line="0" selection-end-column="16" />
+        <state relative-caret-position="442">
+          <caret line="148" column="6" lean-forward="false" selection-start-line="148" selection-start-column="6" selection-end-line="148" selection-end-column="67" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/integration/assertions.go">
+    <entry file="file://$PROJECT_DIR$/action/create_disk.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="23" column="17" lean-forward="false" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oneandone/disks/disk_creator.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="25" column="35" lean-forward="false" selection-start-line="25" selection-start-column="35" selection-end-line="25" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oneandone/disks/disk_attacher_detacher.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
-          <caret line="20" column="5" lean-forward="false" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="48" column="24" lean-forward="false" selection-start-line="48" selection-start-column="24" selection-end-line="48" selection-end-column="24" />
+          <caret line="37" column="13" lean-forward="false" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
           <folding>
-            <element signature="e#14#484#0" expanded="true" />
-            <element signature="n#!!block;n#basicDeps#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/dispatcher/json.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-427">
-          <caret line="61" column="22" lean-forward="false" selection-start-line="61" selection-start-column="14" selection-end-line="61" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/action/create_vm.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding>
-            <element signature="e#16#341#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/integration/1and1-agent-env.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="98" lean-forward="true" selection-start-line="0" selection-start-column="98" selection-end-line="0" selection-end-column="98" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/go-1.9/src/internal/poll/fd_unix.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="204" column="14" lean-forward="false" selection-start-line="204" selection-start-column="14" selection-end-line="204" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/go-1.9/src/os/file_unix.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="232" column="23" lean-forward="true" selection-start-line="232" selection-start-column="23" selection-end-line="232" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/go-1.9/src/os/file.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1018">
-          <caret line="236" column="5" lean-forward="false" selection-start-line="236" selection-start-column="5" selection-end-line="236" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/go-1.9/src/io/ioutil/ioutil.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="75" column="5" lean-forward="false" selection-start-line="75" selection-start-column="5" selection-end-line="75" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/go-1.9/src/io/io.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="89" column="5" lean-forward="false" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/transport/cli.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="702">
-          <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-          <folding>
-            <element signature="e#19#212#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/registry/http_client.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="104">
-          <caret line="213" column="4" lean-forward="false" selection-start-line="213" selection-start-column="4" selection-end-line="226" selection-end-column="5" />
-          <folding>
-            <element signature="e#18#318#0" expanded="true" />
+            <element signature="e#15#244#0" expanded="true" />
           </folding>
         </state>
       </provider>

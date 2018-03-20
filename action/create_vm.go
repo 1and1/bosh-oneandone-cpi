@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	//bosherr "github.com/cloudfoundry/bosh-utils/errors"
+	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	boshuuid "github.com/cloudfoundry/bosh-utils/uuid"
 
@@ -48,12 +48,8 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 		ServerIp:       cloudProps.PublicIP,
 	}
 
-	metadata := vm.InstanceMetadata{
-		vm.NewSSHKeys([]string{cloudProps.SSHKey}),
-		vm.NewUserData(name, cv.connector.AgentRegistryEndpoint(),
-			nil, agentNetworks),
-	}
-	instance, err := creator.CreateInstance(icfg, metadata)
+	userdata := registry.NewUserDataObject(name, cv.connector.AgentRegistryEndpoint(), nil, agentNetworks)
+	instance, err := creator.CreateInstance(icfg)
 
 	// Start a local forward ssh tunnel?
 	if err == nil && networks.AllDynamic() {
@@ -65,7 +61,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 		return "", bosherr.WrapError(err, "Error launching new instance")
 	}
 
-	if err := cv.updateRegistry(agentID, publicIp, name, agentNetworks, env); err != nil {
+	if err := cv.updateRegistry(agentID, publicIp, name, cloudProps.SSHKey, agentNetworks, userdata, env); err != nil {
 		return "", err
 	}
 	return VMCID(instance.ID()), nil
@@ -80,8 +76,18 @@ func (cv CreateVM) vmName(prefix string) string {
 	return fmt.Sprintf("%s-%s", prefix, suffix)
 }
 
-func (cv CreateVM) updateRegistry(agentID string, ipAddress string, vmName string,
-	agentNetworks registry.NetworksSettings, env Environment) error {
+func (cv CreateVM) updateRegistry(agentID string, ipAddress string, vmName string, publicKey string,
+	agentNetworks registry.NetworksSettings, userdata registry.UserData, env Environment) error {
+	/*create vcap ssh directory and copy public key to it
+	This is something that the agent does when using the registry,
+	but since we are replacing it with FS we have to do this manually*/
+	commands := []string{"mkdir 0700 /home/vcap/.ssh",
+		fmt.Sprintf("echo \"%s\" >> /home/vcap/.ssh/authorized_keys", publicKey),
+		"chown -R vcap.vcap /home/vcap/.ssh",
+		"chmod 0700 /home/vcap/.ssh",
+	}
+
+	cv.registry.RunCommand("root", ipAddress, commands)
 
 	cv.logger.Info(logTag, "trying to update the registry")
 	// Handle registry update failure. Delete VM or retry?
@@ -93,7 +99,7 @@ func (cv CreateVM) updateRegistry(agentID string, ipAddress string, vmName strin
 	}()
 	agentOptions := cv.connector.AgentOptions()
 	agentSettings := registry.NewAgentSettings(agentID, vmName, agentNetworks,
-		registry.EnvSettings(env), agentOptions)
+		registry.EnvSettings(env), agentOptions, publicKey, userdata)
 
 	//upload file with AgentSettings using FS and SCP
 	cv.registry.UploadFile("root", ipAddress, agentSettings)

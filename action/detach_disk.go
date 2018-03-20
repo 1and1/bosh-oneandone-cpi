@@ -41,20 +41,25 @@ func (dd DetachDisk) Run(vmCID VMCID, diskCID DiskCID) (interface{}, error) {
 		return nil, bosherr.WrapError(err, "Unable to find Volume")
 	}
 
+	publicIp, err := in.PublicIP(dd.connector, dd.logger)
+	if err != nil {
+		return "", bosherr.WrapError(err, "Error launching new instance")
+	}
+
 	if err := detacher.DetachInstanceFromStorage(strg, in); err != nil {
 		return nil, bosherr.WrapError(err, "Error detaching volume")
 	}
 
 	// Read VM agent settings
-	agentSettings, err := dd.registryClient.Fetch(string(vmCID))
+	agentSettings, err := dd.registryClient.Fetch("root", publicIp)
 	if err != nil {
-		return nil, bosherr.WrapErrorf(err, "Detaching disk '%s' from vm '%s", diskCID, vmCID)
+		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
 	}
 
 	// Update VM agent settings
 	newAgentSettings := agentSettings.DetachPersistentDisk(string(diskCID))
-	if err = dd.registryClient.Update(string(vmCID), newAgentSettings); err != nil {
-		return nil, bosherr.WrapErrorf(err, "Detaching disk '%s' from vm '%s", diskCID, vmCID)
+	if err = dd.registryClient.UploadFile("root", publicIp, newAgentSettings); err != nil {
+		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
 	}
 	return nil, nil
 }

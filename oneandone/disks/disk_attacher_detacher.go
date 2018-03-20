@@ -31,19 +31,36 @@ func (ad *diskAttacherDetacher) AttachInstanceToStorage(v *sdk.BlockStorage, in 
 		ad.logger.Error(diskOperationsLogTag, "Error attaching server %v", err)
 		return devicePath, err
 	}
+	ser, err := ad.connector.Client().GetServer(in.ID())
 
-	disks, err := ad.connector.Client().ListBlockStorages(1, 50, "", in.ID(), "")
+	ad.connector.Client().WaitForState(ser, "POWERED_ON", 10, 90)
+
+	ser, err = ad.connector.Client().RebootServer(in.ID(), false)
+	if err != nil {
+		ad.logger.Error(diskOperationsLogTag, "Error restarting server %v", err)
+		return devicePath, err
+	}
+
+	ad.connector.Client().WaitForState(ser, "POWERED_ON", 10, 90)
+
+	disks, err := ad.connector.Client().ListServerHdds(in.ID())
 
 	//wait for block storage to be ready
 	ad.connector.Client().WaitForState(res, "POWERED_ON", 10, 90)
-
+	found := false
 	// Look up for the device index
 	for index, attacheddisk := range disks {
 		if attacheddisk.Id == v.Id {
+			found = true
 			devicePath = fmt.Sprintf("%s%s", diskPathPrefix, string(diskPathSuffix[index]))
 		}
 	}
-	return devicePath, nil
+	if found {
+		return devicePath, nil
+	} else {
+		return "sdb", nil
+	}
+
 }
 
 func (ad *diskAttacherDetacher) DetachInstanceFromStorage(v *sdk.BlockStorage, in *resource.Instance) error {

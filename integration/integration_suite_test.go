@@ -22,7 +22,7 @@ func TestIntegration(t *testing.T) {
 var _ = SynchronizedBeforeSuite(func() []byte {
 	// Clean any straggler VMs
 	cleanVMs()
-	var imageId = "CF9C6569ECB0B0EF81BA5A3446538226"
+	var imageId = "0ECFBD372AF5C0895458C29B4C54CF62"
 
 	request := fmt.Sprintf(`{
 			  "method": "create_stemcell",

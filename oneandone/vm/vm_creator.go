@@ -2,6 +2,7 @@ package vm
 
 import (
 	//"fmt"
+	//"fmt"
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
@@ -27,7 +28,7 @@ type InstanceConfiguration struct {
 }
 
 type Creator interface {
-	CreateInstance(icfg InstanceConfiguration, md InstanceMetadata) (*resource.Instance, error)
+	CreateInstance(icfg InstanceConfiguration) (*resource.Instance, error)
 }
 
 type CreatorFactory func(client.Connector, boshlog.Logger) Creator
@@ -41,14 +42,13 @@ func NewCreator(c client.Connector, l boshlog.Logger) Creator {
 	return &creator{connector: c, logger: l}
 }
 
-func (cv *creator) CreateInstance(icfg InstanceConfiguration,
-	md InstanceMetadata) (*resource.Instance, error) {
+func (cv *creator) CreateInstance(icfg InstanceConfiguration) (*resource.Instance, error) {
 
-	return cv.launchInstance(icfg, md)
+	return cv.launchInstance(icfg)
 }
-func (cv *creator) launchInstance(icfg InstanceConfiguration, md InstanceMetadata) (*resource.Instance, error) {
+func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instance, error) {
 
-	////setup firewall ports
+	//setup firewall ports
 	//var firewallPolicy oneandone.FirewallPolicyRequest
 	//var firewallId string
 	//var firewallData *oneandone.FirewallPolicy
@@ -140,16 +140,17 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration, md InstanceMetadat
 	//}
 	//
 	////wait on server to be ready
-	////cv.connector.Client().WaitForState(res, "POWERED_OFF", 10, 90)
+	//cv.connector.Client().WaitForState(res, "POWERED_OFF", 10, 90)
 	//
-	////cv.connector.Client().AssignServerPrivateNetwork(res.Id, "D522A56E643EED2479F2B73810DAF5F3")
+	//cv.connector.Client().AssignServerPrivateNetwork(res.Id, "D522A56E643EED2479F2B73810DAF5F3")
 	//
-	////cv.connector.Client().StartServer(res.Id)
+	//cv.connector.Client().StartServer(res.Id)
 	//
 	//cv.connector.Client().WaitForState(res, "POWERED_ON", 10, 90)
 	//time.Sleep(120 * time.Second)
-	res, _ := cv.connector.Client().GetServer("58E0D2AABD40BCC59B3BACBD4480CDDB")
+	res, _ := cv.connector.Client().GetServer("E1E34F28C12159491326262215113E83")
 
 	instance := resource.NewInstance(res.Id)
+
 	return instance, nil
 }

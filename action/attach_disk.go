@@ -53,15 +53,20 @@ func (ad AttachDisk) Run(vmCID VMCID, diskCID DiskCID) (interface{}, error) {
 		return nil, bosherr.WrapError(err, "Error attaching storage")
 	}
 
+	publicIp, err := in.PublicIP(ad.connector, ad.logger)
+	if err != nil {
+		return "", bosherr.WrapError(err, "Error launching new instance")
+	}
+
 	// Read VM agent settings
-	agentSettings, err := ad.registryClient.Fetch(string(vmCID))
+	agentSettings, err := ad.registryClient.Fetch("root", publicIp)
 	if err != nil {
 		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
 	}
 
 	// Update VM agent settings
 	newAgentSettings := agentSettings.AttachPersistentDisk(string(diskCID), devicePath)
-	if err = ad.registryClient.Update(string(vmCID), newAgentSettings); err != nil {
+	if err = ad.registryClient.UploadFile("root", publicIp, newAgentSettings); err != nil {
 		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
 	}
 	return nil, nil

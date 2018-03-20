@@ -16,12 +16,14 @@ import (
 	"golang.org/x/crypto/ssh"
 	"os"
 	//"os/user"
+	"github.com/pkg/sftp"
 	"io"
 )
 
 const httpClientLogTag = "RegistryHTTPClient"
 const httpClientMaxAttemps = 5
 const httpClientRetryDelay = 5
+const settingsPath = "/var/vcap/bosh/user_data.json"
 
 // HTTPClient represents a BOSH Registry Client.
 type HTTPClient struct {
@@ -66,43 +68,22 @@ func (c HTTPClient) Delete(instanceID string) error {
 }
 
 // Fetch gets the agent settings for a given instance ID.
-func (c HTTPClient) Fetch(instanceID string) (AgentSettings, error) {
-	endpoint := fmt.Sprintf("%s/instances/%s/settings", c.options.EndpointWithCredentials(), instanceID)
-	c.logger.Debug(httpClientLogTag, "Fetching agent settings from registry endpoint '%s'", endpoint)
+func (c HTTPClient) Fetch(username string, ipAddress string) (AgentSettings, error) {
+	var agentEnv AgentSettings
 
-	request, err := http.NewRequest("GET", endpoint, nil)
+	contents, err := c.Download(username, ipAddress, settingsPath)
 	if err != nil {
-		return AgentSettings{}, bosherr.WrapErrorf(err, "Creating GET request for registry endpoint '%s'", endpoint)
+		return AgentSettings{}, bosherr.WrapError(err, "Downloading agent env from virtual guestr")
 	}
 
-	httpResponse, err := c.doRequest(request)
+	err = json.Unmarshal(contents, &agentEnv)
 	if err != nil {
-		return AgentSettings{}, bosherr.WrapErrorf(err, "Fetching agent settings from registry endpoint '%s'", endpoint)
+		return AgentSettings{}, bosherr.WrapError(err, "Unmarshalling agent env")
 	}
 
-	defer httpResponse.Body.Close()
+	c.logger.Debug(httpClientLogTag, "Fetched agent env: %#v", agentEnv)
 
-	if httpResponse.StatusCode != http.StatusOK {
-		return AgentSettings{}, bosherr.Errorf("Received status code '%d' when fetching agent settings from registry endpoint '%s'", httpResponse.StatusCode, endpoint)
-	}
-
-	httpBody, err := ioutil.ReadAll(httpResponse.Body)
-	if err != nil {
-		return AgentSettings{}, bosherr.WrapErrorf(err, "Reading agent settings response from registry endpoint '%s'", endpoint)
-	}
-
-	var settingsResponse agentSettingsResponse
-	if err = json.Unmarshal(httpBody, &settingsResponse); err != nil {
-		return AgentSettings{}, bosherr.WrapErrorf(err, "Unmarshalling agent settings response from registry endpoint '%s', contents: '%s'", endpoint, httpBody)
-	}
-
-	var agentSettings AgentSettings
-	if err = json.Unmarshal([]byte(settingsResponse.Settings), &agentSettings); err != nil {
-		return AgentSettings{}, bosherr.WrapErrorf(err, "Unmarshalling agent settings response from registry endpoint '%s', contents: '%s'", endpoint, httpBody)
-	}
-
-	c.logger.Debug(httpClientLogTag, "Received agent settings from registry endpoint '%s', contents: '%s'", endpoint, httpBody)
-	return agentSettings, nil
+	return agentEnv, nil
 }
 
 // Update updates the agent settings for a given instance ID. If there are not already agent settings for the instance, it will create ones.
@@ -194,15 +175,9 @@ func (c HTTPClient) UploadFile(username string, ipAddress string, agentSettings 
 	if err != nil {
 		return bosherr.WrapErrorf(err, "Marshalling agent settings, contents: '%#v", agentSettings)
 	}
+	fileName := "1and1-agent-env.json"
 	//creating the settings file locally
-	writeFile(settingsJSON)
-
-	//uploading file to server
-	//key, err := getKeyFile()
-	if err != nil {
-		return bosherr.WrapErrorf(err, "no public key found")
-
-	}
+	writeFile(settingsJSON, fileName)
 
 	config := &ssh.ClientConfig{
 		User:            username,
@@ -227,7 +202,7 @@ func (c HTTPClient) UploadFile(username string, ipAddress string, agentSettings 
 	}
 
 	// Open a file
-	f, _ := os.Open("1and1-agent-env.json")
+	f, _ := os.Open(fileName)
 
 	// Close session after the file has been copied
 	defer client.Session.Close()
@@ -239,17 +214,25 @@ func (c HTTPClient) UploadFile(username string, ipAddress string, agentSettings 
 	// Usage: CopyFile(fileReader, remotePath, permission)
 
 	client.CopyFile(f, "/var/vcap/bosh/user_data.json", "0655")
+
 	return nil
 }
 
-func writeFile(fileContent []byte) {
-	err := ioutil.WriteFile("1and1-agent-env.json", fileContent, 0644)
+func (c HTTPClient) RunCommand(username string, ipAddress string, commands []string) error {
 
+	config := &ssh.ClientConfig{
+		User:            username,
+		Auth:            []ssh.AuthMethod{PublicKeyFile(username, ".ssh/id_rsa")},
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+	}
+
+	executeCmd(commands, ipAddress, "22", config)
+	return nil
+}
+
+func writeFile(fileContent []byte, filename string) {
+	err := ioutil.WriteFile(filename, fileContent, 0644)
 	check(err)
-	//
-	//dat, err := ioutil.ReadFile("1and1-agent-env.json")
-	//check(err)
-	//fmt.Print(string(dat))
 }
 
 func PublicKeyFile(username string, file string) ssh.AuthMethod {
@@ -271,4 +254,69 @@ func check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+func (c HTTPClient) Download(user string, ipAddress string, sourcePath string) ([]byte, error) {
+	c.logger.Debug(httpClientLogTag, "Downloading file at %s", sourcePath)
+	buf := &bytes.Buffer{}
+	err := SSHDownload(user, ipAddress, sourcePath, buf)
+	if err != nil {
+		return nil, bosherr.WrapErrorf(err, "Download of %q failed", sourcePath)
+	}
+
+	c.logger.Debug(httpClientLogTag, "Downloaded %d bytes", buf.Len())
+
+	return buf.Bytes(), nil
+}
+
+func SSHDownload(username, ip, srcFile string, destination io.Writer) error {
+	config := &ssh.ClientConfig{
+		User:            username,
+		Auth:            []ssh.AuthMethod{PublicKeyFile(username, ".ssh/id_rsa")},
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+	}
+	sshAddress := fmt.Sprint(ip, ":22")
+	client, err := ssh.Dial("tcp", sshAddress, config)
+	if err != nil {
+		return err
+	}
+	defer client.Close()
+
+	sftp, err := sftp.NewClient(client)
+	if err != nil {
+		return err
+	}
+	defer sftp.Close()
+
+	f, err := sftp.Open(srcFile)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	_, err = f.WriteTo(destination)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func executeCmd(commands []string, hostname string, port string, config *ssh.ClientConfig) {
+	conn, _ := ssh.Dial("tcp", fmt.Sprintf("%s:%s", hostname, port), config)
+	session, _ := conn.NewSession()
+	defer session.Close()
+	var stdoutBuf bytes.Buffer
+	session.Stdout = &stdoutBuf
+	fullcommand:=""
+
+	for index, cmd := range commands {
+		if index != (len(commands)-1) {
+			fullcommand = fullcommand + cmd + " && "
+		}else{
+			fullcommand = fullcommand + cmd
+		}
+	}
+	session.Run(fullcommand)
+
 }

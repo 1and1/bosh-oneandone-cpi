@@ -117,7 +117,7 @@ var _ = Describe("VM", func() {
 						]
 					}
 				  }
-				},
+				},["diskid"],
 				{
 				  "bosh": {
 					  "group_name": "1and1 test",

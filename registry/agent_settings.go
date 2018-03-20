@@ -3,7 +3,7 @@ package registry
 import "encoding/json"
 
 const defaultSystemDisk = "/dev/sda"
-const defaultEphemeralDisk = "/dev/sda"
+const defaultEphemeralDisk = ""
 
 type agentSettingsResponse struct {
 	Settings string `json:"settings"`
@@ -35,6 +35,14 @@ type AgentSettings struct {
 
 	// VM settings
 	VM VMSettings `json:"vm"`
+
+	// public key
+	PublicKey string `json:"public_key"`
+
+	//user-data
+	Server   UserDataServerName       `json:"server"`
+	Registry UserDataRegistryEndpoint `json:"registry"`
+	DNS      UserDataDNSItems         `json:"dns,omitempty"`
 }
 
 // BlobstoreSettings are the Blobstore settings for a particular VM.
@@ -94,7 +102,8 @@ type VMSettings struct {
 }
 
 // NewAgentSettings creates new agent settings for a VM.
-func NewAgentSettings(agentID string, vmCID string, networksSettings NetworksSettings, env EnvSettings, agentOptions AgentOptions) AgentSettings {
+func NewAgentSettings(agentID string, vmCID string, networksSettings NetworksSettings,
+	env EnvSettings, agentOptions AgentOptions, publickey string, userdata UserData) AgentSettings {
 	agentSettings := AgentSettings{
 		AgentID: agentID,
 		Disks: DisksSettings{
@@ -112,6 +121,16 @@ func NewAgentSettings(agentID string, vmCID string, networksSettings NetworksSet
 		Ntp:      agentOptions.Ntp,
 		VM: VMSettings{
 			Name: vmCID,
+		},
+		PublicKey: publickey,
+		Server: UserDataServerName{
+			Name: vmCID,
+		},
+		Registry: UserDataRegistryEndpoint{
+			Endpoint: userdata.Registry.Endpoint,
+		},
+		DNS: UserDataDNSItems{
+			NameServer: userdata.DNS.NameServer,
 		},
 	}
 

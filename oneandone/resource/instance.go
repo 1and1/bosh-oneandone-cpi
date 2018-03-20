@@ -8,10 +8,6 @@ import (
 	"time"
 )
 
-const (
-	ROOT_USER_NAME               = "root"
-)
-
 type Instance struct {
 	vmId string
 

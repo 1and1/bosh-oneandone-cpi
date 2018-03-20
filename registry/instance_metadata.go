@@ -1,8 +1,7 @@
-package vm
+package registry
 
 import (
 	"encoding/json"
-	"github.com/bosh-oneandone-cpi/registry"
 	"strings"
 )
 
@@ -26,10 +25,11 @@ type InstanceMetadata []MetadataEntry
 // the agent. It mirrors
 // https://godoc.org/github.com/cloudfoundry/bosh-agent/infrastructure#UserDataContentsType
 type UserData struct {
-	Server   UserDataServerName        `json:"server"`
-	Registry UserDataRegistryEndpoint  `json:"registry"`
-	DNS      UserDataDNSItems          `json:"dns,omitempty"`
-	Networks registry.NetworksSettings `json:"networks"`
+	Server    UserDataServerName       `json:"server"`
+	Registry  UserDataRegistryEndpoint `json:"registry"`
+	DNS       UserDataDNSItems         `json:"dns,omitempty"`
+	Networks  NetworksSettings         `json:"networks"`
+	PublicKey string                   `json:"public_key"`
 }
 
 type UserDataServerName struct {
@@ -45,12 +45,27 @@ type UserDataDNSItems struct {
 }
 
 type AgentSettingsMetaData struct {
-	Settings registry.AgentSettings
+	Settings AgentSettings
 }
 
 type SSHKeys []string
 
-func NewUserData(name string, registryEndpoint string, dnsNames []string, networks registry.NetworksSettings) MetadataEntry {
+func NewUserData(name string, registryEndpoint string, dnsNames []string, networks NetworksSettings) MetadataEntry {
+	return UserData{
+		Server: UserDataServerName{
+			Name: name,
+		},
+		Registry: UserDataRegistryEndpoint{
+			Endpoint: registryEndpoint,
+		},
+		DNS: UserDataDNSItems{
+			NameServer: dnsNames,
+		},
+		Networks: networks,
+	}
+}
+
+func NewUserDataObject(name string, registryEndpoint string, dnsNames []string, networks NetworksSettings) UserData {
 	return UserData{
 		Server: UserDataServerName{
 			Name: name,
@@ -69,7 +84,7 @@ func NewSSHKeys(in []string) MetadataEntry {
 	return SSHKeys(in)
 }
 
-func NewAgentSettingsMetadata(settings registry.AgentSettings) MetadataEntry {
+func NewAgentSettingsMetadata(settings AgentSettings) MetadataEntry {
 	return AgentSettingsMetaData{Settings: settings}
 }
 
