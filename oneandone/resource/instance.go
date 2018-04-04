@@ -14,10 +14,11 @@ type Instance struct {
 	// May not always be known
 	publicIPs  []string
 	privateIPs []string
+	pnId       string
 }
 
-func NewInstance(vmId string) *Instance {
-	return &Instance{vmId: vmId}
+func NewInstance(vmId string, pnId string) *Instance {
+	return &Instance{vmId: vmId, pnId: pnId}
 }
 
 func NewInstanceWithPrivateIPs(vmId string, privateIPs []string) *Instance {

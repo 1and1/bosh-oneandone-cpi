@@ -57,6 +57,11 @@ func (ad AttachDisk) Run(vmCID VMCID, diskCID DiskCID) (interface{}, error) {
 	if err != nil {
 		return "", bosherr.WrapError(err, "Error launching new instance")
 	}
+	//todo: sdb with devicepath value
+	//defining partionion label
+	bsCommands := []string{"parted -s /dev/sdb mklabel gpt"}
+
+	ad.registryClient.RunCommand("root", publicIp, bsCommands)
 
 	// Read VM agent settings
 	agentSettings, err := ad.registryClient.Fetch("root", publicIp)

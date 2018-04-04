@@ -6,6 +6,7 @@ import (
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	sdk "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	"time"
 )
 
 const diskPathPrefix = "/dev/sd"
@@ -55,6 +56,8 @@ func (ad *diskAttacherDetacher) AttachInstanceToStorage(v *sdk.BlockStorage, in 
 			devicePath = fmt.Sprintf("%s%s", diskPathPrefix, string(diskPathSuffix[index]))
 		}
 	}
+
+	time.Sleep(3 * time.Minute)
 	if found {
 		return devicePath, nil
 	} else {

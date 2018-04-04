@@ -2,7 +2,6 @@ package vm
 
 import (
 	//"fmt"
-	//"fmt"
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
@@ -48,7 +47,7 @@ func (cv *creator) CreateInstance(icfg InstanceConfiguration) (*resource.Instanc
 }
 func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instance, error) {
 
-	//setup firewall ports
+	////setup firewall ports
 	//var firewallPolicy oneandone.FirewallPolicyRequest
 	//var firewallId string
 	//var firewallData *oneandone.FirewallPolicy
@@ -142,15 +141,19 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 	////wait on server to be ready
 	//cv.connector.Client().WaitForState(res, "POWERED_OFF", 10, 90)
 	//
-	//cv.connector.Client().AssignServerPrivateNetwork(res.Id, "D522A56E643EED2479F2B73810DAF5F3")
+	//spn, err := cv.connector.Client().AssignServerPrivateNetwork(res.Id, "D522A56E643EED2479F2B73810DAF5F3")
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//pn, err := cv.connector.Client().GetPrivateNetwork(spn.PrivateNets[0].Id)
 	//
 	//cv.connector.Client().StartServer(res.Id)
 	//
 	//cv.connector.Client().WaitForState(res, "POWERED_ON", 10, 90)
-	//time.Sleep(120 * time.Second)
-	res, _ := cv.connector.Client().GetServer("E1E34F28C12159491326262215113E83")
+	//time.Sleep(4 * time.Minute)
 
-	instance := resource.NewInstance(res.Id)
+	instance := resource.NewInstance("3924E09AF375C771D66986B80198C246", "")
 
 	return instance, nil
 }

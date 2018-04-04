@@ -81,7 +81,9 @@ func (cv CreateVM) updateRegistry(agentID string, ipAddress string, vmName strin
 	/*create vcap ssh directory and copy public key to it
 	This is something that the agent does when using the registry,
 	but since we are replacing it with FS we have to do this manually*/
-	commands := []string{"mkdir 0700 /home/vcap/.ssh",
+	commands := []string{
+		"usermod -G admin,bosh_sudoers,bosh_sshers vcap",
+		"mkdir 0700 /home/vcap/.ssh",
 		fmt.Sprintf("echo \"%s\" >> /home/vcap/.ssh/authorized_keys", publicKey),
 		"chown -R vcap.vcap /home/vcap/.ssh",
 		"chmod 0700 /home/vcap/.ssh",

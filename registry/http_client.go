@@ -226,7 +226,10 @@ func (c HTTPClient) RunCommand(username string, ipAddress string, commands []str
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
-	executeCmd(commands, ipAddress, "22", config)
+	err := executeCmd(commands, ipAddress, "22", config)
+	if err != nil {
+		return bosherr.WrapError(err, fmt.Sprintf("Exceuting command %v failed with user %s and ip address %v", commands, username, ipAddress))
+	}
 	return nil
 }
 
@@ -237,6 +240,7 @@ func writeFile(fileContent []byte, filename string) {
 
 func PublicKeyFile(username string, file string) ssh.AuthMethod {
 	//usr, _ := user.Current()x
+	//todo: make this work for root and non root users
 	file = "/" + username + "/.ssh/id_rsa" //+ username + "/" + file
 	buffer, err := ioutil.ReadFile(file)
 	if err != nil {
@@ -302,21 +306,38 @@ func SSHDownload(username, ip, srcFile string, destination io.Writer) error {
 	return nil
 }
 
-func executeCmd(commands []string, hostname string, port string, config *ssh.ClientConfig) {
+func executeCmd(commands []string, hostname string, port string, config *ssh.ClientConfig) error {
 	conn, _ := ssh.Dial("tcp", fmt.Sprintf("%s:%s", hostname, port), config)
-	session, _ := conn.NewSession()
+	session, err := conn.NewSession()
+	if err != nil {
+		for i := 0; i < 5; i++ {
+			time.Sleep(35 * time.Second)
+			// Connect to the remote server
+			session, err = conn.NewSession()
+			if err == nil {
+				break
+			}
+		}
+		if err != nil {
+			return bosherr.WrapErrorf(err, "Couldn't establish a connection to the remote server'")
+		}
+	}
 	defer session.Close()
 	var stdoutBuf bytes.Buffer
 	session.Stdout = &stdoutBuf
-	fullcommand:=""
+	fullcommand := ""
 
 	for index, cmd := range commands {
-		if index != (len(commands)-1) {
+		if index != (len(commands) - 1) {
 			fullcommand = fullcommand + cmd + " && "
-		}else{
+		} else {
 			fullcommand = fullcommand + cmd
 		}
 	}
-	session.Run(fullcommand)
+	err = session.Run(fullcommand)
+	if err != nil {
+		return err
+	}
+	return nil
 
 }

@@ -35,6 +35,6 @@ func (f *finder) FindInstance(instanceID string) (*resource.Instance, error) {
 		f.logger.Debug(logTag, "Error GetInstance %s", err)
 		return nil, err
 	}
-	return resource.NewInstance(r.Id), nil
+	return resource.NewInstance(r.Id,""), nil
 
 }

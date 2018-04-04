@@ -20,9 +20,8 @@ type CreatorFactory func(client.Connector, boshlog.Logger) Creator
 
 func (dc *diskCreator) CreateStorage(name string, sizeinGB int, dcId string) (*sdk.BlockStorage, error) {
 
-	sizeinGB=20
-	name="bs1"
-	dcId="908DC2072407C94C8054610AD5A53B8C"
+	sizeinGB = 20
+	dcId = "908DC2072407C94C8054610AD5A53B8C"
 	req := sdk.BlockStorageRequest{
 		Name:         name,
 		Size:         &sizeinGB,

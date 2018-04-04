@@ -3,7 +3,6 @@ package registry
 import "encoding/json"
 
 const defaultSystemDisk = "/dev/sda"
-const defaultEphemeralDisk = ""
 
 type agentSettingsResponse struct {
 	Settings string `json:"settings"`
@@ -108,7 +107,6 @@ func NewAgentSettings(agentID string, vmCID string, networksSettings NetworksSet
 		AgentID: agentID,
 		Disks: DisksSettings{
 			System:     defaultSystemDisk,
-			Ephemeral:  defaultEphemeralDisk,
 			Persistent: map[string]PersistentSettings{},
 		},
 		Blobstore: BlobstoreSettings{

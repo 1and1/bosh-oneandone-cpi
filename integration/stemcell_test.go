@@ -9,7 +9,7 @@ import (
 
 var _ = Describe("Stemcell", func() {
 	It("executes the stemcell lifecycle with an image-id", func() {
-		var imageId = "0ECFBD372AF5C0895458C29B4C54CF62"
+		var imageId = "00A393D2AAFB6057C69954DF81F78437"
 
 		By("finding a stemcell by image-id")
 		request := fmt.Sprintf(`{
