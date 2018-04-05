@@ -43,7 +43,7 @@ type ServerHdds struct {
 type Hdd struct {
 	idField
 	Size   int  `json:"size,omitempty"`
-	IsMain bool `json:"is_main,omitempty"`
+	IsMain bool `json:"is_main"`
 	ApiPtr
 }
 

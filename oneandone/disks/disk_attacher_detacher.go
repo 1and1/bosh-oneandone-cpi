@@ -61,7 +61,7 @@ func (ad *diskAttacherDetacher) AttachInstanceToStorage(v *sdk.BlockStorage, in 
 	if found {
 		return devicePath, nil
 	} else {
-		return "sdb", nil
+		return "sdc", nil
 	}
 
 }
