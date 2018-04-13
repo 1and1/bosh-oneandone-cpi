@@ -22,8 +22,9 @@ type StemcellCloudProperties struct {
 // NetworkCloudProperties holds the CPI specific network properties
 // defined in cloud config
 type NetworkCloudProperties struct {
-	Subnet    string `json:"subnet,omitempty"`
-	OpenPorts []Rule `json:"open-ports,omitempty"`
+	PrivateNetWorkId string `json:"private-network-id,omitempty"`
+	Subnet           string `json:"subnet,omitempty"`
+	OpenPorts        []Rule `json:"open-ports,omitempty"`
 }
 
 type Rule struct {
@@ -40,7 +41,10 @@ type VMCloudProperties struct {
 	InstanceFlavor string  `json:"flavor,omitempty"`
 	Cores          int     `json:"cores,omitempty"`
 	DiskSize       int     `json:"diskSize,omitempty"`
+	EphemeralDisk  int     `json:"ephemeralDiskSize,omitempty"`
 	Ram            float32 `json:"ram,omitempty"`
 	SSHKey         string  `json:"rsa_key,omitempty"`
 	PublicIP       string  `json:"public_ip,omitempty"`
+	SSHPairPath    string  `json:"keypair,omitempty"`
+	Director       bool    `json:"director,omitempty"`
 }

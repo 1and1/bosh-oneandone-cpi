@@ -55,10 +55,13 @@ func (dd DetachDisk) Run(vmCID VMCID, diskCID DiskCID) (interface{}, error) {
 	if err != nil {
 		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
 	}
-
+	sshKeyPairPath := in.SSHKeyPair()
+	if sshKeyPairPath == "" {
+		sshKeyPairPath = sshPairKey
+	}
 	// Update VM agent settings
 	newAgentSettings := agentSettings.DetachPersistentDisk(string(diskCID))
-	if err = dd.registryClient.UploadFile("root", publicIp, newAgentSettings); err != nil {
+	if err = dd.registryClient.UploadFile(publicIp, newAgentSettings, sshKeyPairPath); err != nil {
 		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
 	}
 	return nil, nil

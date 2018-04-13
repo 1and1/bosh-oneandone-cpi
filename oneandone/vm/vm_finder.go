@@ -1,11 +1,12 @@
 package vm
 
 import (
-	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
+	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
+	"strings"
 )
 
 type Finder interface {
@@ -35,6 +36,10 @@ func (f *finder) FindInstance(instanceID string) (*resource.Instance, error) {
 		f.logger.Debug(logTag, "Error GetInstance %s", err)
 		return nil, err
 	}
-	return resource.NewInstance(r.Id,""), nil
+	if strings.Contains(r.Name, "director") {
+		return resource.NewInstance(r.Id, "/root/.ssh"), nil
+	}
+
+	return resource.NewInstance(r.Id, "/vcap/.ssh"), nil
 
 }

@@ -9,16 +9,16 @@ import (
 )
 
 type Instance struct {
-	vmId string
+	vmId       string
+	sshKeyPair string
 
 	// May not always be known
 	publicIPs  []string
 	privateIPs []string
-	pnId       string
 }
 
-func NewInstance(vmId string, pnId string) *Instance {
-	return &Instance{vmId: vmId, pnId: pnId}
+func NewInstance(vmId string, sshKeyPair string) *Instance {
+	return &Instance{vmId: vmId, sshKeyPair: sshKeyPair}
 }
 
 func NewInstanceWithPrivateIPs(vmId string, privateIPs []string) *Instance {
@@ -27,6 +27,10 @@ func NewInstanceWithPrivateIPs(vmId string, privateIPs []string) *Instance {
 
 func (in *Instance) ID() string {
 	return in.vmId
+}
+
+func (in *Instance) SSHKeyPair() string {
+	return in.sshKeyPair
 }
 
 func (in *Instance) EnsureReachable(c client.Connector, l boshlog.Logger) error {

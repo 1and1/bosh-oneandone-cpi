@@ -9,6 +9,7 @@ import (
 )
 
 const diskActionsLogTag = "diskActions"
+const sshPairKey = "/home/vcap/.ssh"
 
 // AttachDisk action handles the attach_disk request to attach
 // a persistent disk to a vm instance
@@ -57,21 +58,26 @@ func (ad AttachDisk) Run(vmCID VMCID, diskCID DiskCID) (interface{}, error) {
 	if err != nil {
 		return "", bosherr.WrapError(err, "Error launching new instance")
 	}
+
+	sshKeyPairPath := in.SSHKeyPair()
+	if sshKeyPairPath == "" {
+		sshKeyPairPath = sshPairKey
+	}
 	//todo: sdb with devicepath value
 	//defining partionion label
 	bsCommands := []string{"parted -s /dev/sdb mklabel gpt"}
 
-	ad.registryClient.RunCommand("root", publicIp, bsCommands)
+	ad.registryClient.RunCommand(publicIp, bsCommands, sshKeyPairPath)
 
 	// Read VM agent settings
-	agentSettings, err := ad.registryClient.Fetch("root", publicIp)
+	agentSettings, err := ad.registryClient.Fetch(publicIp,sshKeyPairPath)
 	if err != nil {
 		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
 	}
 
 	// Update VM agent settings
 	newAgentSettings := agentSettings.AttachPersistentDisk(string(diskCID), devicePath)
-	if err = ad.registryClient.UploadFile("root", publicIp, newAgentSettings); err != nil {
+	if err = ad.registryClient.UploadFile(publicIp, newAgentSettings, sshKeyPairPath); err != nil {
 		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
 	}
 	return nil, nil

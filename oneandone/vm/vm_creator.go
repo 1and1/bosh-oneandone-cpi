@@ -2,13 +2,11 @@ package vm
 
 import (
 	//"fmt"
+	"fmt"
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	"github.com/oneandone/oneandone-cloudserver-sdk-go"
-	//"strings"
-	//"time"
-	"fmt"
 	"strings"
 	"time"
 )
@@ -27,6 +25,8 @@ type InstanceConfiguration struct {
 	SSHKey         string
 	Network        Networks
 	InstanceFlavor string
+	SSHKeyPair     string
+	EphemeralDisk  int
 }
 
 type Creator interface {
@@ -59,6 +59,10 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 	var ipId string
 	var hardwareFlavor oneandone.FixedInstanceInfo
 
+	//check if a private network was provided
+	if len(icfg.Network) == 0 || icfg.Network[0].PrivateNetworkId == "" {
+		return nil, fmt.Errorf("please provide a valid private network ID")
+	}
 	if icfg.ServerIp != "" {
 		ips, err := cv.connector.Client().ListPublicIps()
 		if err != nil {
@@ -70,9 +74,6 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 				break
 			}
 
-		}
-		if ipId == "" {
-			return nil, fmt.Errorf("Could find a matching public ip address", icfg.ServerIp)
 		}
 	}
 
@@ -115,15 +116,17 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 			cv.connector.Client().WaitForState(firewallData, "ACTIVE", 10, 90)
 		}
 	}
-	hardwareFlavor.Hardware.Hdds = append(hardwareFlavor.Hardware.Hdds, oneandone.Hdd{Size: 20, IsMain: false})
+	if icfg.EphemeralDisk == 0 {
+		icfg.EphemeralDisk = 20
+	}
+	hardwareFlavor.Hardware.Hdds = append(hardwareFlavor.Hardware.Hdds, oneandone.Hdd{Size: icfg.EphemeralDisk, IsMain: false})
 
 	//creating the server on 1&1
 	req := oneandone.ServerRequest{
 		Name:    icfg.Name,
 		SSHKey:  icfg.SSHKey,
-		PowerOn: true,
+		PowerOn: false,
 		Hardware: oneandone.Hardware{
-			//FixedInsSizeId:    flavorId,
 			Ram:               hardwareFlavor.Hardware.Ram,
 			Vcores:            hardwareFlavor.Hardware.Vcores,
 			CoresPerProcessor: hardwareFlavor.Hardware.CoresPerProcessor,
@@ -140,22 +143,25 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 	}
 
 	//wait on server to be ready
-	//cv.connector.Client().WaitForState(res, "POWERED_OFF", 10, 90)
-	//
-	//spn, err := cv.connector.Client().AssignServerPrivateNetwork(res.Id, "D522A56E643EED2479F2B73810DAF5F3")
-	//if err != nil {
-	//	return nil, err
-	//}
-	//
-	//pn, err := cv.connector.Client().GetPrivateNetwork(spn.PrivateNets[0].Id)
-	//
-	//cv.connector.Client().StartServer(res.Id)
+	cv.connector.Client().WaitForState(res, "POWERED_OFF", 10, 90)
+
+	//PrivateNetwork setup
+	_, err = cv.connector.Client().AssignServerPrivateNetwork(res.Id, icfg.Network[0].PrivateNetworkId)
+	if err != nil {
+		return nil, err
+	}
+
+	pn, err := cv.connector.Client().GetPrivateNetwork(icfg.Network[0].PrivateNetworkId)
+
+	cv.connector.Client().WaitForState(pn, "ACTIVE", 20, 90)
+
+	cv.connector.Client().StartServer(res.Id)
 
 	cv.connector.Client().WaitForState(res, "POWERED_ON", 10, 90)
-	time.Sleep(4 * time.Minute)
 
-	//instance := resource.NewInstance("3924E09AF375C771D66986B80198C246", "")
-	instance := resource.NewInstance(res.Id, "")
+	// extra wait the server always needed a bit more time even after the correct state
+	time.Sleep(1 * time.Minute)
+	instance := resource.NewInstance(res.Id, icfg.SSHKeyPair)
 
 	return instance, nil
 }

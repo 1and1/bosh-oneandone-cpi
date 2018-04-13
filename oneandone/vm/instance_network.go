@@ -1,8 +1,9 @@
 package vm
 
 type NetworkConfiguration struct {
-	Subnet    string
-	OpenPorts []Rule
+	PrivateNetworkId string
+	Subnet           string
+	OpenPorts        []Rule
 }
 type Rule struct {
 	PortFrom *int

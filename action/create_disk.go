@@ -36,7 +36,9 @@ func (cd CreateDisk) Run(size int, props DiskCloudProperties) (DiskCID, error) {
 }
 
 func volumeSize(size int) int {
-	s := int(size)
+	//convert from mb to gb
+	sizeGB := size / 1024
+	s := int(sizeGB)
 	if s < minVolumeSize {
 		return minVolumeSize
 	}

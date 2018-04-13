@@ -44,36 +44,17 @@ func NewHTTPClient(
 
 // Delete deletes the instance settings for a given instance ID.
 func (c HTTPClient) Delete(instanceID string) error {
-	endpoint := fmt.Sprintf("%s/instances/%s/settings", c.options.EndpointWithCredentials(), instanceID)
-	c.logger.Debug(httpClientLogTag, "Deleting agent settings from registry endpoint '%s'", endpoint)
 
-	request, err := http.NewRequest("DELETE", endpoint, nil)
-	if err != nil {
-		return bosherr.WrapErrorf(err, "Creating DELETE request for registry endpoint '%s'", endpoint)
-	}
-
-	httpResponse, err := c.doRequest(request)
-	if err != nil {
-		return bosherr.WrapErrorf(err, "Deleting agent settings from registry endpoint '%s'", endpoint)
-	}
-
-	defer httpResponse.Body.Close()
-
-	if httpResponse.StatusCode != http.StatusOK {
-		return bosherr.Errorf("Received status code '%d' when deleting agent settings from registry endpoint '%s'", httpResponse.StatusCode, endpoint)
-	}
-
-	c.logger.Debug(httpClientLogTag, "Deleted agent settings from registry endpoint '%s'", endpoint)
 	return nil
 }
 
 // Fetch gets the agent settings for a given instance ID.
-func (c HTTPClient) Fetch(username string, ipAddress string) (AgentSettings, error) {
+func (c HTTPClient) Fetch(ipAddress string, sshPath string) (AgentSettings, error) {
 	var agentEnv AgentSettings
 
-	contents, err := c.Download(username, ipAddress, settingsPath)
+	contents, err := c.Download(ipAddress, settingsPath, sshPath)
 	if err != nil {
-		return AgentSettings{}, bosherr.WrapError(err, "Downloading agent env from virtual guestr")
+		return AgentSettings{}, bosherr.WrapError(err, "Downloading agent env from server")
 	}
 
 	err = json.Unmarshal(contents, &agentEnv)
@@ -170,79 +151,86 @@ func (c HTTPClient) httpClient() (http.Client, error) {
 }
 
 // Update updates the agent settings for a given instance ID. If there are not already agent settings for the instance, it will create ones.
-func (c HTTPClient) UploadFile(username string, ipAddress string, agentSettings AgentSettings) error {
+func (c HTTPClient) UploadFile(ipAddress string, agentSettings AgentSettings, sshPath string) error {
 	settingsJSON, err := json.Marshal(agentSettings)
 	if err != nil {
-		return bosherr.WrapErrorf(err, "Marshalling agent settings, contents: '%#v", agentSettings)
+		return bosherr.WrapErrorf(err, "Marshalling agent settings, contents: '%s", agentSettings)
 	}
-	fileName := "1and1-agent-env.json"
-	//creating the settings file locally
-	writeFile(settingsJSON, fileName)
-
-	config := &ssh.ClientConfig{
-		User:            username,
-		Auth:            []ssh.AuthMethod{PublicKeyFile(username, ".ssh/id_rsa")},
-		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+	commands := []string{
+		"> /var/vcap/bosh/user_data.json",
+		fmt.Sprintf("echo '%s' >> /var/vcap/bosh/user_data.json", settingsJSON),
 	}
 
-	sshAddress := fmt.Sprint(ipAddress, ":22")
-	// Create a new SCP client
-	client := scp.NewClient(sshAddress, config)
-
-	for i := 0; i < 5; i++ {
-		time.Sleep(20 * time.Second)
-		// Connect to the remote server
-		err = client.Connect()
-		if err == nil {
-			break
-		}
-	}
-	if err != nil {
-		return bosherr.WrapErrorf(err, "Couldn't establish a connection to the remote server'")
-	}
-
-	// Open a file
-	f, _ := os.Open(fileName)
-
-	// Close session after the file has been copied
-	defer client.Session.Close()
-
-	// Close the file after it has been copied
-	defer f.Close()
-
-	// Finaly, copy the file over
-	// Usage: CopyFile(fileReader, remotePath, permission)
-
-	client.CopyFile(f, "/var/vcap/bosh/user_data.json", "0655")
+	c.RunCommand(ipAddress, commands, sshPath)
 
 	return nil
 }
 
-func (c HTTPClient) RunCommand(username string, ipAddress string, commands []string) error {
+func (c HTTPClient) RunCommand(ipAddress string, commands []string, sshPath string) error {
 
 	config := &ssh.ClientConfig{
-		User:            username,
-		Auth:            []ssh.AuthMethod{PublicKeyFile(username, ".ssh/id_rsa")},
+		User:            "root",
+		Auth:            []ssh.AuthMethod{PublicKeyFile(sshPath)},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
 	err := executeCmd(commands, ipAddress, "22", config)
 	if err != nil {
-		return bosherr.WrapError(err, fmt.Sprintf("Exceuting command %v failed with user %s and ip address %v", commands, username, ipAddress))
+		return bosherr.WrapError(err, fmt.Sprintf("Exceuting command %v failed with user %s and ip address %v", commands, "root", ipAddress))
 	}
 	return nil
 }
 
-func writeFile(fileContent []byte, filename string) {
-	err := ioutil.WriteFile(filename, fileContent, 0644)
-	check(err)
+func (c HTTPClient) UploadRootKeyPair(ipAddress string, sshPath string) error {
+
+	filesToCopy := [2]string{"id_rsa.pub", "id_rsa"}
+	var err error
+	config := &ssh.ClientConfig{
+		User:            "root",
+		Auth:            []ssh.AuthMethod{PublicKeyFile(sshPath)},
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+	}
+	for index, _ := range filesToCopy {
+
+		sshAddress := fmt.Sprint(ipAddress, ":22")
+		// Create a new SCP client
+		client := scp.NewClient(sshAddress, config)
+
+		for i := 0; i < 5; i++ {
+			time.Sleep(10 * time.Second)
+			// Connect to the remote server
+			err = client.Connect()
+			if err == nil {
+				break
+			}
+		}
+		if err != nil {
+			return bosherr.WrapErrorf(err, "Couldn't establish a connection to the remote server'")
+		}
+
+		//copy private key
+		filePath := "/" + filesToCopy[index]
+		// Open a file
+		f, _ := os.Open(sshPath + filePath)
+
+		// Close session after the file has been copied
+		defer client.Session.Close()
+
+		// Close the file after it has been copied
+		defer f.Close()
+
+		// Finaly, copy the file over
+		// Usage: CopyFile(fileReader, remotePath, permission)
+
+		client.CopyFile(f, "/home/vcap/.ssh"+filePath, "0644")
+
+	}
+
+	return nil
 }
 
-func PublicKeyFile(username string, file string) ssh.AuthMethod {
-	//usr, _ := user.Current()x
-	//todo: make this work for root and non root users
-	file = "/" + username + "/.ssh/id_rsa" //+ username + "/" + file
-	buffer, err := ioutil.ReadFile(file)
+func PublicKeyFile(file string) ssh.AuthMethod {
+	buffer, err := ioutil.ReadFile(file + "/id_rsa")
 	if err != nil {
 		return nil
 	}
@@ -260,10 +248,10 @@ func check(e error) {
 	}
 }
 
-func (c HTTPClient) Download(user string, ipAddress string, sourcePath string) ([]byte, error) {
+func (c HTTPClient) Download(ipAddress string, sourcePath string, sshPath string) ([]byte, error) {
 	c.logger.Debug(httpClientLogTag, "Downloading file at %s", sourcePath)
 	buf := &bytes.Buffer{}
-	err := SSHDownload(user, ipAddress, sourcePath, buf)
+	err := SSHDownload(ipAddress, sourcePath, buf, sshPath)
 	if err != nil {
 		return nil, bosherr.WrapErrorf(err, "Download of %q failed", sourcePath)
 	}
@@ -273,10 +261,10 @@ func (c HTTPClient) Download(user string, ipAddress string, sourcePath string) (
 	return buf.Bytes(), nil
 }
 
-func SSHDownload(username, ip, srcFile string, destination io.Writer) error {
+func SSHDownload(ip, srcFile string, destination io.Writer, sshPath string) error {
 	config := &ssh.ClientConfig{
-		User:            username,
-		Auth:            []ssh.AuthMethod{PublicKeyFile(username, ".ssh/id_rsa")},
+		User:            "root",
+		Auth:            []ssh.AuthMethod{PublicKeyFile(sshPath)},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 	sshAddress := fmt.Sprint(ip, ":22")

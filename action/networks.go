@@ -23,11 +23,11 @@ type Network struct {
 
 // AsRegistryNetworks converts the networks map to network settings
 // structure expected by the agent registry
-func (ns Networks) AsRegistryNetworks() registry.NetworksSettings {
+func (ns Networks) AsRegistryNetworks(publicIp string) registry.NetworksSettings {
 	networksSettings := registry.NetworksSettings{}
 
 	for netName, network := range ns {
-		networksSettings[netName] = network.AsRegistryNetwork()
+		networksSettings[netName] = network.AsRegistryNetwork(publicIp)
 	}
 	return networksSettings
 }
@@ -44,7 +44,8 @@ func (ns Networks) AsNetworkConfiguration() vm.Networks {
 			openPorts = append(openPorts, vm.Rule{PortFrom: port.PortFrom, PortTo: port.PortTo, Source: port.Source})
 		}
 		networks = append(networks, vm.NetworkConfiguration{
-			OpenPorts: openPorts,
+			OpenPorts:        openPorts,
+			PrivateNetworkId: ns.First().CloudProperties.PrivateNetWorkId,
 		})
 	}
 	return networks
@@ -52,10 +53,10 @@ func (ns Networks) AsNetworkConfiguration() vm.Networks {
 
 // AsRegistryNetwork converts a single network to network setting structure
 // expected by the agent registry
-func (n Network) AsRegistryNetwork() registry.NetworkSetting {
+func (n Network) AsRegistryNetwork(publicIp string) registry.NetworkSetting {
 	return registry.NetworkSetting{
 		Type:          n.Type,
-		IP:            n.IP,
+		IP:            publicIp,
 		Gateway:       n.Gateway,
 		Netmask:       n.Netmask,
 		UseDHCP:       true,
@@ -128,13 +129,3 @@ func (ns Networks) First() *Network {
 	}
 	return nil
 }
-
-//func (n *Network) validate() error {
-//	if n.CloudProperties.SubnetName == "" {
-//		return bosherr.Error("Missing subnet name from network definition ")
-//	}
-//	if n.CloudProperties.VcnName == "" {
-//		return bosherr.Error("Missing vcn name from network definition ")
-//	}
-//	return nil
-//}
