@@ -25,7 +25,7 @@ func NewConcreteFactory(
 	logger boshlog.Logger,
 ) ConcreteFactory {
 
-	registryClient := registry.NewHTTPClient(cfg.Cloud.Properties.Registry, logger)
+	registryClient := registry.NewFSClient(cfg.Cloud.Properties.Registry, logger)
 
 	return ConcreteFactory{
 		connector: connector,

@@ -50,6 +50,9 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 	}
 
 	instance, err := creator.CreateInstance(icfg)
+	if err != nil {
+		return "", bosherr.WrapError(err, "Error creating new instance")
+	}
 
 	// Start a local forward ssh tunnel?
 	if err == nil && networks.AllDynamic() {
@@ -77,7 +80,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 
 func (cv CreateVM) vmName(prefix string, director bool) string {
 	if director {
-		prefix = "director" + prefix
+		prefix = "director " + prefix
 	}
 	suffix, err := cv.uuidGen.Generate()
 	if err != nil {
@@ -98,15 +101,20 @@ func (cv CreateVM) updateRegistry(agentID string, ipAddress string, vmName strin
 		"chown -R vcap.vcap /home/vcap/.ssh",
 		"chmod 0700 /home/vcap/.ssh",
 	}
+	var err error
 
-	cv.registry.RunCommand(ipAddress, commands, keyPairPath)
+	err = cv.registry.RunCommand(ipAddress, commands, keyPairPath)
+	if err != nil {
+		cv.logger.Error(logTag, "Error excuting vcap user commands %s", err)
+	}
 
 	//copy ssh key pair to each new node
-	cv.registry.UploadRootKeyPair(ipAddress, keyPairPath)
+	err = cv.registry.UploadRootKeyPair(ipAddress, keyPairPath)
+	if err != nil {
+		cv.logger.Error(logTag, "Error uploading ssh keys %s", err)
+	}
 
-	cv.logger.Info(logTag, "trying to update the registry")
 	// Handle registry update failure. Delete VM or retry?
-	var err error
 	defer func() {
 		if err != nil {
 			cv.logger.Error(logTag, "Registry update failed! FIXME: handle failure")
@@ -117,9 +125,10 @@ func (cv CreateVM) updateRegistry(agentID string, ipAddress string, vmName strin
 		registry.EnvSettings(env), agentOptions, publicKey, userdata)
 
 	//upload file with AgentSettings using FS and SCP
-	cv.registry.UploadFile(ipAddress, agentSettings, keyPairPath)
-
-	cv.logger.Info(logTag, "Updated registry")
+	err = cv.registry.UploadFile(ipAddress, agentSettings, keyPairPath)
+	if err != nil {
+		cv.logger.Error(logTag, "Error uploading userdata settings file %s", err)
+	}
 	return nil
 
 }

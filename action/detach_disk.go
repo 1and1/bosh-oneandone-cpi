@@ -49,15 +49,15 @@ func (dd DetachDisk) Run(vmCID VMCID, diskCID DiskCID) (interface{}, error) {
 	if err := detacher.DetachInstanceFromStorage(strg, in); err != nil {
 		return nil, bosherr.WrapError(err, "Error detaching volume")
 	}
-
-	// Read VM agent settings
-	agentSettings, err := dd.registryClient.Fetch("root", publicIp)
-	if err != nil {
-		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
-	}
 	sshKeyPairPath := in.SSHKeyPair()
 	if sshKeyPairPath == "" {
 		sshKeyPairPath = sshPairKey
+	}
+
+	// Read VM agent settings
+	agentSettings, err := dd.registryClient.Fetch(publicIp, sshKeyPairPath)
+	if err != nil {
+		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
 	}
 	// Update VM agent settings
 	newAgentSettings := agentSettings.DetachPersistentDisk(string(diskCID))

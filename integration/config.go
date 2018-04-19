@@ -1,7 +1,6 @@
 package integration
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -14,11 +13,14 @@ import (
 	boshdisp "github.com/bosh-oneandone-cpi/api/dispatcher"
 	"github.com/bosh-oneandone-cpi/api/transport"
 	boshcfg "github.com/bosh-oneandone-cpi/config"
-	client "github.com/bosh-oneandone-cpi/oneandone/client"
+	"github.com/bosh-oneandone-cpi/oneandone/client"
 	boshlogger "github.com/cloudfoundry/bosh-utils/logger"
 	"github.com/cloudfoundry/bosh-utils/uuid"
 	"path/filepath"
+	"bytes"
 )
+
+var oaoClient client.Connector
 
 var (
 	// A stemcell that will be created in integration_suite_test.go
@@ -36,9 +38,7 @@ var (
 	// Channel that will be used to retrieve IPs to use
 	ips chan string
 	//apikeyPath = fakeAPIKeyPath()
-	apikeyPath = "C:/gopath/src/github.com/bosh-oneandone-cpi/integration/test/assets/fake_api_key.pem"
-	//token      = os.Getenv("ONEANDONE_TOKEN")
-	token = "c4a21f145229f0597d60b0e531cfc69f"
+	token      = os.Getenv("ONEANDONE_TOKEN")
 	internalIp      = envOrDefault("CPI_INTERNAL_IP", "10.4.92.139")
 	internalCidr    = envOrDefault("CPI_INTERNAL_CIDR", "10.4.92.139/24")
 	internalNetmask = envOrDefault("CPI_INTERNAL_NETMASK", "255.255.255.0")
@@ -80,7 +80,6 @@ func execCPI(request string) (boshdisp.Response, error) {
 	var err error
 	var cfg boshcfg.Config
 	var in, out, errOut, errOutLog bytes.Buffer
-	var oaoClient client.Connector
 	var boshResponse boshdisp.Response
 
 	if cfg, err = boshcfg.NewConfigFromString(cfgContent); err != nil {

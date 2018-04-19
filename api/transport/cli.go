@@ -41,7 +41,6 @@ func (t CLI) ServeOnce() error {
 	}
 
 	respBytes := t.dispatcher.Dispatch(reqBytes)
-	t.logger.Info("REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", string(respBytes))
 
 	if _, err := t.out.Write(respBytes); err != nil {
 		t.logger.Error(cliLogTag, "Failed writing to OUT: %s", err)

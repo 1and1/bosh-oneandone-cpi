@@ -6,7 +6,6 @@ import (
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 	sdk "github.com/oneandone/oneandone-cloudserver-sdk-go"
-	"time"
 )
 
 const diskPathPrefix = "/dev/sd"
@@ -36,14 +35,6 @@ func (ad *diskAttacherDetacher) AttachInstanceToStorage(v *sdk.BlockStorage, in 
 
 	ad.connector.Client().WaitForState(ser, "POWERED_ON", 10, 90)
 
-	ser, err = ad.connector.Client().RebootServer(in.ID(), false)
-	if err != nil {
-		ad.logger.Error(diskOperationsLogTag, "Error restarting server %v", err)
-		return devicePath, err
-	}
-
-	ad.connector.Client().WaitForState(ser, "POWERED_ON", 10, 90)
-
 	disks, err := ad.connector.Client().ListServerHdds(in.ID())
 
 	//wait for block storage to be ready
@@ -57,7 +48,6 @@ func (ad *diskAttacherDetacher) AttachInstanceToStorage(v *sdk.BlockStorage, in 
 		}
 	}
 
-	time.Sleep(3 * time.Minute)
 	if found {
 		return devicePath, nil
 	} else {

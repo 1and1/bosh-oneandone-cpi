@@ -8,7 +8,6 @@ import (
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
 )
 
-const diskActionsLogTag = "diskActions"
 const sshPairKey = "/home/vcap/.ssh"
 
 // AttachDisk action handles the attach_disk request to attach
@@ -63,14 +62,9 @@ func (ad AttachDisk) Run(vmCID VMCID, diskCID DiskCID) (interface{}, error) {
 	if sshKeyPairPath == "" {
 		sshKeyPairPath = sshPairKey
 	}
-	//todo: sdb with devicepath value
-	//defining partionion label
-	bsCommands := []string{"parted -s /dev/sdb mklabel gpt"}
-
-	ad.registryClient.RunCommand(publicIp, bsCommands, sshKeyPairPath)
 
 	// Read VM agent settings
-	agentSettings, err := ad.registryClient.Fetch(publicIp,sshKeyPairPath)
+	agentSettings, err := ad.registryClient.Fetch(publicIp, sshKeyPairPath)
 	if err != nil {
 		return nil, bosherr.WrapErrorf(err, "Attaching disk '%s' to vm '%s'", diskCID, vmCID)
 	}

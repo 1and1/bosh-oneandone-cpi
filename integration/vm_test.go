@@ -7,65 +7,8 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
-
+var machineName = "live bosh director test"
 var _ = Describe("VM", func() {
-	//request := fmt.Sprintf(`{
-	//		  "method": "create_vm",
-	//		  "arguments": [
-	//			"agent",
-	//			"%v",
-	//			{
-	//			  "name": "boshtest",
-	//			  "flavor": "S",
-	//			  "rsa_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD0IdDhD9pzUYUBEmD8sbUcisr6kTh8a4eOmdN5DI3WkJIO3NhVWWHMZfBMApJHTVpgKOcrmArYZpft08QPOiRb2Om/0nTQvXLAjo/ra0lUYrHQw8WZW88Itzf1mSHN3dlsc+YoJPSFeRksqpntWnL/TwLyuJQ51qxIew+RTitayDdRtR+Qhn1qw/yxtH4Mt+nFJMu4OORBCR3CdrcAHUmmBOZ3eOr2WHWuTHVDrSuqgqc7ndnABWwQOs37fKsL38tEZC0oKbHM34alizSmXjszzIMMM3HMoDyS4cDBdS8uoNaSU1/fMZj3BkTQST+UwJtLZN+3X/ClKJztz9ijwYMR root@ali-G751JT"
-	//
-	//			},
-	//			{
-	//			  "default": {
-	//				"type": "dynamic",
-	//				"cloud_properties": {
-	//				  "open-ports": [
-	//						{
-	//							"port-from":22,
-	//							"port-to":22,
-	//							"source":"0.0.0.0"
-	//
-	//						},
-	//						{
-	//							"port-from":80,
-	//							"port-to":80,
-	//							"source":"0.0.0.0"
-	//
-	//						},
-	//						{
-	//							"port-from":443,
-	//							"port-to":443,
-	//							"source":"0.0.0.0"
-	//
-	//						},
-	//						{
-	//							"port-from":8443,
-	//							"port-to":8443,
-	//							"source":"0.0.0.0"
-	//
-	//						},
-	//						{
-	//							"port-from":8447,
-	//							"port-to":8447,
-	//							"source":"0.0.0.0"
-	//						}
-	//					]
-	//				}
-	//			  }
-	//			}
-	//		  ]
-	//		}`, existingStemcell)
-	//It("creates a VM with an invalid configuration and receives an error message with logs", func() {
-	//	resp, err := execCPI(request)
-	//	Expect(err).ToNot(HaveOccurred())
-	//	Expect(resp.Error.Message).ToNot(BeEmpty())
-	//})
-
 	It("executes the VM lifecycle", func() {
 		var vmCID string
 		By("creating a VM")
@@ -75,9 +18,9 @@ var _ = Describe("VM", func() {
 				"agent",
 				"%v",
 				{
-				  "name": "boshtest",
+				  "name": "%v",
 				  "flavor": "S",
-                  "keypair":"/root/.ssh",
+                "keypair":"/root/.ssh",
 				  "rsa_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD0IdDhD9pzUYUBEmD8sbUcisr6kTh8a4eOmdN5DI3WkJIO3NhVWWHMZfBMApJHTVpgKOcrmArYZpft08QPOiRb2Om/0nTQvXLAjo/ra0lUYrHQw8WZW88Itzf1mSHN3dlsc+YoJPSFeRksqpntWnL/TwLyuJQ51qxIew+RTitayDdRtR+Qhn1qw/yxtH4Mt+nFJMu4OORBCR3CdrcAHUmmBOZ3eOr2WHWuTHVDrSuqgqc7ndnABWwQOs37fKsL38tEZC0oKbHM34alizSmXjszzIMMM3HMoDyS4cDBdS8uoNaSU1/fMZj3BkTQST+UwJtLZN+3X/ClKJztz9ijwYMR root@ali-G751JT"
 
 				},
@@ -85,6 +28,7 @@ var _ = Describe("VM", func() {
 				  "default": {
 					"type": "dynamic",
 					"cloud_properties": {
+                    "private-network-id":"D522A56E643EED2479F2B73810DAF5F3",
 					  "open-ports": [
 							{
 								"port-from":22,
@@ -126,7 +70,7 @@ var _ = Describe("VM", func() {
 				  }
 				}
 			  ]
-			}`, existingStemcell)
+			}`, existingStemcell, machineName)
 		vmCID = assertSucceedsWithResult(request).(string)
 
 		By("locating the VM")
@@ -137,10 +81,8 @@ var _ = Describe("VM", func() {
 		exists := assertSucceedsWithResult(request).(bool)
 		Expect(exists).To(Equal(true))
 
-		expectedName := "boshtest"
 		assertValidVM(vmCID, func(instance *oneandone.Server) {
-			// Labels should be an exact match
-			Expect(instance.Name).To(BeEquivalentTo(expectedName))
+			Expect(instance.Name).To(ContainSubstring(machineName))
 		})
 
 		updatedName := "updatedfrombosh"
@@ -148,28 +90,20 @@ var _ = Describe("VM", func() {
 			  "method": "set_vm_metadata",
 			  "arguments": [
 				"%v",
-				%v
+				{"name":"%v"}
 			  ]
 			}`, vmCID, updatedName)
 		assertSucceeds(request)
 		assertValidVM(vmCID, func(instance *oneandone.Server) {
-			// Labels should be an exact match
-			Expect(instance.Name).To(BeEquivalentTo(expectedName))
+			Expect(instance.Name).To(ContainSubstring(updatedName))
 		})
 
-		//By("rebooting the VM")
-		//request = fmt.Sprintf(`{
-		//	  "method": "reboot_vm",
-		//	  "arguments": ["%v"]
-		//	}`, vmCID)
-		//assertSucceeds(request)
-
-		//By("deleting the VM")
-		//request = fmt.Sprintf(`{
-		//	  "method": "delete_vm",
-		//	  "arguments": ["%v"]
-		//	}`, vmCID)
-		//assertSucceeds(request)
+		By("deleting the VM")
+		request = fmt.Sprintf(`{
+			  "method": "delete_vm",
+			  "arguments": ["%v"]
+			}`, vmCID)
+		assertSucceeds(request)
 
 	})
 })

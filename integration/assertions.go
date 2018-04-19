@@ -3,7 +3,6 @@ package integration
 import (
 	"fmt"
 
-	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/oneandone/oneandone-cloudserver-sdk-go"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -38,16 +37,12 @@ func toStringArray(raw []interface{}) []string {
 }
 
 func assertValidVM(id string, valFunc func(server *oneandone.Server)) {
-	var cc client.Connector
-	cc.Connect()
-	list, err := cc.Client().ListServers()
+
+	server, err := oaoClient.Client().GetServer(id)
 	if err != nil {
 		//todo:throw error
 	}
-	for _, srv := range list {
-		if srv.Id == id {
-			return
-		}
-	}
+	valFunc(server)
+	return
 	Fail(fmt.Sprintf("Instance %q not found\n", id))
 }

@@ -52,14 +52,9 @@ func (in *Instance) queryIPs(c client.Connector, l boshlog.Logger) error {
 	for _, ip := range res {
 		public = append(public, ip.Ip)
 	}
-	//todo: find private ips
-	//var private []string
-	//public, private, err = in.location.instanceIPs(c, in.ocid)
 
 	in.publicIPs = make([]string, len(public))
-	//in.privateIPs = make([]string, len(private))
 	copy(in.publicIPs, public)
-	//copy(in.privateIPs, private)
 
 	l.Debug(logTag, "Queried IPs, Private %v, Public %v", in.privateIPs, in.publicIPs)
 	return nil
@@ -88,7 +83,6 @@ func (in *Instance) setupSSHTunnelToAgent(c client.Connector, l boshlog.Logger) 
 		duration, _ := time.ParseDuration(tunnel.Duration)
 		remotePort, _ := c.AgentOptions().MBusPort()
 		//todo: mind this below
-		//remoteIP, err := in.remoteIP(c, l, tunnel.UsePublicIP)
 		remoteIP, err := in.remoteIP(c, l, true)
 		if err != nil {
 			return err
