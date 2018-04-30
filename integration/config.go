@@ -1,13 +1,9 @@
 package integration
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
-	"io/ioutil"
-	"os"
-	"strings"
-
 	"github.com/bosh-oneandone-cpi/action"
 	boshapi "github.com/bosh-oneandone-cpi/api"
 	boshdisp "github.com/bosh-oneandone-cpi/api/dispatcher"
@@ -16,8 +12,10 @@ import (
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	boshlogger "github.com/cloudfoundry/bosh-utils/logger"
 	"github.com/cloudfoundry/bosh-utils/uuid"
+	"io"
+	"io/ioutil"
+	"os"
 	"path/filepath"
-	"bytes"
 )
 
 var oaoClient client.Connector
@@ -25,26 +23,8 @@ var oaoClient client.Connector
 var (
 	// A stemcell that will be created in integration_suite_test.go
 	existingStemcell string
-
-	// Configurable defaults
-	stemcellFile         = envOrDefault("STEMCELL_FILE", "")
-	stemcellVersion      = envOrDefault("STEMCELL_VERSION", "https://s3.amazonaws.com/bosh-core-stemcells/google/bosh-stemcell-3468.15-google-kvm-ubuntu-trusty-go_agent.tgz")
-	networkName          = envOrDefault("NETWORK_NAME", "cfintegration")
-	customNetworkName    = envOrDefault("CUSTOM_NETWORK_NAME", "cfintegration-custom")
-	customSubnetworkName = envOrDefault("CUSTOM_SUBNETWORK_NAME", "cfintegration-custom-us-central1")
-	ipAddrs              = strings.Split(envOrDefault("PRIVATE_IP", "192.168.100.102,192.168.100.103,192.168.100.104"), ",")
-	imageURL             = envOrDefault("IMAGE_URL", "https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1404-trusty-v20161213")
-
-	// Channel that will be used to retrieve IPs to use
-	ips chan string
-	//apikeyPath = fakeAPIKeyPath()
-	token      = os.Getenv("ONEANDONE_TOKEN")
-	internalIp      = envOrDefault("CPI_INTERNAL_IP", "10.4.92.139")
-	internalCidr    = envOrDefault("CPI_INTERNAL_CIDR", "10.4.92.139/24")
-	internalNetmask = envOrDefault("CPI_INTERNAL_NETMASK", "255.255.255.0")
-	internalGw      = envOrDefault("CPI_INTERNAL_GW", "10.4.92.139")
-
-	//
+	token            = os.Getenv("ONEANDONE_TOKEN")
+	sshKey           = os.Getenv("RSA_KEY")
 	// registry
 	registryUser     = envOrDefault("CPI_REGISTRY_USER", "admin")
 	registryPassword = envOrDefault("CPI_REGISTRY_PASSWORD", "admin-password")
@@ -76,17 +56,28 @@ var (
 		}`, token, registryHost, registryPort, registryUser, registryPassword)
 )
 
-func execCPI(request string) (boshdisp.Response, error) {
+func initAPI() error {
 	var err error
 	var cfg boshcfg.Config
-	var in, out, errOut, errOutLog bytes.Buffer
-	var boshResponse boshdisp.Response
+	if cfg, err = boshcfg.NewConfigFromString(cfgContent); err != nil {
+		return err
+	}
+	oaoClient = client.NewConnector(cfg.Cloud, boshlogger.NewLogger(boshlogger.LevelWarn))
+	oaoClient.Connect()
+	return nil
+}
 
+func execCPI(request string) (boshdisp.Response, error) {
+	var err error
+	var boshResponse boshdisp.Response
+	var cfg boshcfg.Config
+
+	var in, out, errOut, errOutLog bytes.Buffer
 	if cfg, err = boshcfg.NewConfigFromString(cfgContent); err != nil {
 		return boshResponse, err
 	}
-
 	oaoClient = client.NewConnector(cfg.Cloud, boshlogger.NewLogger(boshlogger.LevelWarn))
+
 	multiWriter := io.MultiWriter(&errOut, &errOutLog)
 	logger := boshlogger.NewWriterLogger(boshlogger.LevelDebug, multiWriter)
 	multiLogger := boshapi.MultiLogger{Logger: logger, LogBuff: &errOutLog}

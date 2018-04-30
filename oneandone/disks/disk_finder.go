@@ -3,7 +3,7 @@ package disks
 import (
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
-	sdk "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	sdk "github.com/1and1/oneandone-cloudserver-sdk-go"
 )
 
 type diskFinder struct {

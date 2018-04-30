@@ -14,7 +14,7 @@ import (
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	"github.com/bosh-oneandone-cpi/oneandone/vm"
 	vmfakes "github.com/bosh-oneandone-cpi/oneandone/vm/fakes"
-	sdk "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	sdk "github.com/1and1/oneandone-cloudserver-sdk-go"
 )
 
 var _ = Describe("CreateDisk", func() {

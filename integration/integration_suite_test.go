@@ -1,18 +1,18 @@
 package integration
 
 import (
-	//"fmt"
-
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"testing"
 
-	//"github.com/bosh-oneandone-cpi/oneandone/client"
 	"fmt"
-	"github.com/oneandone/oneandone-cloudserver-sdk-go"
+	sdk "github.com/1and1/oneandone-cloudserver-sdk-go"
+	"strings"
 )
 
-var oneandoneClient *oneandone.ApiInstance
+var imageId string
+var pnNetworkId string
+var privateNetworkName = "BOSH integration PN test"
 
 func TestIntegration(t *testing.T) {
 	RegisterFailHandler(Fail)
@@ -20,9 +20,20 @@ func TestIntegration(t *testing.T) {
 }
 
 var _ = SynchronizedBeforeSuite(func() []byte {
+	initAPI()
 	// Clean any straggler VMs
 	cleanVMs()
-	var imageId = "430AE4697DB31B35119BFE2153A00C0A"
+
+	images, err := oaoClient.Client().ListImages(1, 20, "", "bosh", "")
+	if err != nil {
+		Expect(err).ToNot(HaveOccurred())
+	}
+
+	if len(images) > 0 {
+		imageId = images[0].Id
+	} else {
+		Fail("BOSH image not found")
+	}
 
 	request := fmt.Sprintf(`{
 			  "method": "create_stemcell",
@@ -36,12 +47,15 @@ var _ = SynchronizedBeforeSuite(func() []byte {
 			}`, imageId)
 	stemcell := assertSucceedsWithResult(request).(string)
 
-	ips = make(chan string, len(ipAddrs))
-
-	// Parse IP addresses to be used and put on a chan
-	for _, addr := range ipAddrs {
-		ips <- addr
+	pnRequest := sdk.PrivateNetworkRequest{
+		Name: privateNetworkName,
 	}
+	_, pn, err := oaoClient.Client().CreatePrivateNetwork(&pnRequest)
+	if err != nil {
+		Expect(err).ToNot(HaveOccurred())
+	}
+	oaoClient.Client().WaitForState(pn, "ACTIVE", 10, 60)
+	pnNetworkId = pn.Id
 
 	return []byte(stemcell)
 }, func(data []byte) {
@@ -49,65 +63,38 @@ var _ = SynchronizedBeforeSuite(func() []byte {
 	existingStemcell = string(data)
 	Expect(existingStemcell).ToNot(BeEmpty())
 
-	//// Required env vars
-	//Expect(googleProject).ToNot(Equal(""), "GOOGLE_PROJECT must be set")
-	//Expect(externalStaticIP).ToNot(Equal(""), "EXTERNAL_STATIC_IP must be set")
-	//Expect(serviceAccount).ToNot(Equal(""), "SERVICE_ACCOUNT must be set")
-
-	//// Initialize a oneandone API client
-	//var cc client.Connector
-	//cc.Connect()
-	//client := cc.Client()
-	//Expect(client).ToNot(BeNil())
-})
-
-var _ = SynchronizedAfterSuite(func() {}, func() {
-	//cleanVMs()
-	//request := fmt.Sprintf(`{
-	//		  "method": "delete_stemcell",
-	//		  "arguments": ["%v"]
-	//		}`, existingStemcell)
-	//
-	//response, err := execCPI(request)
-	//Expect(err).ToNot(HaveOccurred())
-	//Expect(response.Error).To(BeNil())
-	//Expect(response.Result).To(BeNil())
 })
 
 func cleanVMs() {
-	//// Initialize a compute API client
-	//var cc client.Connector
-	//cc.Connect()
-	//client := cc.Client()
-	//
-	//// Clean up any VMs left behind from failed tests. Instances with the 'integration-delete' tag will be deleted.
-	//var pageToken string
-	//toDelete := make([]*compute.Instance, 0)
-	//GinkgoWriter.Write([]byte("Looking for VMs with 'integration-delete' tag. Matches will be deleted\n"))
-	//for {
-	//	// Clean up VMs with 'integration-delete' tag
-	//	listCall := computeService.Instances.AggregatedList(googleProject)
-	//	listCall.PageToken(pageToken)
-	//	aggregatedList, err := listCall.Do()
-	//	Expect(err).To(BeNil())
-	//	for _, list := range aggregatedList.Items {
-	//		for _, instance := range list.Instances {
-	//			for _, tag := range instance.Tags.Items {
-	//				if tag == "integration-delete" {
-	//					toDelete = append(toDelete, instance)
-	//				}
-	//			}
-	//		}
-	//	}
-	//	if aggregatedList.NextPageToken == "" {
-	//		break
-	//	}
-	//	pageToken = aggregatedList.NextPageToken
-	//}
-	//
-	//for _, vm := range toDelete {
-	//	GinkgoWriter.Write([]byte(fmt.Sprintf("Deleting VM %v\n", vm.Name)))
-	//	_, err := computeService.Instances.Delete(googleProject, util.ResourceSplitter(vm.Zone), vm.Name).Do()
-	//	Expect(err).ToNot(HaveOccurred())
-	//}
+	//todo: add extra check to not delete non tests servers and also needs to remove test private networks
+	// Initialize a compute API client
+
+	//delete dangling servers from previous tests
+	serversToDelete, err := oaoClient.Client().ListServers(1, 20, "", machineName, "")
+	if err == nil {
+
+		for _, vm := range serversToDelete {
+			GinkgoWriter.Write([]byte(fmt.Sprintf("Deleting VM %v\n", vm.Name)))
+			if strings.Contains(vm.Name, machineName) && vm.Status.State == "POWERED_ON" {
+				del, err := oaoClient.Client().DeleteServer(vm.Id, false)
+				oaoClient.Client().WaitUntilDeleted(del)
+				Expect(err).ToNot(HaveOccurred())
+			}
+		}
+	}
+
+	//delete dangling private networks from previous tests
+	pns, err := oaoClient.Client().ListPrivateNetworks(1, 20, "", "bosh", "")
+	if err == nil {
+
+		for _, pn := range pns {
+			GinkgoWriter.Write([]byte(fmt.Sprintf("Deleting Private Network %v\n", pn.Name)))
+			if strings.Contains(pn.Name, privateNetworkName) && pn.State == "ACTIVE" {
+				del, err := oaoClient.Client().DeletePrivateNetwork(pn.Id)
+				oaoClient.Client().WaitUntilDeleted(del)
+				Expect(err).ToNot(HaveOccurred())
+			}
+		}
+	}
+
 }

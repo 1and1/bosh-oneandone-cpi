@@ -1,14 +1,12 @@
 package vm
 
 import (
-	//"fmt"
 	"fmt"
+	"github.com/1and1/oneandone-cloudserver-sdk-go"
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
-	"github.com/oneandone/oneandone-cloudserver-sdk-go"
 	"strings"
-	"time"
 )
 
 const logTag = "VMOperations"
@@ -77,6 +75,7 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 		}
 	}
 
+	//prepare server's flavor
 	if icfg.InstanceFlavor != "" {
 		instances, err := cv.connector.Client().ListFixedInstanceSizes()
 		if err != nil {
@@ -91,11 +90,12 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 
 		}
 		if flavorId == "" {
-			return nil, fmt.Errorf("Could find a matching instance flavor: %s , either provide a custom hardware configurations or a valid flavir (S,M,L,XL,XXL,3XL,4XL,5XL)", icfg.InstanceFlavor)
+			return nil, fmt.Errorf("could find a matching instance flavor: %s , either provide a custom hardware configurations or a valid flavor (S,M,L,XL,XXL,3XL,4XL,5XL)", icfg.InstanceFlavor)
 		}
 
 	}
 
+	//setup firewall policies
 	if icfg.Network != nil && len(icfg.Network) > 0 {
 		//check if subnet exists at a private network
 		firewallPolicy.Name = fmt.Sprintf("Bosh fw %v", icfg.Name)
@@ -121,11 +121,11 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 	}
 	hardwareFlavor.Hardware.Hdds = append(hardwareFlavor.Hardware.Hdds, oneandone.Hdd{Size: icfg.EphemeralDisk, IsMain: false})
 
-	//creating the server on 1&1
+	//Prepare server request and send it to the SDK
 	req := oneandone.ServerRequest{
 		Name:    icfg.Name,
 		SSHKey:  icfg.SSHKey,
-		PowerOn: false,
+		PowerOn: true,
 		Hardware: oneandone.Hardware{
 			Ram:               hardwareFlavor.Hardware.Ram,
 			Vcores:            hardwareFlavor.Hardware.Vcores,
@@ -136,6 +136,7 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 		DatacenterId:     icfg.DatacenterId,
 		ApplianceId:      icfg.ImageId,
 		IpId:             ipId,
+		PrivateNetworkId: icfg.Network[0].PrivateNetworkId,
 	}
 	_, res, err := cv.connector.Client().CreateServer(&req)
 	if err != nil {
@@ -143,24 +144,8 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 	}
 
 	//wait on server to be ready
-	cv.connector.Client().WaitForState(res, "POWERED_OFF", 10, 90)
-
-	//PrivateNetwork setup
-	_, err = cv.connector.Client().AssignServerPrivateNetwork(res.Id, icfg.Network[0].PrivateNetworkId)
-	if err != nil {
-		return nil, err
-	}
-
-	pn, err := cv.connector.Client().GetPrivateNetwork(icfg.Network[0].PrivateNetworkId)
-
-	cv.connector.Client().WaitForState(pn, "ACTIVE", 20, 90)
-
-	cv.connector.Client().StartServer(res.Id)
-
 	cv.connector.Client().WaitForState(res, "POWERED_ON", 10, 90)
 
-	// extra wait the server always needed a bit more time even after the correct state
-	time.Sleep(1 * time.Minute)
 	instance := resource.NewInstance(res.Id, icfg.SSHKeyPair)
 
 	return instance, nil

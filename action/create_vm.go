@@ -68,7 +68,9 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 	userdata := registry.NewUserDataObject(name, cv.connector.AgentRegistryEndpoint(), nil, agentNetworks)
 
 	//check if an ssh key pair path was provided. if not set the defualt value to /vcap/.ssh
-	if cloudProps.SSHPairPath == "" {
+	if cloudProps.Director {
+		cloudProps.SSHPairPath = "/root/.ssh"
+	} else {
 		cloudProps.SSHPairPath = "/home/vcap/.ssh"
 	}
 

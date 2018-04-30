@@ -3,7 +3,7 @@ package integration
 import (
 	"fmt"
 
-	"github.com/oneandone/oneandone-cloudserver-sdk-go"
+	"github.com/1and1/oneandone-cloudserver-sdk-go"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

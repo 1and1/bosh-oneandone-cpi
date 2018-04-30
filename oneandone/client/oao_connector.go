@@ -2,7 +2,7 @@ package client
 
 import (
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
-	cclient "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	cclient "github.com/1and1/oneandone-cloudserver-sdk-go"
 
 	"github.com/bosh-oneandone-cpi/config"
 	"github.com/bosh-oneandone-cpi/registry"

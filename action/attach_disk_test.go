@@ -17,7 +17,7 @@ import (
 	vmfakes "github.com/bosh-oneandone-cpi/oneandone/vm/fakes"
 	"github.com/bosh-oneandone-cpi/registry"
 	registryfakes "github.com/bosh-oneandone-cpi/registry/fakes"
-	sdk "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	sdk "github.com/1and1/oneandone-cloudserver-sdk-go"
 )
 
 var _ = Describe("AttachDisk", func() {

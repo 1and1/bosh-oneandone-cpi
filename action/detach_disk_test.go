@@ -15,7 +15,7 @@ import (
 	registryfakes "github.com/bosh-oneandone-cpi/registry/fakes"
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	"github.com/bosh-oneandone-cpi/registry"
-	sdk "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	sdk "github.com/1and1/oneandone-cloudserver-sdk-go"
 
 	"github.com/bosh-oneandone-cpi/oneandone/vm"
 	"github.com/bosh-oneandone-cpi/oneandone/client"

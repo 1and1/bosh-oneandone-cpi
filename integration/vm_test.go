@@ -3,11 +3,12 @@ package integration
 import (
 	"fmt"
 
-	"github.com/oneandone/oneandone-cloudserver-sdk-go"
+	"github.com/1and1/oneandone-cloudserver-sdk-go"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
-var machineName = "live bosh director test"
+
+var machineName = "bosh director integration test"
 var _ = Describe("VM", func() {
 	It("executes the VM lifecycle", func() {
 		var vmCID string
@@ -20,15 +21,13 @@ var _ = Describe("VM", func() {
 				{
 				  "name": "%v",
 				  "flavor": "S",
-                "keypair":"/root/.ssh",
-				  "rsa_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD0IdDhD9pzUYUBEmD8sbUcisr6kTh8a4eOmdN5DI3WkJIO3NhVWWHMZfBMApJHTVpgKOcrmArYZpft08QPOiRb2Om/0nTQvXLAjo/ra0lUYrHQw8WZW88Itzf1mSHN3dlsc+YoJPSFeRksqpntWnL/TwLyuJQ51qxIew+RTitayDdRtR+Qhn1qw/yxtH4Mt+nFJMu4OORBCR3CdrcAHUmmBOZ3eOr2WHWuTHVDrSuqgqc7ndnABWwQOs37fKsL38tEZC0oKbHM34alizSmXjszzIMMM3HMoDyS4cDBdS8uoNaSU1/fMZj3BkTQST+UwJtLZN+3X/ClKJztz9ijwYMR root@ali-G751JT"
-
+               	  "rsa_key": "%v"
 				},
 				{
 				  "default": {
 					"type": "dynamic",
 					"cloud_properties": {
-                    "private-network-id":"D522A56E643EED2479F2B73810DAF5F3",
+                   "private-network-id":"%v",
 					  "open-ports": [
 							{
 								"port-from":22,
@@ -70,7 +69,7 @@ var _ = Describe("VM", func() {
 				  }
 				}
 			  ]
-			}`, existingStemcell, machineName)
+			}`, existingStemcell, machineName, sshKey, pnNetworkId)
 		vmCID = assertSucceedsWithResult(request).(string)
 
 		By("locating the VM")

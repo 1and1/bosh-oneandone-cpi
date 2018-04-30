@@ -3,7 +3,7 @@ package stemcell
 import (
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
-	"github.com/oneandone/oneandone-cloudserver-sdk-go"
+	"github.com/1and1/oneandone-cloudserver-sdk-go"
 )
 
 // imageAvailableWaiter waits for a newly created

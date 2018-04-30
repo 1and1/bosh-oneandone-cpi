@@ -1,7 +1,7 @@
 package fakes
 
 import (
-	sdk "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	sdk "github.com/1and1/oneandone-cloudserver-sdk-go"
 )
 
 type FakeDiskCreator struct {

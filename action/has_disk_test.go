@@ -13,7 +13,7 @@ import (
 	diskfakes "github.com/bosh-oneandone-cpi/oneandone/disks/fakes"
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/disks"
-	sdk "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	sdk "github.com/1and1/oneandone-cloudserver-sdk-go"
 )
 
 var _ = Describe("HasDisk", func() {

@@ -3,7 +3,7 @@ package fakes
 import (
 	"github.com/bosh-oneandone-cpi/config"
 	"github.com/bosh-oneandone-cpi/registry"
-	cclient "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	cclient "github.com/1and1/oneandone-cloudserver-sdk-go"
 )
 
 type FakeConnector struct {

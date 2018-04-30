@@ -2,7 +2,7 @@ package fakes
 
 import (
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
-	sdk "github.com/oneandone/oneandone-cloudserver-sdk-go"
+	sdk "github.com/1and1/oneandone-cloudserver-sdk-go"
 )
 
 type FakeAttacherDetacher struct {

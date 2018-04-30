@@ -1,64 +1,84 @@
 package registry
 
 import (
-	"golang.org/x/crypto/ssh"
-	"io/ioutil"
-	"io"
-	"fmt"
-	"github.com/pkg/sftp"
-	"time"
 	"bytes"
+	"fmt"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
+	"github.com/pkg/sftp"
+	"golang.org/x/crypto/ssh"
+	"io"
+	"io/ioutil"
+	"time"
 )
 
-func PublicKeyFile(file string) ssh.AuthMethod {
+func PublicKeyFile(file string) (ssh.AuthMethod, error) {
 	buffer, err := ioutil.ReadFile(file + "/id_rsa")
 	if err != nil {
-		return nil
+		return nil, bosherr.WrapErrorf(err, fmt.Sprintf("Couldn't find the ssh key pair at local path"), file)
 	}
 
 	key, err := ssh.ParsePrivateKey(buffer)
 	if err != nil {
-		return nil
+		return nil, bosherr.WrapErrorf(err, fmt.Sprintf("Couldn't find the ssh key pair at local path"), file)
 	}
-	return ssh.PublicKeys(key)
+	return ssh.PublicKeys(key), nil
 }
 
 func SSHDownload(ip, srcFile string, destination io.Writer, sshPath string) error {
+	authMethod, err := PublicKeyFile(sshPath)
+	if err != nil {
+		return err
+	}
 	config := &ssh.ClientConfig{
 		User:            "root",
-		Auth:            []ssh.AuthMethod{PublicKeyFile(sshPath)},
+		Auth:            []ssh.AuthMethod{authMethod},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 	sshAddress := fmt.Sprint(ip, ":22")
-	client, err := ssh.Dial("tcp", sshAddress, config)
-	if err != nil {
-		return err
-	}
-	defer client.Close()
+	for i := 0; i < 10; i++ {
+		client, err := ssh.Dial("tcp", sshAddress, config)
+		if err != nil {
+			return err
+		}
+		defer client.Close()
 
-	sftp, err := sftp.NewClient(client)
-	if err != nil {
-		return err
-	}
-	defer sftp.Close()
+		sftp, err := sftp.NewClient(client)
+		if err != nil {
+			return err
+		}
+		defer sftp.Close()
 
-	f, err := sftp.Open(srcFile)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
+		f, err := sftp.Open(srcFile)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
 
-	_, err = f.WriteTo(destination)
-	if err != nil {
-		return err
+		_, err = f.WriteTo(destination)
+		if err != nil {
+			return err
+		}
+		break
 	}
 
 	return nil
 }
 
 func executeCmd(commands []string, hostname string, port string, config *ssh.ClientConfig) error {
-	conn, _ := ssh.Dial("tcp", fmt.Sprintf("%s:%s", hostname, port), config)
+	var conn *ssh.Client
+	var err error
+	for i := 0; i < 5; i++ {
+		conn, err = ssh.Dial("tcp", fmt.Sprintf("%s:%s", hostname, port), config)
+		if err != nil {
+			time.Sleep(30 * time.Second)
+		} else {
+			break
+		}
+	}
+	if err != nil {
+		return bosherr.WrapErrorf(err, fmt.Sprintf("Couldn't establish an ssh dial to server %s on port %s with config %v'"), hostname, port, config)
+	}
+
 	session, err := conn.NewSession()
 	if err != nil {
 		for i := 0; i < 5; i++ {
