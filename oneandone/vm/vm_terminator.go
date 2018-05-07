@@ -23,7 +23,6 @@ func (t *terminator) TerminateInstance(instanceID string) error {
 
 	t.logger.Info(logTag, "Deleting VM %s...", instanceID)
 	var firewallIdsToremove []string
-	//TODO: cleanup any remainig resources like firewalls and load balancers
 	// find any attached firewall policies
 	//list server ips
 	serverIps, err := t.connector.Client().ListServerIps(instanceID)

@@ -14,9 +14,9 @@ var _ = Describe("Stemcell", func() {
 		request := fmt.Sprintf(`{
          "method": "create_stemcell",
          "arguments": ["",{
-           "name": "bosh-oneandone-kvm-ubuntu-trusty",
-           "version": "3215",
-           "infrastructure": "1&1",
+           "name": "bosh-oneandone-xen-ubuntu-trusty-go_agent-raw",
+           "version": "3541.21",
+           "infrastructure": "oneandone",
            "image-id": "%s"
          }]
        }`, imageId)

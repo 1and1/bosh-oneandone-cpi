@@ -14,8 +14,8 @@ var _ = Describe("Disk", func() {
 		var diskCID string
 		request := fmt.Sprintf(`{
 			  "method": "create_disk",
-			  "arguments": [20,{"datacenter":"908DC2072407C94C8054610AD5A53B8C"}]
-			}`)
+			  "arguments": [20,{"datacenter":"%v"}]
+			}`, datacenterId)
 		diskCID = assertSucceedsWithResult(request).(string)
 
 		By("confirming a disk exists")
@@ -35,16 +35,14 @@ var _ = Describe("Disk", func() {
 				{
 				  "name": "%v",
 				  "flavor": "S",
-                  "director":true,
-				  "rsa_key": "%v"
-
+               	  "rsa_key": "%v"
 				},
 				{
 				  "default": {
 					"type": "dynamic",
 					"cloud_properties": {
-                     "private-network-id":"%v",
-					 "open-ports": [
+                    "private-network-id":"%v",
+					  "open-ports": [
 							{
 								"port-from":22,
 								"port-to":22,
@@ -55,6 +53,24 @@ var _ = Describe("Disk", func() {
 								"port-from":80,
 								"port-to":80,
 								"source":"0.0.0.0"
+
+							},
+							{
+								"port-from":443,
+								"port-to":443,
+								"source":"0.0.0.0"
+
+							},
+							{
+								"port-from":8443,
+								"port-to":8443,
+								"source":"0.0.0.0"
+
+							},
+							{
+								"port-from":8447,
+								"port-to":8447,
+								"source":"0.0.0.0"
 							}
 						]
 					}
@@ -62,8 +78,6 @@ var _ = Describe("Disk", func() {
 				},["diskid"],
 				{
 				  "bosh": {
-					  "group_name": "1and1 test",
-				  "groups": ["micro-1and1", "dummy", "dummy", "micro-1and1-dummy", "dummy-dummy"]
 				  }
 				}
 			  ]

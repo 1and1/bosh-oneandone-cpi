@@ -3,9 +3,9 @@ package stemcell
 import (
 	"fmt"
 
+	sdk "github.com/1and1/oneandone-cloudserver-sdk-go"
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
-	sdk "github.com/1and1/oneandone-cloudserver-sdk-go"
 )
 
 type stemcellOperations struct {
@@ -15,10 +15,10 @@ type stemcellOperations struct {
 
 func (so stemcellOperations) DeleteStemcell(stemcellID string) error {
 
-	cs := so.connector.Client()
-	_, err := cs.DeleteImage(stemcellID)
-	return err
-
+	//cs := so.connector.Client()
+	//_, err := cs.DeleteImage(stemcellID)
+	//return err
+	return nil
 }
 
 func (so stemcellOperations) CreateStemcell(imageId string) (stemcellID string, err error) {

@@ -13,6 +13,7 @@ import (
 var imageId string
 var pnNetworkId string
 var privateNetworkName = "BOSH integration PN test"
+var datacenterId string
 
 func TestIntegration(t *testing.T) {
 	RegisterFailHandler(Fail)
@@ -21,8 +22,20 @@ func TestIntegration(t *testing.T) {
 
 var _ = SynchronizedBeforeSuite(func() []byte {
 	initAPI()
-	// Clean any straggler VMs
+	// Clean any leftovers
 	cleanVMs()
+
+	//find US datacenter
+	datacetners, err := oaoClient.Client().ListDatacenters()
+	if err != nil {
+		Expect(err).ToNot(HaveOccurred())
+	}
+
+	for _, dc := range datacetners {
+		if dc.CountryCode == "US" {
+			datacenterId = dc.Id
+		}
+	}
 
 	images, err := oaoClient.Client().ListImages(1, 20, "", "bosh", "")
 	if err != nil {
@@ -65,10 +78,13 @@ var _ = SynchronizedBeforeSuite(func() []byte {
 
 })
 
-func cleanVMs() {
-	//todo: add extra check to not delete non tests servers and also needs to remove test private networks
-	// Initialize a compute API client
+var _ = SynchronizedAfterSuite(func() {
+	// Clean any leftovers
+	cleanVMs()
+}, func() {
+})
 
+func cleanVMs() {
 	//delete dangling servers from previous tests
 	serversToDelete, err := oaoClient.Client().ListServers(1, 20, "", machineName, "")
 	if err == nil {
@@ -76,6 +92,21 @@ func cleanVMs() {
 		for _, vm := range serversToDelete {
 			GinkgoWriter.Write([]byte(fmt.Sprintf("Deleting VM %v\n", vm.Name)))
 			if strings.Contains(vm.Name, machineName) && vm.Status.State == "POWERED_ON" {
+				//remove firewall policies
+				if len(vm.Ips) > 0 {
+					for _, ip := range vm.Ips {
+						fws, err := oaoClient.Client().GetServerIpFirewallPolicy(vm.Id, ip.Id)
+						if err != nil {
+							continue
+						}
+						delFw, err := oaoClient.Client().DeleteFirewallPolicy(fws.Id)
+						if err != nil {
+							continue
+						}
+						oaoClient.Client().WaitUntilDeleted(delFw)
+					}
+
+				}
 				del, err := oaoClient.Client().DeleteServer(vm.Id, false)
 				oaoClient.Client().WaitUntilDeleted(del)
 				Expect(err).ToNot(HaveOccurred())

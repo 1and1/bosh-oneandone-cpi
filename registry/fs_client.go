@@ -147,7 +147,7 @@ import (
 		buf := &bytes.Buffer{}
 		err := SSHDownload(ipAddress, sourcePath, buf, sshPath)
 		if err != nil {
-			return nil, bosherr.WrapErrorf(err, "Download of %q failed", sourcePath)
+			return nil, bosherr.WrapErrorf(err, "Downloading %q failed", sourcePath)
 		}
 
 		c.logger.Debug(fsClientLogTag, "Downloaded %d bytes", buf.Len())

@@ -15,7 +15,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 )
 
 var oaoClient client.Connector
@@ -112,25 +111,9 @@ func execCPI(request string) (boshdisp.Response, error) {
 	return boshResponse, nil
 }
 
-func envRequired(key string) (val string) {
-	if val = os.Getenv(key); val == "" {
-		panic(fmt.Sprintf("Could not find required environment variable '%s'", key))
-	}
-	return
-}
-
 func envOrDefault(key, defaultVal string) (val string) {
 	if val = os.Getenv(key); val == "" {
 		val = defaultVal
 	}
 	return
-}
-
-func assetsDir() string {
-	dir, _ := os.Getwd()
-	return filepath.Join(dir, "test/assets")
-}
-
-func fakeAPIKeyPath() string {
-	return filepath.Join(assetsDir(), "fake_api_key.pem")
 }

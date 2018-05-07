@@ -57,6 +57,11 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 	var ipId string
 	var hardwareFlavor oneandone.FixedInstanceInfo
 
+	//check for ssh key
+	if len(icfg.SSHKey) == 0 || icfg.SSHKey == "" {
+		return nil, fmt.Errorf("please provide a valid rsa_key value")
+	}
+
 	//check if a private network was provided
 	if len(icfg.Network) == 0 || icfg.Network[0].PrivateNetworkId == "" {
 		return nil, fmt.Errorf("please provide a valid private network ID")
@@ -92,7 +97,17 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 		if flavorId == "" {
 			return nil, fmt.Errorf("could find a matching instance flavor: %s , either provide a custom hardware configurations or a valid flavor (S,M,L,XL,XXL,3XL,4XL,5XL)", icfg.InstanceFlavor)
 		}
-
+	} else {
+		hardwareFlavor = oneandone.FixedInstanceInfo{
+			Hardware: &oneandone.Hardware{
+				CoresPerProcessor: 1,
+				Vcores:            icfg.Cores,
+				Ram:               icfg.Ram,
+				Hdds: []oneandone.Hdd{
+					oneandone.Hdd{Size: icfg.DiskSize, IsMain: true},
+				},
+			},
+		}
 	}
 
 	//setup firewall policies

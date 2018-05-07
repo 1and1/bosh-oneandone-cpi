@@ -16,7 +16,7 @@ type StemcellCloudProperties struct {
 	ImageID        string `json:"image-id"`
 	ImageSourceURL string `json:"image-source-url,omitempty"`
 	OSType         string `json:"os-type,omitempty"`
-	Architecture   int    `json:"architecture,omitempty"`
+	Architecture   string `json:"architecture,omitempty"`
 }
 
 // NetworkCloudProperties holds the CPI specific network properties
