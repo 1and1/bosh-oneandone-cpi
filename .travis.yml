@@ -1,0 +1,10 @@
+language: go
+
+go:
+  - 1.9.2
+
+go_import_path: github.com/bosh-oneandone-cpi
+
+install: make get-deps
+
+script: make test
