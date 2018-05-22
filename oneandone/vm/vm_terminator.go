@@ -48,7 +48,7 @@ func (t *terminator) TerminateInstance(instanceID string) error {
 		}
 	}
 	// Delete instance
-	vm, err := t.connector.Client().DeleteServer(instanceID, false)
+	vm, err := t.connector.Client().DeleteServer(instanceID, false, true)
 	if err != nil {
 		t.logger.Info(logTag, "Ignoring error deleting instance %s", err)
 	} else {

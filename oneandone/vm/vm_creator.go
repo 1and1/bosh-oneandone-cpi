@@ -6,6 +6,7 @@ import (
 	"github.com/bosh-oneandone-cpi/oneandone/client"
 	"github.com/bosh-oneandone-cpi/oneandone/resource"
 	boshlog "github.com/cloudfoundry/bosh-utils/logger"
+	"strconv"
 	"strings"
 )
 
@@ -56,6 +57,7 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 	var flavorId string
 	var ipId string
 	var hardwareFlavor oneandone.FixedInstanceInfo
+	var datacenterId string
 
 	//check for ssh key
 	if len(icfg.SSHKey) == 0 || icfg.SSHKey == "" {
@@ -77,6 +79,20 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 				break
 			}
 
+		}
+	}
+
+	//fetch datacenter
+	if icfg.DatacenterId != "" {
+		dcs, err := cv.connector.Client().ListDatacenters()
+		if err != nil {
+			return nil, fmt.Errorf("Error fetching hardware flavor. Reason: %s", err)
+		}
+		for _, dc := range dcs {
+			if strings.ToLower(dc.CountryCode) == strings.ToLower(icfg.DatacenterId) {
+				datacenterId = dc.Id
+				break
+			}
 		}
 	}
 
@@ -112,25 +128,52 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 
 	//setup firewall policies
 	if icfg.Network != nil && len(icfg.Network) > 0 {
-		//check if subnet exists at a private network
-		firewallPolicy.Name = fmt.Sprintf("Bosh fw %v", icfg.Name)
-		var rules []oneandone.FirewallPolicyRule
-		for _, n := range icfg.Network {
-			for _, p := range n.OpenPorts {
-				rules = append(rules, oneandone.FirewallPolicyRule{Protocol: "TCP", PortTo: p.PortTo, PortFrom: p.PortFrom, SourceIp: p.Source})
-			}
-		}
-		firewallPolicy.Rules = rules
-		if len(rules) > 0 {
-			firewallId, firewallData, err = cv.connector.Client().CreateFirewallPolicy(&firewallPolicy)
-			if err != nil {
-				if err != nil {
-					return nil, fmt.Errorf("Error creating a firewall policy with the open ports provided in the config file %s", err)
+
+		//check if a firewall policy name was provided, in case the name was Default we will either look for the default policy or create one
+		if icfg.Network[0].PolicyName != "" {
+			if strings.ToLower(icfg.Network[0].PolicyName) == "default" {
+				found, _ := cv.connector.Client().ListFirewallPolicies(1, 100, "", DefaultBoshPolicyName, "")
+				if found != nil && len(found) > 0 {
+					firewallId = found[0].Id
+				} else {
+					defRules := strings.Split(DefaultBoshPolicy, ",")
+					var rules []oneandone.FirewallPolicyRule
+					for _, rule := range defRules {
+						ruleValue, _ := strconv.Atoi(rule)
+						rules = append(rules, oneandone.FirewallPolicyRule{Protocol: "TCP", PortTo: &ruleValue, PortFrom: &ruleValue, SourceIp: "0.0.0.0"})
+					}
+					firewallPolicy.Name = DefaultBoshPolicyName
+					firewallPolicy.Rules = rules
+					firewallId, firewallData, err = cv.connector.Client().CreateFirewallPolicy(&firewallPolicy)
+					if err != nil {
+						if err != nil {
+							return nil, fmt.Errorf("Error creating a firewall policy with the open ports provided in the config file %s", err)
+						}
+					}
+					cv.connector.Client().WaitForState(firewallData, "ACTIVE", 10, 90)
 				}
 			}
-			cv.connector.Client().WaitForState(firewallData, "ACTIVE", 10, 90)
+		} else {
+			firewallPolicy.Name = fmt.Sprintf("Bosh fw %v", icfg.Name)
+			var rules []oneandone.FirewallPolicyRule
+			for _, n := range icfg.Network {
+				for _, p := range n.OpenPorts {
+					rules = append(rules, oneandone.FirewallPolicyRule{Protocol: "TCP", PortTo: p.PortTo, PortFrom: p.PortFrom, SourceIp: p.Source})
+				}
+			}
+			firewallPolicy.Rules = rules
+			if len(rules) > 0 {
+				firewallId, firewallData, err = cv.connector.Client().CreateFirewallPolicy(&firewallPolicy)
+				if err != nil {
+					if err != nil {
+						return nil, fmt.Errorf("Error creating a firewall policy with the open ports provided in the config file %s", err)
+					}
+				}
+				cv.connector.Client().WaitForState(firewallData, "ACTIVE", 10, 90)
+			}
 		}
 	}
+
 	if icfg.EphemeralDisk == 0 {
 		icfg.EphemeralDisk = 20
 	}
@@ -148,13 +191,14 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 			Hdds:              hardwareFlavor.Hardware.Hdds,
 		},
 		FirewallPolicyId: firewallId,
-		DatacenterId:     icfg.DatacenterId,
+		DatacenterId:     datacenterId,
 		ApplianceId:      icfg.ImageId,
 		IpId:             ipId,
 		PrivateNetworkId: icfg.Network[0].PrivateNetworkId,
 	}
 	_, res, err := cv.connector.Client().CreateServer(&req)
 	if err != nil {
+		cv.rollBack(res, firewallData)
 		return nil, err
 	}
 
@@ -164,4 +208,18 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 	instance := resource.NewInstance(res.Id, icfg.SSHKeyPair)
 
 	return instance, nil
+}
+
+func (cv *creator) rollBack(server *oneandone.Server, firewallPolicy *oneandone.FirewallPolicy) {
+	//remove firewall policy
+	if firewallPolicy != nil {
+		inst, _ := cv.connector.Client().DeleteFirewallPolicy(firewallPolicy.Id)
+		cv.connector.Client().WaitUntilDeleted(inst)
+	}
+
+	//remove server in case an error has happened
+	if server != nil {
+		inst, _ := cv.connector.Client().DeleteServer(server.Id, false, false)
+		cv.connector.Client().WaitUntilDeleted(inst)
+	}
 }

@@ -13,7 +13,7 @@ import (
 var imageId string
 var pnNetworkId string
 var privateNetworkName = "BOSH integration PN test"
-var datacenterId string
+var datacenterId = "US"
 
 func TestIntegration(t *testing.T) {
 	RegisterFailHandler(Fail)
@@ -24,26 +24,18 @@ var _ = SynchronizedBeforeSuite(func() []byte {
 	initAPI()
 	// Clean any leftovers
 	cleanVMs()
-
-	//find US datacenter
-	datacetners, err := oaoClient.Client().ListDatacenters()
-	if err != nil {
-		Expect(err).ToNot(HaveOccurred())
-	}
-
-	for _, dc := range datacetners {
-		if dc.CountryCode == "US" {
-			datacenterId = dc.Id
-		}
-	}
-
 	images, err := oaoClient.Client().ListImages(1, 20, "", "bosh", "")
 	if err != nil {
 		Expect(err).ToNot(HaveOccurred())
 	}
 
 	if len(images) > 0 {
-		imageId = images[0].Id
+		for _, img := range images {
+			if strings.ToLower(img.Datacenter.CountryCode) == strings.ToLower(datacenterId) {
+				imageId = img.Id
+				break
+			}
+		}
 	} else {
 		Fail("BOSH image not found")
 	}

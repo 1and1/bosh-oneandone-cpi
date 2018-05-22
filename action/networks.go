@@ -46,6 +46,7 @@ func (ns Networks) AsNetworkConfiguration() vm.Networks {
 		networks = append(networks, vm.NetworkConfiguration{
 			OpenPorts:        openPorts,
 			PrivateNetworkId: ns.First().CloudProperties.PrivateNetWorkId,
+			PolicyName:       ns.First().CloudProperties.PolicyName,
 		})
 	}
 	return networks

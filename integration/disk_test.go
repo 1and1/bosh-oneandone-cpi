@@ -35,44 +35,15 @@ var _ = Describe("Disk", func() {
 				{
 				  "name": "%v",
 				  "flavor": "S",
-               	  "rsa_key": "%v"
+               	  "rsa_key": "%v",
+                  "director": true
 				},
 				{
 				  "default": {
 					"type": "dynamic",
 					"cloud_properties": {
                     "private-network-id":"%v",
-					  "open-ports": [
-							{
-								"port-from":22,
-								"port-to":22,
-								"source":"0.0.0.0"
-
-							},
-							{
-								"port-from":80,
-								"port-to":80,
-								"source":"0.0.0.0"
-
-							},
-							{
-								"port-from":443,
-								"port-to":443,
-								"source":"0.0.0.0"
-
-							},
-							{
-								"port-from":8443,
-								"port-to":8443,
-								"source":"0.0.0.0"
-
-							},
-							{
-								"port-from":8447,
-								"port-to":8447,
-								"source":"0.0.0.0"
-							}
-						]
+                    "firewall-policy-name":"Default"
 					}
 				  }
 				},["diskid"],

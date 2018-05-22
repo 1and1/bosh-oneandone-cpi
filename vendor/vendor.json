@@ -13,10 +13,10 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "x8/EmnYQKc6zmgH7KcZ/C3yxK7s=",
+			"checksumSHA1": "NfvgZjyYM/e8q0OsTkSjH9H6jVc=",
 			"path": "github.com/1and1/oneandone-cloudserver-sdk-go",
-			"revision": "046648aff50f55ad7d3364531ed5c2770fc9c091",
-			"revisionTime": "2018-04-26T23:49:56Z"
+			"revision": "2b3ed879716dfd5adb03fa971d5b60268e8f9795",
+			"revisionTime": "2018-05-22T18:38:49Z"
 		},
 		{
 			"checksumSHA1": "I2DDeog8ML55A+drYgods2s4Y5Q=",

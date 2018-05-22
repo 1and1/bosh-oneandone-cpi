@@ -23,8 +23,8 @@ type StemcellCloudProperties struct {
 // defined in cloud config
 type NetworkCloudProperties struct {
 	PrivateNetWorkId string `json:"private-network-id,omitempty"`
-	Subnet           string `json:"subnet,omitempty"`
 	OpenPorts        []Rule `json:"open-ports,omitempty"`
+	PolicyName       string `json:"firewall-policy-name,omitempty"`
 }
 
 type Rule struct {

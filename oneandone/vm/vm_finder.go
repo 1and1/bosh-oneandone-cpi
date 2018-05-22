@@ -40,6 +40,6 @@ func (f *finder) FindInstance(instanceID string) (*resource.Instance, error) {
 		return resource.NewInstance(r.Id, "/root/.ssh"), nil
 	}
 
-	return resource.NewInstance(r.Id, "/vcap/.ssh"), nil
+	return resource.NewInstance(r.Id, "/home/vcap/.ssh"), nil
 
 }
