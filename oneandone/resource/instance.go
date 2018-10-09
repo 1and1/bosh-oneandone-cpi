@@ -43,18 +43,26 @@ func (in *Instance) EnsureReachable(c client.Connector, l boshlog.Logger) error 
 }
 
 func (in *Instance) queryIPs(c client.Connector, l boshlog.Logger) error {
-	res, err := c.Client().ListServerIps(in.ID())
+	res, err := c.Client().GetServer(in.ID())
 	if err != nil {
 		l.Debug(logTag, "Error finding IPs %s", err)
 		return err
 	}
 	var public []string
-	for _, ip := range res {
+	for _, ip := range res.Ips {
 		public = append(public, ip.Ip)
+	}
+
+	var private []string
+	for _, ip := range res.PrivateNets {
+		private = append(private, ip.ServerIP)
 	}
 
 	in.publicIPs = make([]string, len(public))
 	copy(in.publicIPs, public)
+
+	in.privateIPs = make([]string, len(private))
+	copy(in.privateIPs, private)
 
 	l.Debug(logTag, "Queried IPs, Private %v, Public %v", in.privateIPs, in.publicIPs)
 	return nil

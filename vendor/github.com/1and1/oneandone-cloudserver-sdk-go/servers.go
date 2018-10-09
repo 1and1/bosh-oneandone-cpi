@@ -24,7 +24,7 @@ type Server struct {
 	MonPolicy     *Identity        `json:"monitoring_policy,omitempty"`
 	Snapshot      *ServerSnapshot  `json:"snapshot,omitempty"`
 	Ips           []ServerIp       `json:"ips,omitempty"`
-	PrivateNets   []Identity       `json:"private_networks,omitempty"`
+	PrivateNets   []ServerPrivateNetwork       `json:"private_networks,omitempty"`
 	Alerts        *ServerAlerts    `json:"-"`
 	AlertsRaw     *json.RawMessage `json:"alerts,omitempty"`
 }
@@ -55,6 +55,12 @@ type serverDeployImage struct {
 	idField
 	Password string    `json:"password,omitempty"`
 	Firewall *Identity `json:"firewall_policy,omitempty"`
+}
+
+type ServerPrivateNetwork struct {
+	idField
+	nameField
+	ServerIP string `json:"server_ip,omitempty"`
 }
 
 type ServerIp struct {

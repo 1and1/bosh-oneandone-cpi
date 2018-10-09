@@ -26,6 +26,7 @@ type InstanceConfiguration struct {
 	InstanceFlavor string
 	SSHKeyPair     string
 	EphemeralDisk  int
+	LBId           string
 }
 
 type Creator interface {
@@ -190,6 +191,7 @@ func (cv *creator) launchInstance(icfg InstanceConfiguration) (*resource.Instanc
 			CoresPerProcessor: hardwareFlavor.Hardware.CoresPerProcessor,
 			Hdds:              hardwareFlavor.Hardware.Hdds,
 		},
+		LoadBalancerId:   icfg.LBId,
 		FirewallPolicyId: firewallId,
 		DatacenterId:     datacenterId,
 		ApplianceId:      icfg.ImageId,

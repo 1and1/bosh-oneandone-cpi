@@ -47,6 +47,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 		ServerIp:       cloudProps.PublicIP,
 		SSHKeyPair:     cloudProps.SSHPairPath,
 		EphemeralDisk:  cloudProps.EphemeralDisk,
+		LBId:           cloudProps.LBId,
 	}
 
 	instance, err := creator.CreateInstance(icfg)
@@ -59,12 +60,17 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 		err = instance.EnsureReachable(cv.connector, cv.logger)
 	}
 
-	publicIp, err := instance.PublicIP(cv.connector, cv.logger)
+	//privateIp, err := instance.PrivateIP(cv.connector, cv.logger)
+	//if err != nil {
+	//	return "", bosherr.WrapError(err, "Error launching new instance")
+	//}
+
+	publicIP, err := instance.PublicIP(cv.connector, cv.logger)
 	if err != nil {
 		return "", bosherr.WrapError(err, "Error launching new instance")
 	}
 
-	agentNetworks := networks.AsRegistryNetworks(publicIp)
+	agentNetworks := networks.AsRegistryNetworks(publicIP)
 	userdata := registry.NewUserDataObject(name, cv.connector.AgentRegistryEndpoint(), nil, agentNetworks)
 
 	//check if an ssh key pair path was provided. if not set the defualt value to /vcap/.ssh
@@ -74,7 +80,7 @@ func (cv CreateVM) Run(agentID string, stemcellCID StemcellCID, cloudProps VMClo
 		cloudProps.SSHPairPath = "/home/vcap/.ssh"
 	}
 
-	if err := cv.updateRegistry(agentID, publicIp, name, cloudProps.SSHKey, cloudProps.SSHPairPath, agentNetworks, userdata, env); err != nil {
+	if err := cv.updateRegistry(agentID, publicIP, name, cloudProps.SSHKey, cloudProps.SSHPairPath, agentNetworks, userdata, env); err != nil {
 		return "Updating registry failed", err
 	}
 	return VMCID(instance.ID()), nil

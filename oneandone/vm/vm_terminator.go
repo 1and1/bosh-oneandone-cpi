@@ -26,33 +26,30 @@ func (t *terminator) TerminateInstance(instanceID string) error {
 	// find any attached firewall policies
 	//list server ips
 	serverIps, err := t.connector.Client().ListServerIps(instanceID)
-	if err != nil {
-		t.logger.Error(logTag, "Ignoring Could not list instance IP's %s", err)
-	} else {
 
-		for _, ip := range serverIps {
-			firewallIdsToremove = append(firewallIdsToremove, ip.Firewall.Id)
-		}
-
-		for _, id := range firewallIdsToremove {
-			firewallpolicy, _ := t.connector.Client().GetFirewallPolicy(id)
-
-			//remove the firewall policy if no other servers attached
-			if len(firewallpolicy.ServerIps) <= 1 {
-				t.connector.Client().WaitForState(firewallpolicy, "ACTIVE", 10, 90)
-				_, err := t.connector.Client().DeleteFirewallPolicy(id)
-				if err != nil {
-					t.logger.Error(logTag, "Failed to remove firewallpolicy id=%s with error %s", id, err)
-				}
-			}
-		}
-	}
 	// Delete instance
-	vm, err := t.connector.Client().DeleteServer(instanceID, false, true)
+	vm, err := t.connector.Client().DeleteServer(instanceID, false, false)
 	if err != nil {
 		t.logger.Info(logTag, "Ignoring error deleting instance %s", err)
 	} else {
 		t.connector.Client().WaitUntilDeleted(vm)
+	}
+
+	for _, ip := range serverIps {
+		firewallIdsToremove = append(firewallIdsToremove, ip.Firewall.Id)
+	}
+
+	for _, id := range firewallIdsToremove {
+		firewallpolicy, _ := t.connector.Client().GetFirewallPolicy(id)
+
+		//remove the firewall policy if no other servers attached
+		if len(firewallpolicy.ServerIps) <= 1 {
+			t.connector.Client().WaitForState(firewallpolicy, "ACTIVE", 10, 90)
+			_, err := t.connector.Client().DeleteFirewallPolicy(id)
+			if err != nil {
+				t.logger.Error(logTag, "Failed to remove firewallpolicy id=%s with error %s", id, err)
+			}
+		}
 	}
 
 	return err

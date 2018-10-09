@@ -85,12 +85,6 @@ func (n Network) isStatic() bool {
 	return n.Type == "manual" || n.IP != ""
 }
 
-// isVip returns true if the network is configured
-// as a "vip" network
-func (n Network) isVip() bool {
-	return n.Type == "vip"
-}
-
 // FirstDynamic returns the first "dynamic" network in the networks map.  It returns nil
 // if none exist.
 func (ns Networks) FirstDynamic() *Network {
