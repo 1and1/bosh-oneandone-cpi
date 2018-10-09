@@ -47,4 +47,5 @@ type VMCloudProperties struct {
 	PublicIP       string  `json:"public_ip,omitempty"`
 	SSHPairPath    string  `json:"keypair,omitempty"`
 	Director       bool    `json:"director,omitempty"`
+	LBId           string  `json:"lb-id,omitempty"`
 }

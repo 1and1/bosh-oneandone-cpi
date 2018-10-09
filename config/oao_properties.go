@@ -11,22 +11,6 @@ type OAOProperties struct {
 	// APIToken is the token used to connect to 1&1
 	APIToken string `json:"token"`
 
-	//// CPIKeyfile is the path to the private key used by the CPI
-	//// used for SSH connections
-	//CpiKeyFile string `json:"cpikeyfile"`
-	//
-	//// CpiUser is name of the user to use for CPI SSH connections
-	//CpiUser string `json:"cpiuser"`
-	//
-	//// UsePublicIPForSSH controls whether to use public or private IP
-	//// of the target insatnce for establishing SSH connections
-	//UsePublicIPForSSH bool `json:"usePublicIpForSsh,omitempty"`
-	//
-	//// AuthorizedKeys contains the public ssh-keys to provision
-	//// on new vms
-	//AuthorizedKeys AuthorizedKeys `json:"authorized_keys"`
-	//
-	// SSHTunnel is the configuration for creating a forward SSH tunnel
 	SSHTunnel SSHTunnel `json:"sshTunnel,omitempty"`
 }
 
@@ -83,38 +67,6 @@ func newSanitizedConfig(configFullPath string, b OAOProperties) OAOProperties {
 
 	return OAOProperties{
 		APIToken: b.APIToken,
-		//CpiKeyFile:        filepath.Join(dir, filepath.Base(b.CpiKeyFile)),
-		//CpiUser:           b.CpiUser,
-		//UsePublicIPForSSH: b.UsePublicIPForSSH,
-		//AuthorizedKeys:    b.AuthorizedKeys,
 		SSHTunnel: b.SSHTunnel,
 	}
 }
-
-// TransportConfig returns the configuration properties
-// needed by the underlying transport layer for communicating
-// with OAO
-//func (b OAOProperties) TransportConfig(host string) transport.Config {
-//
-//	return transport.Config{Tenant: b.Tenancy, User: b.User,
-//		Fingerprint: b.Fingerprint, Host: host, KeyFile: b.APIKeyFile}
-//}
-
-// UserSSHPublicKeyContent returns the configured ssh-rsa user public key
-//func (b OAOProperties) UserSSHPublicKeyContent() (string, error) {
-//	return sanitizeSSHKey(b.AuthorizedKeys.User)
-//}
-
-// CpiSSHPublicKeyContent returns the configured cpi user's ssh-rsa public key
-//func (b OAOProperties) CpiSSHPublicKeyContent() (string, error) {
-//	return sanitizeSSHKey(b.AuthorizedKeys.Cpi)
-//}
-
-// CpiSSHConfig returns the CPI ssh configuration
-//func (b OAOProperties) CpiSSHConfig() SSHConfig {
-//	return SSHConfig{b.CpiUser, b.CpiKeyFile, b.UsePublicIPForSSH}
-//}
-
-//func sanitizeSSHKey(key string) (string, error) {
-//	return strings.TrimSuffix(strings.TrimSpace(key), "\n"), nil
-//}
